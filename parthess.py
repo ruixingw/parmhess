@@ -194,25 +194,25 @@ def recreqs(A):  # A[i][0,1] ; 0:matA, 1:vecB; i: i blocks
     nblocks=len(A[0])
     matCalc=list(zip(*[A[i][0] for i in range(0,len(A))]))
     vecCalc=list(zip(*[A[i][1] for i in range(0,len(A))]))
-    print("matCalc is,\n",matCalc)
-    print("vecCalc is,\n",vecCalc)
-    print("start\n")
+
+    if debug:
+        print("matCalc is:\n",matCalc)
+        print("vecCalc is:\n",vecCalc)
+        print("\nstart")
     for i in range(0,len(matCalc)):
-        print(matCalc[i])
-        print(vecCalc[i])
+        if debug:
+            print("Selected matCalc is:\n",matCalc[i])
+            print("Selected vecCalc is:\n",vecCalc[i])
         rsprint=np.linalg.solve(matCalc[i],vecCalc[i])
         result+=rsprint
         print(rsprint)
-        print("stop")
+        if debug:
+            print('stop\n')
         ig+=1
-    if debug:
-        print("matCalc is,\n",matCalc)
-        print("vecCalc is,\n",vecCalc)
-        print("this result is:",rsprint)
     print("total result=",result)
     result=result/ig
     print("averaged result=",result)
-    print("had used",ig,"linear equation systems")
+    print("\nthis group had used",ig,"linear equation systems\n")
     return result
 
 
@@ -262,10 +262,14 @@ for igroup in range(1,maxgroup+1):
                 print("Atom i:",i)
                 print("Atom j:",j)
      #       print(i,j)
-            # read 3 by 3 Hessian, instantialize to numpy array
+            # read 33 Hessian, instantialize to numpy array
             Hqm=np.array(qmfchk.find33Hessian(i,j),dtype=float)
             Hpm=np.array(hprimegrp[igroup].find33Hessian(i,j),dtype=float)
             hk=np.array(hess[iparm].find33Hessian(i,j),dtype=float)
+            if debug:
+                print("Hqm=\n",np.array(Hqm))
+                print("Hpm=\n",np.array(Hpm))
+                print("hk=\n",np.array(hk))
             vecB[iparmingroup].append(np.sum((Hqm-Hpm)*hk))
 
             matA[iparmingroup].append([])
@@ -273,8 +277,10 @@ for igroup in range(1,maxgroup+1):
                     if ifgroup[ipa]==igroup:
                          i=int(x.split('-')[0])
                          j=int(x.split('-')[-1])
-                         hk=np.array(hess[ipa].find33Hessian(i,j),dtype=float)
                          hb=np.array(hess[ipa].find33Hessian(i,j),dtype=float)
+                         if debug:
+                             print("hb=\n",np.array(hb))
+                             print("hb*hk=\n",np.sum(hb*hk))
                          matA[iparmingroup][num].append(np.sum(hb*hk))
 
     A=[]
@@ -284,12 +290,12 @@ for igroup in range(1,maxgroup+1):
         A[i].append(vecB[i])
         if debug:
             print("Coeff:\n")
-            print(A[i][0])
+            print(np.array(A[i][0]))
             print("\nvecB:\n")
-            print(A[i][1])
+            print(np.array(A[i][1]))
             print("Another\n")
     result=0
-    ig=0
+#    ig=0
     result=recreqs(A)
     # print("Total:",result)
     # result=result/ig
@@ -359,9 +365,9 @@ for iparm in range(0,nunk):
         down=np.sum(hk*hk)
         result+=up/down
         if debug:
-            print('Hqm:',Hqm)
-            print('Hprime:',Hpm)
-            print('hk:',hk)
+            print('Hqm:\n',np.array(Hqm))
+            print('Hprime:\n',np.array(Hpm))
+            print('hk:\n',np.array(hk))
             print('parameter:',up/down,'\n')
 
     ## Average every atom pairs
