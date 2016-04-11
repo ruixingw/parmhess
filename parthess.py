@@ -1,397 +1,481 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from geomdef import *
-from readfiles import *
+import rx.molecules as rxmol
+import rx.chemfiles as rxfile
 import numpy as np
+from io import StringIO
 import argparse,os
 
 parser=argparse.ArgumentParser()
-parser.add_argument('inputfile',help="allinone input file")
-parser.add_argument('-d','--debug',help="save all temp file for debug",action='store_true')
+parser.add_argument('mmfile',help="mmfile prepared by tsubasa.")
+parser.add_argument('qmfile',help="FCHK file from a frequency calculation.")
+parser.add_argument('-d','--delete',help="Delete all temp files. Default option will save files to ./phfdebug",action='store_true')
 args=parser.parse_args()
-input=args.inputfile
-debug=args.debug
+mmfile=args.mmfile
+originname=mmfile
+qmfile=args.qmfile
+delete=args.delete
 
+print(mmfile,qmfile)
+mmfile=mmfile[0:mmfile.find('.')]
+qmfile=qmfile[0:qmfile.find('.')]
 ##prepare del.sh, del old files, print title
 with open('del.sh','w') as f:
-    f.write('rm -rf phfpy* hprim* tmp* hess* gau* Hess* del.sh\n')
+    f.write('rm -rf phfpy* tmp* *hprime* hess* gau* Hess* phfdebug del.sh\n')
 os.system('chmod +x del.sh')
 
 print('\n\n                         Partial Hessian Fitting for parameterization\n\n')
-if debug:
-    print("\n\nWARNING: Debug mode is on, all temperory files would be saved.\n\n")
-os.system('rm -rf phfpy* gau* hprim* hess* Hess* ')
+if delete:
+    print("\n\nWARNING: Delete mode is on, all temperory files would be deleted.\n\n")
+#os.system('rm -rf phfpy* gau* hprim* hess* Hess* ')
+mole=rxmol.Molecule('mmfile')
+mmfile=rxfile.File(mmfile).com
+qmfile=rxfile.File(qmfile)
+qmfile.readfchk()
+mmfile.read()
+nunk=0
+for item in mmfile.nozomubondfunc:
+    if item.value==rxfile.mmfunction.magicnum:
+        nunk+=1
+for item in mmfile.nozomuanglefunc:
+    if item.value==rxfile.mmfunction.magicnum:
+        nunk+=1
+for item in mmfile.nozomudihdfunc:
+    if item.value==rxfile.mmfunction.magicnum:
+        nunk+=1
 
-print('Read config from:',input)
+xyz=StringIO(mmfile.xyz)
+mole.readfromxyz(xyz)
+mole.readchargefromlist(mmfile.atomchargelist)
+mole.readtypefromlist(mmfile.atomtypelist)
+mole.readconnectivity(mmfile.connectivity)
+hessxyz=''
+hprimexyz=''
+finalxyz=''
+for atom in mole:
+    hprimexyz+=atom.atomsym+'-'+atom.name+'-'+str(atom.atomcharge)+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
+    hessxyz+=atom.atomsym+'-'+atom.name+'-0.000000'+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
+    finalxyz+=atom.atomsym+'-'+atom.atomtype+'-'+str(atom.atomcharge)+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
 
-##Read input. Read MMinput, QMfchk(freq) input, natoms, and Links to a list.
-with open(input,'r') as f:
-    for i,line in enumerate(f.readlines()):
-        if line.find('#')==0:
-            continue
-        if line.find('#')>=0:
-            line=line[:line.find('#')]
-        if line.find('natoms')>=0:
-            natoms=int(line.split('=')[1])
-        if line.find('mmfile')>=0:
-            mmfile=line.split('=')[1].strip('\n')
-        if line.find('qmfchk')>=0:
-            qmfchk=line.split('=')[1].strip('\n')
-        if line.find('Link start')>=0:
-            linkstart=i
-    links=[]
-    links.append([])
-    p=0
-    f.seek(0)
-    for line in f.readlines()[linkstart+1:]:
-        if line.find('#')==0:
-            continue
-        if line.find('#')>=0:
-            line=line[:line.find('#')]
-        if line.find('next')<0:
-            links[p].append(line.strip('\n'))
-        else:
-            p=p+1
-            links.append([])
+hesshead=mmfile.commandline+'\nhess\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+hessxyz+'\n'+mmfile.connectivity+'\n'
+hprimehead=mmfile.commandline+'\nhess\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+hprimexyz+'\n'+mmfile.connectivity+'\n'
+finalhead=mmfile.commandline+'\nfinal\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+finalxyz+'\n'+mmfile.connectivity+'\n'
+mole.readtypefromlist(mmfile.atomtypelist)
 
-    ifgroup=[]
-    ngroup=0
-    with open(mmfile,'r') as f:
-        nunk=0
-        for line in f.readlines():
-            if line.find('XXXXXX')>=0:
-                ifgroup.append('')
-                if line.find('&&&')>=0:
-                    ifgroup[nunk]=int(line.split('&&&')[1])
-                    if ifgroup[nunk]>ngroup:
-                        ngroup=ifgroup[nunk]
-                else:
-                    ifgroup[nunk]=0
-                nunk+=1
+def matchdihd(dihd,func):
+    a=(dihd.a.atomtype==func.a or func.a=='*')
+    b=(dihd.b.atomtype==func.b or func.b=='*')
+    c=(dihd.c.atomtype==func.c or func.c=='*')
+    d=(dihd.d.atomtype==func.d or func.d=='*')
+    forward=a and b and c and d
+    a=(dihd.a.atomtype==func.d or func.d=='*')
+    b=(dihd.b.atomtype==func.c or func.c=='*')
+    c=(dihd.c.atomtype==func.b or func.b=='*')
+    d=(dihd.d.atomtype==func.a or func.a=='*')
+    reverse=a and b and c and d
+    if forward or reverse:
+        return True
+    else:
+        return False
+def matchbond(bond,func):
+    a=(bond.a.atomtype==func.a or func.a=='*')
+    b=(bond.b.atomtype==func.b or func.b=='*')
+    forward=a and b
+    a=(bond.a.atomtype==func.b or func.b=='*')
+    b=(bond.b.atomtype==func.a or func.a=='*')
+    reverse=a and b
+    if forward or reverse:
+        return True
+    else:
+        return False
+def matchangle(angle,func):
+    a=(angle.a.atomtype==func.a or func.a=='*')
+    b=(angle.b.atomtype==func.b or func.b=='*')
+    c=(angle.c.atomtype==func.c or func.c=='*')
+    forward=a and b and c
+    a=(angle.a.atomtype==func.c or func.c=='*')
+    b=(angle.b.atomtype==func.b or func.b=='*')
+    c=(angle.c.atomtype==func.a or func.a=='*')
+    reverse=a and b and c
+    if forward or reverse:
+        return True
+    else:
+        return False
+pwd=os.path.split(os.path.realpath(__file__))[0]
+vdwdata={}
+with open(os.path.join(pwd,'vdw.dat'),'r') as f:
+    for line in f:
+        vdwdata.update({line.split()[0]:line.split()[1]+' '+line.split()[2]})
+hessvdwtail=''
+hprimevdwtail=''
+for atom in mole:
+    atom.vdwradius=vdwdata[atom.atomtype].split()[0]
+    atom.vdwepsilon=vdwdata[atom.atomtype].split()[1]
+    hessvdwtail+='VDW '+atom.name+'  '+atom.vdwradius+'  0.0000\n'
+    hprimevdwtail+='VDW '+atom.name+'  '+atom.vdwradius+' '+atom.vdwepsilon+'\n'
 
-
-print('natoms:',natoms)
-print('mmfile:',mmfile)
-print('qmfchk:',qmfchk)
-print('Number of link blocks:',len(links)-1)
-print('Number of unknown parameters:',nunk,'\n\n\n\n')
-if len(links)-1!=nunk:
-    print("Error in input.inp: Number of link blocks is not equal to unknowns")
-    quit()
-
-## Instantialize qmfchk
-qmfchk=File(qmfchk.split('.')[0])
-
-
-
-##Change g09 command
-gauCOM.g09rt='g09'
-## Prepare mmInput h(k) as hess[iparm]
-print("Prepare hess:")
-hcontent=[]
-with open(mmfile,'r') as f:
-
-    for iparm in range(0,nunk):
-        f.seek(0)
-        hcontent.append('')
-        nX=-1
-        for line in f.readlines():
-            # Set charge,vdW to zero
-            if line.find('VDW')>=0:
-                line=line.split()[0]+'  '+line.split()[1]+'  0.0000\n'
-            if line.find('-')>=0 and line.count('.')==4:
-                line=line[:line.find('.')-1]+'0.000000'+line[line.find('.')+7:]
-            if line.find('XXXXXX')>=0:
-                nX+=1
-                if iparm==nX:
-                    line=line.split('XXXXXX')[0]+'1.000'+line.split('XXXXXX')[1]
-                else:
-                    line=line.split('XXXXXX')[0]+'0.000'+line.split('XXXXXX')[1]
+for dihd in mole.dihdlist.values():
+        for dihdfunc in mmfile.nozomudihdfunc:
+            if matchdihd(dihd,dihdfunc):
+                dihd.nozomufunc=dihdfunc
+                dihd.parm=dihd.nozomufunc.value
+for angle in mole.anglelist.values():
+        for anglefunc in mmfile.nozomuanglefunc:
+            if matchangle(angle,anglefunc):
+                angle.nozomufunc=anglefunc
+                angle.parm=anglefunc.value
+for bond in mole.bondlist.values():
+        for bondfunc in mmfile.nozomubondfunc:
+            if matchbond(bond,bondfunc):
+                bond.nozomufunc=bondfunc
+                bond.parm=bondfunc.value
+def tail(one,vdwtail,heorhp):
+    hesstail=''
+    for dihd in mole.dihdlist.values():
+        if heorhp=='hess':
+            parm='0.00 '
+            if one is dihd:
+                parm='1.00 '
+        elif heorhp=='hprime':
+            if dihd.parm=='XXXXXX':
+                parm='0.00 '
             else:
-                if line.find('AmbTrs')>=0:
-                    continue
-                elif line.find('HrmBnd1')>=0:
-                    line=line.split()[0]+' '+line.split()[1]+' '+line.split()[2]+' '+line.split()[3]+' 0.000 '+line.split()[5]+'\n'
-                elif line.find('HrmStr1')>=0:
-                    line=line.split()[0]+' '+line.split()[1]+' '+line.split()[2]+' 0.000 '+line.split()[4]+'\n'
-                elif line.find('ImpTrs')>=0:
-                    line=line.split()[0]+' '+line.split()[1]+' '+line.split()[2]+' '+line.split()[3]+' '+line.split()[4]+' 0.000 '+line.split()[6]+' '+line.split()[7]+'\n'
-            hcontent[iparm]+=line.strip('&&&').strip('\n')+'\n'
-        with open('hess'+str(iparm)+'.com','w') as w:
-            w.write(hcontent[iparm])
-
-## Instantialize hess[iparm], Run g09
-hess=[]
-for iparm in range(0,nunk):
-    hess.append(File('hess'+str(iparm)))
-    hess[iparm].rung09()
-for iparm in range(0,nunk):
-    if not hess[iparm].isover():
-        quit()
-    else:
-        if not hess[iparm].formchk():
+                parm=str(dihd.parm)+' '
+            if one is dihd:
+                parm='0.00 '
+        hesstail+='AmbTrs '+dihd.mydihdtype+' '
+        if dihd.nozomufunc.periodicity==1:
+            hesstail+=' '+str(dihd.nozomufunc.phase)+'0 0 0 '+parm+' 0.0 0.0 0.0 '+str(dihd.nozomufunc.npaths)+'\n'
+        elif dihd.nozomufunc.periodicity==2:
+            hesstail+='0 '+str(dihd.nozomufunc.phase)+' 0 0 0.0 '+parm+' 0.0 0.0 '+str(dihd.nozomufunc.npaths)+'\n'
+        elif dihd.nozomufunc.periodicity==3:
+            hesstail+='0 0 '+str(dihd.nozomufunc.phase)+' 0 0.0 0.0 '+parm+' 0.0 '+str(dihd.nozomufunc.npaths)+'\n'
+        elif dihd.nozomufunc.periodicity==4:
+            hesstail+='0 0 0 '+str(dihd.nozomufunc.phase)+' 0.0 0.0 0.0 '+parm+' '+str(dihd.nozomufunc.npaths)+'\n'
+        else:
+            print("No perio found for ",dihd.mydihdtype)
             quit()
+    for angle in mole.anglelist.values():
+        if heorhp=='hess':
+            parm='0.00 '
+            if one is angle:
+                parm='1.00 '
+        elif heorhp=='hprime':
+            if angle.parm=='XXXXXX':
+                parm='0.00 '
+            else:
+                parm=str(angle.parm)+' '
+            if one is angle:
+                parm='0.00 '
 
-print('hess prepared.\n\n')
+        hesstail+='HrmBnd1 '+angle.myangletype+' '+parm+"{: .3f}".format(angle.anglevalue)+'\n'
 
+    for bond in mole.bondlist.values():
+        if heorhp=='hess':
+            parm='0.00 '
+            if one is bond:
+                parm='1.00 '
+        elif heorhp=='hprime':
+            if bond.parm=='XXXXXX':
+                parm='0.00 '
+            else:
+                parm=str(bond.parm)+' '
+            if one is bond:
+                parm='0.00 '
 
+        hesstail+='HrmStr1 '+bond.mybondtype+' '+parm+"{: .5f}".format(bond.length)+'\n'
 
-
-# Start Calculate Parameters:
-
-# Read QMHessian:
-if not qmfchk.readHessianFromFchk():
-    print("Failure to read QMHessian from:",qmfchk.name)
-    quit()
-
-
-# Read h(k) Hessian:
-for iparm in range(0,nunk):
-    if not hess[iparm].readHessianFromFchk():
-        print("Failure to read MMHessian",iparm,"from:",hess[iparm].fchkname())
-        quit()
-
-
-# Start Loop: Calculate every hprime and parameter
-
-hprime=[]
-hprimegrp=['']
-# An Hprime is saved to prepare next hprime
-Hprime=''
-with open(mmfile,'r') as f:
-    f.seek(0)
-    Hprime=[x.strip('&&&').strip('\n')+'\n' for x in f.readlines()]
-
-
-maxgroup=ngroup
-# igroup : group number
-# class linearequation(object):
-#     def __init__(self):
-#         self.matA=[]
-#         self.vecB=[]
-#         self.current=0
-#         self.high=0
-#     def print(self):
-#         print("Coeffiecnt matrix is,",self.matA)
-#         print("Corresponding vecB is,",self.vecB)
-#     def __iter__(self):
-#         return self
-#     def next(self):
-#         if self.current>=self.high:
-#             raise StopIteration
-#         else:
-#             self.current+=1
-#             return [self.matA[self.current-1],self.vecB[self.current-1]]
-
-
-
-def recreqs(A):  # A[i][0,1] ; 0:matA, 1:vecB; i: i blocks
-    matCalc=[]
-    vecCalc=[]
-    item=[]
-    ig=0
-    result=0
-    nblocks=len(A[0])
-    matCalc=list(zip(*[A[i][0] for i in range(0,len(A))]))
-    vecCalc=list(zip(*[A[i][1] for i in range(0,len(A))]))
-
-    if debug:
-        print("matCalc is:\n",matCalc)
-        print("vecCalc is:\n",vecCalc)
-        print("\nstart")
-    for i in range(0,len(matCalc)):
-        if debug:
-            print("Selected matCalc is:\n",matCalc[i])
-            print("Selected vecCalc is:\n",vecCalc[i])
-        rsprint=np.linalg.solve(matCalc[i],vecCalc[i])
-        result+=rsprint
-        print(rsprint)
-        if debug:
-            print('stop\n')
-        ig+=1
-    print("total result=",result)
-    result=result/ig
-    print("averaged result=",result)
-    print("\nthis group had used",ig,"linear equation systems\n")
-    return result
-
-
-
-
-for igroup in range(1,maxgroup+1):
-    print('Group NO.',igroup)
-    # Prepare hprim: set all unknowns to 0.000
-    content=''
-
-    for line in Hprime:
-        if line.find('XXXXXX')>=0:
-            line=line.split('XXXXXX')[0]+'0.000'+line.split('XXXXXX')[1]
-        content+=line
-
-    with open('hprimegrp'+str(igroup)+'.com','w') as f:
-        f.write(content)
-
-    # Instantialize hprimegrp, rung09, and formchk
-    hprimegrp.append(File('hprimegrp'+str(igroup)))
-    hprimegrp[igroup].rung09()
-    if not hprimegrp[igroup].isover():
-        print("Error in hprim:",hprimegrp[igroup].comname())
-    else:
-        if not hprimegrp[igroup].formchk():
-            quit()
-
-    # Read hprimegrp Hessian
-    if not hprimegrp[igroup].readHessianFromFchk():
-        print("Failure to read Hessian from:",hprimegrp[igroup].fchkname())
-        quit()
-    # Filter  parameters of this group
-    nlink=0
-    matA=[]
-    vecB=[]
-    iparmingroup=-1
-    for iparm in range(0,nunk):
-        if ifgroup[iparm]!=igroup:
+    for addfunc in mmfile.additionfunc:
+        if addfunc.content.find('ImpTrs')>=0 and heorhp=='hess':
             continue
-        matA.append([])
-        vecB.append([])
-        iparmingroup+=1
-        for num,x in enumerate(links[iparm]): ## each atom pair
-            i=int(x.split('-')[0])
-            j=int(x.split('-')[-1])
-            if debug:
-                print("Atom i:",i)
-                print("Atom j:",j)
-     #       print(i,j)
-            # read 33 Hessian, instantialize to numpy array
-            Hqm=np.array(qmfchk.find33Hessian(i,j),dtype=float)
-            Hpm=np.array(hprimegrp[igroup].find33Hessian(i,j),dtype=float)
-            hk=np.array(hess[iparm].find33Hessian(i,j),dtype=float)
-            if debug:
-                print("Hqm=\n",np.array(Hqm))
-                print("Hpm=\n",np.array(Hpm))
-                print("hk=\n",np.array(hk))
-            vecB[iparmingroup].append(np.sum((Hqm-Hpm)*hk))
-
-            matA[iparmingroup].append([])
-            for ipa in range(0,nunk):
-                    if ifgroup[ipa]==igroup:
-                         i=int(x.split('-')[0])
-                         j=int(x.split('-')[-1])
-                         hb=np.array(hess[ipa].find33Hessian(i,j),dtype=float)
-                         if debug:
-                             print("hb=\n",np.array(hb))
-                             print("hb*hk=\n",np.sum(hb*hk))
-                         matA[iparmingroup][num].append(np.sum(hb*hk))
-
-    A=[]
-    for i in range(0,iparmingroup+1):    # A[igroup][0]:mat  [1]:vec
-        A.append([])
-        A[i].append(matA[i])
-        A[i].append(vecB[i])
-        if debug:
-            print("Coeff:\n")
-            print(np.array(A[i][0]))
-            print("\nvecB:\n")
-            print(np.array(A[i][1]))
-            print("Another\n")
-    result=0
-#    ig=0
-    result=recreqs(A)
-    # print("Total:",result)
-    # result=result/ig
-    # print("Average:",result)
+        hesstail+=addfunc.content
+    hesstail+=vdwtail
+    hesstail+='\n\n'
+    return hesstail
 
 
+i=0
+hess=[]
+mmfunctions=[]
+for obj in mole.dihdlist.values():
+    mmfunctions.append(obj)
+for obj in mole.anglelist.values():
+    mmfunctions.append(obj)
+for obj in mole.bondlist.values():
+    mmfunctions.append(obj)
 
-    # Update Hprime
-    newHprime=[]
-    i=0
-    for line in Hprime:
-        if line.find('&&&')>=0 and line.find('XXXXXX')>=0:
-            if int(line.split('&&&')[1])==igroup:
-                line=line.split('XXXXXX')[0]+"{:.3f}".format(result[i])+line.split('XXXXXX')[1]
-                i+=1
-        newHprime.append(line)
-    Hprime=newHprime
+num=len(mmfunctions)
+for obj in mmfunctions:
+    with open('hess'+str(len(hess))+'.com','w') as f:
+        f.write(hesshead+tail(obj,hessvdwtail,'hess'))
+    this=rxfile.File('hess'+str(len(hess)))
+    obj.hessfile=this
+    hess.append(this)
+    hess[-1].rung09()
+    hess[-1].isover()
+    num-=1
+    print(num," left")
+    hess[-1].runformchk()
+    hess[-1].readfchk()
+    i+=1
 
+#Identify coupled terms
 
+links={}
+for obj in mmfunctions:
+    if type(obj)==rxmol.Dihd:
+        a=obj[1].atomnum
+        b=obj[4].atomnum
+        if a>b: a,b=b,a
+        if str(a)+'-'+str(b) in links.keys():
+            links[str(a)+'-'+str(b)].append(obj)
+        else:
+            links.update({str(a)+'-'+str(b):[obj]})
+    if type(obj)==rxmol.Angle:
+        a=obj[1].atomnum
+        b=obj[3].atomnum
+        if a>b: a,b=b,a
+        if str(a)+'-'+str(b) in links.keys():
+            links[str(a)+'-'+str(b)].append(obj)
+        else:
+            links.update({str(a)+'-'+str(b):[obj]})
+    if type(obj)==rxmol.Bond:
+        a=obj[1].atomnum
+        b=obj[2].atomnum
+        if a>b: a,b=b,a
+        if str(a)+'-'+str(b) in links.keys():
+            links[str(a)+'-'+str(b)].append(obj)
+        else:
+            links.update({str(a)+'-'+str(b):[obj]})
 
-
-
-for iparm in range(0,nunk):
-
-    print('NO.',iparm)
-
-    # Prepare hprim: set all unknowns to 0.000
-    content=''
-
-    for line in Hprime:
-        if line.find('XXXXXX')>=0:
-            line=line.split('XXXXXX')[0]+'0.000'+line.split('XXXXXX')[1]
-        content+=line
-
-    with open('hprime'+str(iparm)+'.com','w') as f:
-        f.write(content)
-
-    # Instantialize hprime, rung09, and formchk
-    hprime.append(File('hprime'+str(iparm)))
-    if ifgroup[iparm]!=0:
-        continue
-    hprime[iparm].rung09()
-    if not hprime[iparm].isover():
-        print("Error in hprim:",hprime[iparm].comname())
+for key,value in links.items():
+    if len(value)>1:
+        for item in links[key]:
+            item.ifcouple=key
     else:
-        if not hprime[iparm].formchk():
-            quit()
+        for item in links[key]:
+            item.ifcouple=False
 
-    # Read hprime Hessian
-    if not hprime[iparm].readHessianFromFchk():
-        print("Failure to read Hessian from:",hprime[iparm].fchkname())
-        quit()
 
-    # Start calculate parameter: group 0
-    result=0
-    for x in links[iparm]: ## each atom pair
-        up=0
-        down=0
-        i=int(x.split('-')[0])
-        j=int(x.split('-')[-1])
-        # read 3 by 3 Hessian, instantialize to numpy array
-        Hqm=np.array(qmfchk.find33Hessian(i,j),dtype=float)
-        Hpm=np.array(hprime[iparm].find33Hessian(i,j),dtype=float)
-        hk=np.array(hess[iparm].find33Hessian(i,j),dtype=float)
 
-        up=np.sum((Hqm-Hpm)*hk)
+
+# Dihds Hprime
+#print(mole.dihd(1,2,3,4).parm)
+dihdhprimetail=tail(mole.bond(1,2),hprimevdwtail,'hprime')
+dihdhprime=hprimehead+dihdhprimetail
+with open('dihdhprime.com','w') as f:
+    f.write(dihdhprime)
+dihdhprime=rxfile.File('dihdhprime')
+dihdhprime.rung09()
+dihdhprime.isover()
+dihdhprime.runformchk()
+dihdhprime.readfchk()
+
+for dihd in mole.dihdlist.values():
+    if dihd.parm=='XXXXXX' and dihd.ifcouple==False:
+        a=dihd[1].atomnum
+        b=dihd[4].atomnum
+        hk=dihd.hessfile.find33Hessian(a,b)
+        hp=dihdhprime.find33Hessian(a,b)
+        hq=qmfile.find33Hessian(a,b)
+        up=np.sum((hq-hp)*hk)
         down=np.sum(hk*hk)
-        result+=up/down
-        if debug:
-            print('Hqm:\n',np.array(Hqm))
-            print('Hprime:\n',np.array(Hpm))
-            print('hk:\n',np.array(hk))
-            print('parameter:',up/down,'\n')
+        k=up/down
+        dihd.parm=k
+    if dihd.parm=='XXXXXX' and dihd.ifcouple!=False:
 
-    ## Average every atom pairs
-    result=result/(len(links[iparm]))
-    print('{:3f}'.format(result))
-    print("Averaged from",len(links[iparm]),"results")
+        hk=[]
+        a=int(dihd.ifcouple.split('-')[0])
+        b=int(dihd.ifcouple.split('-')[1])
+        for item in links[dihd.ifcouple]:
+            hk.append(item.hessfile.find33Hessian(a,b))
 
-    ## Update Hprime for next cycle
-    newHprime=[]
-    ifchange=True
-    for line in Hprime:
-        if line.find('XXXXXX')>=0 and ifchange:
-            line=line[:line.find('XXXXXX')]+'{: .3f}'.format(result)+line[line.find('XXXXXX')+6:]
-            ifchange=False
-        newHprime.append(line)
-    Hprime=newHprime
+        left=[]
+        for ha in hk:
+            left.append([np.sum(ha*hb) for hb in hk])
+        left=np.array(left)
 
-## Write final result
-with open('phf_result_'+mmfile,'w') as f:
-    for line in Hprime:
-        f.write(line)
+        hq=qmfile.find33Hessian(a,b)
+        hp=dihdhprime.find33Hessian(a,b)
+        right=[]
+        for ha in hk:
+            this=np.sum((hq-hp)*ha)
+            right.append(this)
+        right=np.array(right)
+        result=np.linalg.solve(left,right)
+        result=iter(result)
+        for item in links[dihd.ifcouple]:
+            item.parm=next(result)
+
+for nozomufunc in mmfile.nozomudihdfunc:
+    if nozomufunc.value=='XXXXXX':
+        res=0
+        i=0
+        for dihd in mole.dihdlist.values():
+            if dihd.nozomufunc==nozomufunc:
+                res+=dihd.parm
+                i+=1
+        nozomufunc.value=res/i
+
+# Angles Hprime
+#print(mole.dihd(1,2,3,4).parm)
+anglehprimetail=tail('123',hprimevdwtail,'hprime')
+anglehprime=hprimehead+anglehprimetail
+with open('anglehprime.com','w') as f:
+    f.write(anglehprime)
+anglehprime=rxfile.File('anglehprime')
+anglehprime.rung09()
+anglehprime.isover()
+anglehprime.runformchk()
+anglehprime.readfchk()
+
+for angle in mole.anglelist.values():
+    if angle.parm=='XXXXXX' and angle.ifcouple==False:
+        a=angle[1].atomnum
+        b=angle[3].atomnum
+        hk=angle.hessfile.find33Hessian(a,b)
+        hp=anglehprime.find33Hessian(a,b)
+        hq=qmfile.find33Hessian(a,b)
+        up=np.sum((hq-hp)*hk)
+        down=np.sum(hk*hk)
+        k=up/down
+        angle.parm=k
+    if angle.parm=='XXXXXX' and angle.ifcouple!=False:
+
+        hk=[]
+        a=int(angle.ifcouple.split('-')[0])
+        b=int(angle.ifcouple.split('-')[1])
+        for item in links[angle.ifcouple]:
+            hk.append(item.hessfile.find33Hessian(a,b))
+
+        left=[]
+        for ha in hk:
+            left.append([np.sum(ha*hb) for hb in hk])
+        left=np.array(left)
+
+        hq=qmfile.find33Hessian(a,b)
+        hp=anglehprime.find33Hessian(a,b)
+        right=[]
+        for ha in hk:
+            this=np.sum((hq-hp)*ha)
+            right.append(this)
+        right=np.array(right)
+        result=np.linalg.solve(left,right)
+        result=iter(result)
+        for item in links[angle.ifcouple]:
+            item.parm=next(result)
+
+for nozomufunc in mmfile.nozomuanglefunc:
+    if nozomufunc.value=='XXXXXX':
+        res=0
+        i=0
+        for angle in mole.anglelist.values():
+            if angle.nozomufunc==nozomufunc:
+                res+=angle.parm
+                i+=1
+        nozomufunc.value=res/i
+
+# Bonds Hprime
+#print(mole.dihd(1,2,3,4).parm)
+bondhprimetail=tail('123',hprimevdwtail,'hprime')
+bondhprime=hprimehead+bondhprimetail
+with open('bondhprime.com','w') as f:
+    f.write(bondhprime)
+bondhprime=rxfile.File('bondhprime')
+bondhprime.rung09()
+bondhprime.isover()
+bondhprime.runformchk()
+bondhprime.readfchk()
+
+for bond in mole.bondlist.values():
+    if bond.parm=='XXXXXX' and bond.ifcouple==False:
+        a=bond[1].atomnum
+        b=bond[2].atomnum
+        hk=bond.hessfile.find33Hessian(a,b)
+        hp=bondhprime.find33Hessian(a,b)
+        hq=qmfile.find33Hessian(a,b)
+        up=np.sum((hq-hp)*hk)
+        down=np.sum(hk*hk)
+        k=up/down
+        bond.parm=k
+    if bond.parm=='XXXXXX' and bond.ifcouple!=False:
+
+        hk=[]
+        a=int(bond.ifcouple.split('-')[0])
+        b=int(bond.ifcouple.split('-')[1])
+        for item in links[bond.ifcouple]:
+            hk.append(item.hessfile.find33Hessian(a,b))
+
+        left=[]
+        for ha in hk:
+            left.append([np.sum(ha*hb) for hb in hk])
+        left=np.array(left)
+
+        hq=qmfile.find33Hessian(a,b)
+        hp=bondhprime.find33Hessian(a,b)
+        right=[]
+        for ha in hk:
+            this=np.sum((hq-hp)*ha)
+            right.append(this)
+        right=np.array(right)
+        result=np.linalg.solve(left,right)
+        result=iter(result)
+        for item in links[bond.ifcouple]:
+            item.parm=next(result)
+
+for nozomufunc in mmfile.nozomubondfunc:
+    if nozomufunc.value=='XXXXXX':
+        res=0
+        i=0
+        for bond in mole.bondlist.values():
+            if bond.nozomufunc==nozomufunc:
+                res+=bond.parm
+                i+=1
+        nozomufunc.value=res/i
 
 
-if debug:
-    print("WARNING: Debug mode is on, all temperory files were saved.")
+# Write final result file
+finaltail=''
+for item in mmfile.nozomudihdfunc:
+    finaltail+='AmbTrs '+item.repr+' '
+    parm="{: .3f}".format(item.value)
+    if item.periodicity==1:
+            finaltail+=' '+str(item.phase)+' 0 0 0 '+parm+' 0.0 0.0 0.0 '+str(item.npaths)+'\n'
+    if item.periodicity==2:
+            finaltail+='0 '+str(item.phase)+' 0 0 0.0 '+parm+' 0.0 0.0 '+str(item.npaths)+'\n'
+    if item.periodicity==3:
+            finaltail+='0 0 '+str(item.phase)+' 0 0.0 0.0 '+parm+' 0.0 '+str(item.npaths)+'\n'
+    if item.periodicity==4:
+            finaltail+='0 0 0 '+str(item.phase)+' 0.0 0.0 0.0 '+parm+' '+str(item.npaths)+'\n'
+
+
+for item in mmfile.nozomuanglefunc:
+    finaltail+='HrmBnd1 '+item.repr+' '
+    parm="{: .3f}".format(item.value)
+    finaltail+=' '+parm+' {: .4f}'.format(item.eqvalue)+'\n'
+for item in mmfile.nozomubondfunc:
+    finaltail+='HrmStr1 '+item.repr+' '
+    parm="{: .3f}".format(item.value)
+    finaltail+=' '+parm+' {: .5f}'.format(item.eqvalue)+'\n'
+
+print(finaltail)
+
+for addfunc in mmfile.additionfunc:
+    finaltail+=addfunc.content
+for nozovdw in mmfile.nozomuvdw:
+    finaltail+=nozovdw.content
+
+finaltail+='\n\n'
+with open('phf_result_'+originname,'w') as f:
+    f.write(finalhead+finaltail)
+
+
+if not delete:
+    os.system('mkdir phfdebug')
+    os.system('mv phfpy* tmp* *hprime* hess* gau* Hess* del.sh phfdebug')
 else:
-    os.system('rm -rf gau* hprim* hess* Hess* del.sh')
+    os.system('rm -rf phfpy* tmp* *hprime* hess* gau* Hess* del.sh\n')
+
+
+
+# Write Final result file
