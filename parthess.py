@@ -281,6 +281,18 @@ for dihd in mole.dihdlist.values():
         up=np.sum((hq-hp)*hk)
         down=np.sum(hk*hk)
         k=up/down
+        left=[]
+        right=[]
+        hideal=hq-hp
+        for i in range(0,3):
+            for j in range(0,3):
+                left.append([hk[i][j]])
+                right.append(hideal[i][j])
+        left=np.array(left)
+        right=np.array(right)
+        linres=np.linalg.lstsq(left,right)[0]
+        dihd.parmlls=linres
+
         dihd.parm=k
     if dihd.parm=='XXXXXX' and dihd.ifcouple!=False:
 
@@ -304,19 +316,36 @@ for dihd in mole.dihdlist.values():
         right=np.array(right)
         result=np.linalg.solve(left,right)
         result=iter(result)
+        llsleft=[]
+        llsright=[]
+        hideal=hq-hp
+        for i in range(0,3):
+            for j in range(0,3):
+                llsleft.append([x[i][j] for x in hk])
+                llsright.append(hideal[i][j])
+        llsleft=np.array(llsleft)
+        llsright=np.array(llsright)
+        llsres=np.linalg.lstsq(llsleft,llsright)[0]
+        llsres=iter(llsres)
         for item in links[dihd.ifcouple]:
             item.parm=next(result)
+            item.parmlls=next(llsres)
+#            item.parmlls=
 
 for nozomufunc in mmfile.nozomudihdfunc:
     if nozomufunc.value=='XXXXXX':
         res=0
         i=0
+        reslls=0
         for dihd in mole.dihdlist.values():
             if dihd.nozomufunc==nozomufunc:
                 res+=dihd.parm
+                reslls+=dihd.parmlls
                 i+=1
         nozomufunc.value=res/i
-
+        nozomufunc.valuells=reslls/i
+        print("ori:",nozomufunc.value)
+        print("lls:",nozomufunc.valuells)
 # Angles Hprime
 #print(mole.dihd(1,2,3,4).parm)
 anglehprimetail=tail('123',hprimevdwtail,'hprime')
@@ -339,6 +368,18 @@ for angle in mole.anglelist.values():
         up=np.sum((hq-hp)*hk)
         down=np.sum(hk*hk)
         k=up/down
+        hideal=hq-hp
+        left=[]
+        right=[]
+        for i in range(0,3):
+            for j in range(0,3):
+                left.append([hk[i][j]])
+                right.append(hideal[i][j])
+        left=np.array(left)
+        right=np.array(right)
+        linres=np.linalg.lstsq(left,right)[0]
+        angle.parmlls=linres
+
         angle.parm=k
     if angle.parm=='XXXXXX' and angle.ifcouple!=False:
 
@@ -362,18 +403,37 @@ for angle in mole.anglelist.values():
         right=np.array(right)
         result=np.linalg.solve(left,right)
         result=iter(result)
+
+        llsleft=[]
+        llsright=[]
+        hideal=hq-hp
+        for i in range(0,3):
+            for j in range(0,3):
+                llsleft.append([x[i][j] for x in hk])
+                llsright.append(hideal[i][j])
+        llsleft=np.array(llsleft)
+        llsright=np.array(llsright)
+        llsres=np.linalg.lstsq(llsleft,llsright)[0]
+        llsres=iter(llsres)
+
         for item in links[angle.ifcouple]:
             item.parm=next(result)
+            item.parmlls=next(llsres)
 
 for nozomufunc in mmfile.nozomuanglefunc:
     if nozomufunc.value=='XXXXXX':
         res=0
+        reslls=0
         i=0
         for angle in mole.anglelist.values():
             if angle.nozomufunc==nozomufunc:
                 res+=angle.parm
+                reslls+=angle.parmlls
                 i+=1
         nozomufunc.value=res/i
+        nozomufunc.valuells=reslls/i
+        print("ori:",nozomufunc.value)
+        print("lls:",nozomufunc.valuells)
 
 # Bonds Hprime
 #print(mole.dihd(1,2,3,4).parm)
@@ -397,7 +457,36 @@ for bond in mole.bondlist.values():
         up=np.sum((hq-hp)*hk)
         down=np.sum(hk*hk)
         k=up/down
+        bond.eigenvalue=np.linalg.eig(hq)[0]
+        bond.eigenvector=np.linalg.eig(hq)[1]
+        vecu=bond.vec/np.linalg.norm(bond.vec)
+        bond.proj=[abs(np.dot(vecu,x)) for x in bond.eigenvector]
+        kab=[x*y for x,y in zip(bond.eigenvalue,bond.proj)]
+        kab=np.sum(kab)
+        kab=abs(kab*1185.82157)
+        hideal=hq-hp
+        left=[]
+        right=[]
+        middle=[]
+        for i in range(0,3):
+            for j in range(0,3):
+                left.append([hk[i][j]])
+                right.append(hideal[i][j])
+                if hk[i][j]!=0:
+                    middle.append(hideal[i][j]/hk[i][j])
+        middle=np.array(middle)
+        print(middle)
+        print(hideal)
+        print(hk)
+        middle=np.sum(middle)/len(middle)
+        left=np.array(left)
+        right=np.array(right)
+        linres=np.linalg.lstsq(left,right)[0]
+
+        bond.parmlls=linres
+        bond.parmeach=middle
         bond.parm=k
+        bond.parmsemi=kab
     if bond.parm=='XXXXXX' and bond.ifcouple!=False:
 
         hk=[]
@@ -420,18 +509,44 @@ for bond in mole.bondlist.values():
         right=np.array(right)
         result=np.linalg.solve(left,right)
         result=iter(result)
+
+        llsleft=[]
+        llsright=[]
+        hideal=hq-hp
+        for i in range(0,3):
+            for j in range(0,3):
+                llsleft.append([x[i][j] for x in hk])
+                llsright.append(hideal[i][j])
+        llsleft=np.array(llsleft)
+        llsright=np.array(llsright)
+        llsres=np.linalg.lstsq(llsleft,llsright)[0]
+        llsres=iter(llsres)
+
         for item in links[bond.ifcouple]:
             item.parm=next(result)
+            item.parmlls=next(llsres)
 
 for nozomufunc in mmfile.nozomubondfunc:
     if nozomufunc.value=='XXXXXX':
         res=0
+        ressemi=0
+        reslls=0
+        resmid=0
         i=0
         for bond in mole.bondlist.values():
             if bond.nozomufunc==nozomufunc:
+                ressemi+=bond.parmsemi
+                reslls+=bond.parmlls
                 res+=bond.parm
+                resmid=bond.parmeach
                 i+=1
         nozomufunc.value=res/i
+        nozomufunc.valuesemi=ressemi/i
+        nozomufunc.valuells=reslls/i
+        nozomufunc.valuemid=resmid/i
+        print("ori:",nozomufunc.value)
+        print("lls:",nozomufunc.valuells)
+        print("middle:",nozomufunc.valuemid)
 
 
 # Write final result file
