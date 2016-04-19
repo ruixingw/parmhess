@@ -4,34 +4,48 @@ import rx.molecules as rxmol
 import rx.chemfiles as rxfile
 import numpy as np
 from io import StringIO
-import argparse,os
+import argparse,os,logging
 
+############Parser input
 parser=argparse.ArgumentParser()
 parser.add_argument('mmfile',help="mmfile prepared by tsubasa.")
 parser.add_argument('qmfile',help="FCHK file from a frequency calculation.")
-parser.add_argument('-d','--delete',help="Delete all temp files. Default option will save files to ./phfdebug",action='store_true')
+parser.add_argument('--delete',help="Delete all temp files. Default option will save files to ./phfdebug",action='store_true')
 args=parser.parse_args()
 mmfile=args.mmfile
 originname=mmfile
 qmfile=args.qmfile
 delete=args.delete
 
-print(mmfile,qmfile)
-mmfile=mmfile[0:mmfile.find('.')]
-qmfile=qmfile[0:qmfile.find('.')]
-##prepare del.sh, del old files, print title
-with open('del.sh','w') as f:
-    f.write('rm -rf phfpy* tmp* *hprime* hess* gau* Hess* phfdebug del.sh\n')
-os.system('chmod +x del.sh')
+#### Logging module setting. Print INFO on screen and DEBUG INFO in file###########
+logging.basicConfig(filename=mmfile+'.phfout',level=logging.DEBUG,filemode='w')
+console=logging.StreamHandler()
+console.setLevel(logging.INFO)
+formatter=logging.Formatter('%(levelname)-8s %(message)s')
+console.setFormatter(formatter)
+logging.getLogger('').addHandler(console)
+###################################################################################
 
 print('\n\n                         Partial Hessian Fitting for parameterization\n\n')
-if delete:
-    print("\n\nWARNING: Delete mode is on, all temperory files would be deleted.\n\n")
-#os.system('rm -rf phfpy* gau* hprim* hess* Hess* ')
+
+logging.info("Provided mmfile input: "+mmfile+' and qmfchk input: '+qmfile)
+
+mmfile=mmfile[0:mmfile.find('.')]
+qmfile=qmfile[0:qmfile.find('.')]
+
+
+
+##prepare del.sh, del old files, print title
+with open('del.sh','w') as f:
+    f.write('rm -rf *hprime* hess* tmpphffile del.sh\n')
+os.system('chmod +x del.sh')
+
+
+
 mole=rxmol.Molecule('mmfile')
 mmfile=rxfile.File(mmfile).com
 qmfile=rxfile.File(qmfile)
-qmfile.readfchk()
+qmfile.fchk.read()
 mmfile.read()
 nunk=0
 for item in mmfile.nozomubondfunc:
@@ -58,49 +72,50 @@ for atom in mole:
     finalxyz+=atom.atomsym+'-'+atom.atomtype+'-'+str(atom.atomcharge)+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
 
 hesshead=mmfile.commandline+'\nhess\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+hessxyz+'\n'+mmfile.connectivity+'\n'
-hprimehead=mmfile.commandline+'\nhess\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+hprimexyz+'\n'+mmfile.connectivity+'\n'
+hprimehead=mmfile.commandline+'\nhprime\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+hprimexyz+'\n'+mmfile.connectivity+'\n'
 finalhead=mmfile.commandline+'\nfinal\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+finalxyz+'\n'+mmfile.connectivity+'\n'
-mole.readtypefromlist(mmfile.atomtypelist)
+
 
 def matchdihd(dihd,func):
-    a=(dihd.a.atomtype==func.a or func.a=='*')
-    b=(dihd.b.atomtype==func.b or func.b=='*')
-    c=(dihd.c.atomtype==func.c or func.c=='*')
-    d=(dihd.d.atomtype==func.d or func.d=='*')
+    a=(dihd[1].atomtype==func.a or func.a=='*')
+    b=(dihd[2].atomtype==func.b or func.b=='*')
+    c=(dihd[3].atomtype==func.c or func.c=='*')
+    d=(dihd[4].atomtype==func.d or func.d=='*')
     forward=a and b and c and d
-    a=(dihd.a.atomtype==func.d or func.d=='*')
-    b=(dihd.b.atomtype==func.c or func.c=='*')
-    c=(dihd.c.atomtype==func.b or func.b=='*')
-    d=(dihd.d.atomtype==func.a or func.a=='*')
-    reverse=a and b and c and d
-    if forward or reverse:
+    a=(dihd[1].atomtype==func.d or func.d=='*')
+    b=(dihd[2].atomtype==func.c or func.c=='*')
+    c=(dihd[3].atomtype==func.b or func.b=='*')
+    d=(dihd[4].atomtype==func.a or func.a=='*')
+    backward=a and b and c and d
+    if forward or backward:
         return True
     else:
         return False
 def matchbond(bond,func):
-    a=(bond.a.atomtype==func.a or func.a=='*')
-    b=(bond.b.atomtype==func.b or func.b=='*')
+    a=(bond[1].atomtype==func.a or func.a=='*')
+    b=(bond[2].atomtype==func.b or func.b=='*')
     forward=a and b
-    a=(bond.a.atomtype==func.b or func.b=='*')
-    b=(bond.b.atomtype==func.a or func.a=='*')
-    reverse=a and b
-    if forward or reverse:
+    a=(bond[1].atomtype==func.b or func.b=='*')
+    b=(bond[2].atomtype==func.a or func.a=='*')
+    backward=a and b
+    if forward or backward:
         return True
     else:
         return False
 def matchangle(angle,func):
-    a=(angle.a.atomtype==func.a or func.a=='*')
-    b=(angle.b.atomtype==func.b or func.b=='*')
-    c=(angle.c.atomtype==func.c or func.c=='*')
+    a=(angle[1].atomtype==func.a or func.a=='*')
+    b=(angle[2].atomtype==func.b or func.b=='*')
+    c=(angle[3].atomtype==func.c or func.c=='*')
     forward=a and b and c
-    a=(angle.a.atomtype==func.c or func.c=='*')
-    b=(angle.b.atomtype==func.b or func.b=='*')
-    c=(angle.c.atomtype==func.a or func.a=='*')
-    reverse=a and b and c
-    if forward or reverse:
+    a=(angle[1].atomtype==func.c or func.c=='*')
+    b=(angle[2].atomtype==func.b or func.b=='*')
+    c=(angle[3].atomtype==func.a or func.a=='*')
+    backward=a and b and c
+    if forward or backward:
         return True
     else:
         return False
+# Read vdw data !!!!!! leave later  : should read vdw from MMfile but not vdw.dat
 pwd=os.path.split(os.path.realpath(__file__))[0]
 vdwdata={}
 with open(os.path.join(pwd,'vdw.dat'),'r') as f:
@@ -114,6 +129,8 @@ for atom in mole:
     hessvdwtail+='VDW '+atom.name+'  '+atom.vdwradius+'  0.0000\n'
     hprimevdwtail+='VDW '+atom.name+'  '+atom.vdwradius+' '+atom.vdwepsilon+'\n'
 
+#!!!!!!
+# Match PoC and PoF
 for dihd in mole.dihdlist.values():
         for dihdfunc in mmfile.nozomudihdfunc:
             if matchdihd(dihd,dihdfunc):
@@ -129,6 +146,7 @@ for bond in mole.bondlist.values():
             if matchbond(bond,bondfunc):
                 bond.nozomufunc=bondfunc
                 bond.parm=bondfunc.value
+
 def tail(one,vdwtail,heorhp):
     hesstail=''
     for dihd in mole.dihdlist.values():
@@ -143,7 +161,7 @@ def tail(one,vdwtail,heorhp):
                 parm=str(dihd.parm)+' '
             if one is dihd:
                 parm='0.00 '
-        hesstail+='AmbTrs '+dihd.mydihdtype+' '
+        hesstail+='AmbTrs '+dihd.mytype+' '
         if dihd.nozomufunc.periodicity==1:
             hesstail+=' '+str(dihd.nozomufunc.phase)+'0 0 0 '+parm+' 0.0 0.0 0.0 '+str(dihd.nozomufunc.npaths)+'\n'
         elif dihd.nozomufunc.periodicity==2:
@@ -153,7 +171,7 @@ def tail(one,vdwtail,heorhp):
         elif dihd.nozomufunc.periodicity==4:
             hesstail+='0 0 0 '+str(dihd.nozomufunc.phase)+' 0.0 0.0 0.0 '+parm+' '+str(dihd.nozomufunc.npaths)+'\n'
         else:
-            print("No perio found for ",dihd.mydihdtype)
+            logging.critical("No perio found for "+dihd.mytype)
             quit()
     for angle in mole.anglelist.values():
         if heorhp=='hess':
@@ -168,7 +186,7 @@ def tail(one,vdwtail,heorhp):
             if one is angle:
                 parm='0.00 '
 
-        hesstail+='HrmBnd1 '+angle.myangletype+' '+parm+"{: .3f}".format(angle.anglevalue)+'\n'
+        hesstail+='HrmBnd1 '+angle.mytype+' '+parm+"{: .3f}".format(angle.anglevalue)+'\n'
 
     for bond in mole.bondlist.values():
         if heorhp=='hess':
@@ -183,7 +201,7 @@ def tail(one,vdwtail,heorhp):
             if one is bond:
                 parm='0.00 '
 
-        hesstail+='HrmStr1 '+bond.mybondtype+' '+parm+"{: .5f}".format(bond.length)+'\n'
+        hesstail+='HrmStr1 '+bond.mytype+' '+parm+"{: .5f}".format(bond.length)+'\n'
 
     for addfunc in mmfile.additionfunc:
         if addfunc.content.find('ImpTrs')>=0 and heorhp=='hess':
@@ -211,12 +229,12 @@ for obj in mmfunctions:
     this=rxfile.File('hess'+str(len(hess)))
     obj.hessfile=this
     hess.append(this)
-    hess[-1].rung09()
-    hess[-1].isover()
+    hess[-1].com.rung09()
+    hess[-1].com.isover()
     num-=1
-    print(num," left")
     hess[-1].runformchk()
-    hess[-1].readfchk()
+    hess[-1].fchk.read()
+    logging.info(str(num)+"+3 left")
     i+=1
 
 #Identify coupled terms
@@ -260,24 +278,24 @@ for key,value in links.items():
 
 
 # Dihds Hprime
-#print(mole.dihd(1,2,3,4).parm)
+
 dihdhprimetail=tail(mole.bond(1,2),hprimevdwtail,'hprime')
 dihdhprime=hprimehead+dihdhprimetail
 with open('dihdhprime.com','w') as f:
     f.write(dihdhprime)
 dihdhprime=rxfile.File('dihdhprime')
-dihdhprime.rung09()
-dihdhprime.isover()
+dihdhprime.com.rung09()
+dihdhprime.com.isover()
 dihdhprime.runformchk()
-dihdhprime.readfchk()
+dihdhprime.fchk.read()
 
 for dihd in mole.dihdlist.values():
     if dihd.parm=='XXXXXX' and dihd.ifcouple==False:
         a=dihd[1].atomnum
         b=dihd[4].atomnum
-        hk=dihd.hessfile.find33Hessian(a,b)
-        hp=dihdhprime.find33Hessian(a,b)
-        hq=qmfile.find33Hessian(a,b)
+        hk=dihd.hessfile.fchk.find33Hessian(a,b)
+        hp=dihdhprime.fchk.find33Hessian(a,b)
+        hq=qmfile.fchk.find33Hessian(a,b)
         up=np.sum((hq-hp)*hk)
         down=np.sum(hk*hk)
         k=up/down
@@ -292,23 +310,23 @@ for dihd in mole.dihdlist.values():
         right=np.array(right)
         linres=np.linalg.lstsq(left,right)[0]
         dihd.parmlls=linres
-
         dihd.parm=k
+        logging.debug("Parameter of "+dihd.mytype+' is '+str(k))
     if dihd.parm=='XXXXXX' and dihd.ifcouple!=False:
 
         hk=[]
         a=int(dihd.ifcouple.split('-')[0])
         b=int(dihd.ifcouple.split('-')[1])
         for item in links[dihd.ifcouple]:
-            hk.append(item.hessfile.find33Hessian(a,b))
+            hk.append(item.hessfile.fchk.find33Hessian(a,b))
 
         left=[]
         for ha in hk:
             left.append([np.sum(ha*hb) for hb in hk])
         left=np.array(left)
 
-        hq=qmfile.find33Hessian(a,b)
-        hp=dihdhprime.find33Hessian(a,b)
+        hq=qmfile.fchk.find33Hessian(a,b)
+        hp=dihdhprime.fchk.find33Hessian(a,b)
         right=[]
         for ha in hk:
             this=np.sum((hq-hp)*ha)
@@ -330,7 +348,7 @@ for dihd in mole.dihdlist.values():
         for item in links[dihd.ifcouple]:
             item.parm=next(result)
             item.parmlls=next(llsres)
-#            item.parmlls=
+            logging.debug("Parameter of "+item.mytype+' is '+str(item.parm))
 
 for nozomufunc in mmfile.nozomudihdfunc:
     if nozomufunc.value=='XXXXXX':
@@ -344,27 +362,24 @@ for nozomufunc in mmfile.nozomudihdfunc:
                 i+=1
         nozomufunc.value=res/i
         nozomufunc.valuells=reslls/i
-        print("ori:",nozomufunc.value)
-        print("lls:",nozomufunc.valuells)
 # Angles Hprime
-#print(mole.dihd(1,2,3,4).parm)
 anglehprimetail=tail('123',hprimevdwtail,'hprime')
 anglehprime=hprimehead+anglehprimetail
 with open('anglehprime.com','w') as f:
     f.write(anglehprime)
 anglehprime=rxfile.File('anglehprime')
-anglehprime.rung09()
-anglehprime.isover()
+anglehprime.com.rung09()
+anglehprime.com.isover()
 anglehprime.runformchk()
-anglehprime.readfchk()
+anglehprime.fchk.read()
 
 for angle in mole.anglelist.values():
     if angle.parm=='XXXXXX' and angle.ifcouple==False:
         a=angle[1].atomnum
         b=angle[3].atomnum
-        hk=angle.hessfile.find33Hessian(a,b)
-        hp=anglehprime.find33Hessian(a,b)
-        hq=qmfile.find33Hessian(a,b)
+        hk=angle.hessfile.fchk.find33Hessian(a,b)
+        hp=anglehprime.fchk.find33Hessian(a,b)
+        hq=qmfile.fchk.find33Hessian(a,b)
         up=np.sum((hq-hp)*hk)
         down=np.sum(hk*hk)
         k=up/down
@@ -381,21 +396,22 @@ for angle in mole.anglelist.values():
         angle.parmlls=linres
 
         angle.parm=k
+        logging.debug("Parameter of "+angle.mytype+' is '+str(angle.parm))
     if angle.parm=='XXXXXX' and angle.ifcouple!=False:
 
         hk=[]
         a=int(angle.ifcouple.split('-')[0])
         b=int(angle.ifcouple.split('-')[1])
         for item in links[angle.ifcouple]:
-            hk.append(item.hessfile.find33Hessian(a,b))
+            hk.append(item.hessfile.fchk.find33Hessian(a,b))
 
         left=[]
         for ha in hk:
             left.append([np.sum(ha*hb) for hb in hk])
         left=np.array(left)
 
-        hq=qmfile.find33Hessian(a,b)
-        hp=anglehprime.find33Hessian(a,b)
+        hq=qmfile.fchk.find33Hessian(a,b)
+        hp=anglehprime.fchk.find33Hessian(a,b)
         right=[]
         for ha in hk:
             this=np.sum((hq-hp)*ha)
@@ -419,7 +435,7 @@ for angle in mole.anglelist.values():
         for item in links[angle.ifcouple]:
             item.parm=next(result)
             item.parmlls=next(llsres)
-
+            logging.debug("Parameter of "+item.mytype+' is '+str(item.parm))
 for nozomufunc in mmfile.nozomuanglefunc:
     if nozomufunc.value=='XXXXXX':
         res=0
@@ -432,28 +448,26 @@ for nozomufunc in mmfile.nozomuanglefunc:
                 i+=1
         nozomufunc.value=res/i
         nozomufunc.valuells=reslls/i
-        print("ori:",nozomufunc.value)
-        print("lls:",nozomufunc.valuells)
 
 # Bonds Hprime
-#print(mole.dihd(1,2,3,4).parm)
+
 bondhprimetail=tail('123',hprimevdwtail,'hprime')
 bondhprime=hprimehead+bondhprimetail
 with open('bondhprime.com','w') as f:
     f.write(bondhprime)
 bondhprime=rxfile.File('bondhprime')
-bondhprime.rung09()
-bondhprime.isover()
+bondhprime.com.rung09()
+bondhprime.com.isover()
 bondhprime.runformchk()
-bondhprime.readfchk()
+bondhprime.fchk.read()
 
 for bond in mole.bondlist.values():
     if bond.parm=='XXXXXX' and bond.ifcouple==False:
         a=bond[1].atomnum
         b=bond[2].atomnum
-        hk=bond.hessfile.find33Hessian(a,b)
-        hp=bondhprime.find33Hessian(a,b)
-        hq=qmfile.find33Hessian(a,b)
+        hk=bond.hessfile.fchk.find33Hessian(a,b)
+        hp=bondhprime.fchk.find33Hessian(a,b)
+        hq=qmfile.fchk.find33Hessian(a,b)
         up=np.sum((hq-hp)*hk)
         down=np.sum(hk*hk)
         k=up/down
@@ -475,9 +489,6 @@ for bond in mole.bondlist.values():
                 if hk[i][j]!=0:
                     middle.append(hideal[i][j]/hk[i][j])
         middle=np.array(middle)
-        print(middle)
-        print(hideal)
-        print(hk)
         middle=np.sum(middle)/len(middle)
         left=np.array(left)
         right=np.array(right)
@@ -487,21 +498,22 @@ for bond in mole.bondlist.values():
         bond.parmeach=middle
         bond.parm=k
         bond.parmsemi=kab
+        logging.debug("Parameter of "+bond.mytype+' is '+str(bond.parm))
     if bond.parm=='XXXXXX' and bond.ifcouple!=False:
 
         hk=[]
         a=int(bond.ifcouple.split('-')[0])
         b=int(bond.ifcouple.split('-')[1])
         for item in links[bond.ifcouple]:
-            hk.append(item.hessfile.find33Hessian(a,b))
+            hk.append(item.hessfile.fchk.find33Hessian(a,b))
 
         left=[]
         for ha in hk:
             left.append([np.sum(ha*hb) for hb in hk])
         left=np.array(left)
 
-        hq=qmfile.find33Hessian(a,b)
-        hp=bondhprime.find33Hessian(a,b)
+        hq=qmfile.fchk.find33Hessian(a,b)
+        hp=bondhprime.fchk.find33Hessian(a,b)
         right=[]
         for ha in hk:
             this=np.sum((hq-hp)*ha)
@@ -525,6 +537,7 @@ for bond in mole.bondlist.values():
         for item in links[bond.ifcouple]:
             item.parm=next(result)
             item.parmlls=next(llsres)
+            logging.debug("Parameter of "+item.mytype+' is '+str(item.parm))
 
 for nozomufunc in mmfile.nozomubondfunc:
     if nozomufunc.value=='XXXXXX':
@@ -544,9 +557,6 @@ for nozomufunc in mmfile.nozomubondfunc:
         nozomufunc.valuesemi=ressemi/i
         nozomufunc.valuells=reslls/i
         nozomufunc.valuemid=resmid/i
-        print("ori:",nozomufunc.value)
-        print("lls:",nozomufunc.valuells)
-        print("middle:",nozomufunc.valuemid)
 
 
 # Write final result file
@@ -573,7 +583,7 @@ for item in mmfile.nozomubondfunc:
     parm="{: .3f}".format(item.value)
     finaltail+=' '+parm+' {: .5f}'.format(item.eqvalue)+'\n'
 
-print(finaltail)
+logging.info('Final parameters:\n\n'+finaltail)
 
 for addfunc in mmfile.additionfunc:
     finaltail+=addfunc.content
@@ -586,10 +596,10 @@ with open('phf_result_'+originname,'w') as f:
 
 
 if not delete:
-    os.system('mkdir phfdebug')
-    os.system('mv phfpy* tmp* *hprime* hess* gau* Hess* del.sh phfdebug')
+    os.popen('mkdir tmpphffile')
+    os.popen('mv *hprime* hess* del.sh tmpphffile')
 else:
-    os.system('rm -rf phfpy* tmp* *hprime* hess* gau* Hess* del.sh\n')
+    os.popen('rm -rf *hprime* hess* gau* Hess* del.sh\n')
 
 
 
