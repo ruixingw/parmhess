@@ -4,9 +4,9 @@ import rx.molecules as rxmol
 import rx.chemfiles as rxfile
 import numpy as np
 from io import StringIO
-import argparse,os,logging
+import argparse,os,logging,pdb
 
-############Parser input
+############Parse input
 parser=argparse.ArgumentParser()
 parser.add_argument('mmfile',help="mmfile prepared by tsubasa.")
 parser.add_argument('qmfile',help="FCHK file from a frequency calculation.")
