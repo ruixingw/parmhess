@@ -92,9 +92,9 @@ hessxyz=''
 hprimexyz=''
 finalxyz=''
 for atom in mole:
-    hprimexyz+=atom.atomsym+'-'+atom.name+'-'+str(atom.atomcharge)+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
+    hprimexyz+=atom.atomsym+'-'+atom.name+'-'+'{:8.6f}'.format(float(atom.atomcharge))+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
     hessxyz+=atom.atomsym+'-'+atom.name+'-0.000000'+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
-    finalxyz+=atom.atomsym+'-'+atom.atomtype+'-'+str(atom.atomcharge)+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
+    finalxyz+=atom.atomsym+'-'+atom.atomtype+'-'+'{:8.6f}'.format(float(atom.atomcharge))+'   '+'    '.join(["{: .12f}".format(x) for x in atom.coords])+'\n'
 
 hesshead=mmcom.commandline+'\nhess\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+hessxyz+'\n'+mmcom.connectivity+'\n'
 hprimehead=mmcom.commandline+'\nhprime\n\n'+str(qmfile.totalcharge)+' '+str(qmfile.multiplicity)+'\n'+hprimexyz+'\n'+mmcom.connectivity+'\n'
