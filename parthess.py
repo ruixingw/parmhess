@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import print_function
-import rx.molecules as rxmol
-import rx.chemfiles as rxfile
+import rxcclib.molecules as rxmol
+import rxcclib.chemfiles as rxfile
 import numpy as np
 from io import StringIO
 import argparse,os,logging,pdb,itertools,copy
