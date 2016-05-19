@@ -3,8 +3,7 @@ from __future__ import print_function
 import rxcclib.molecules as rxmol
 import rxcclib.chemfiles as rxfile
 import numpy as np
-from io import StringIO
-import argparse,os,logging,pdb,itertools,copy
+import argparse,os,logging,itertools,copy
 
 ############Parse input
 parser=argparse.ArgumentParser()
