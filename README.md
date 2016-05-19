@@ -1,33 +1,40 @@
-# Parthess
+# Parthess User Guide
 
 
 ## Overview
-Parthess is a program to determine force constants in Molecular Mechanics (MM) by *Partial Hessian Fitting* (PHF) scheme. The details of PHF scheme is published on XXX.
+
+*Parthess* is a program to determine force constants in Molecular Mechanics (MM) by *Partial Hessian Fitting (PHF)* scheme. The details of *PHF* scheme is published on XXX.
 
 
 ## HowTo
+
 This program is written in Python3 and used many third-party packages.
+
 Dependencies:
-- Python3 , while only Python 3.5.1 (Anaconda 4.0.0) is tested.
-- numpy >1.10
-- cclib >1.3.2
-- rxcclib (See this page)
+- Python3
+- numpy > 1.10
+- [cclib](https://cclib.github.io/) > 1.3.2
+- [rxcclib](https://github.com/ruixingw/rxcclib)
 
-It is strongly recommended to use Anaconda rather than install Python and packages separately, if you are not an experienced Python programmer.
 
-We also wrote another library temporarily named *rxcclib*, which defines molecules, MM functions and methods for file parsing. You will need to install it manually.
+If you are not an experienced Python programmer, it is **strongly recommended** to use [Anaconda](https://www.continuum.io/downloads) rather than install Python and packages separately. 
 
-*cclib* is not included in Anaconda, you will need to install it manually. We plan to contribute some codes of rxcclib to cclib in the future.
-Installation of cclib is very easy:
+*numpy* is already included in the newest version of *Anaconda* with [Intel MKL Optimizations](https://www.continuum.io/blog/developer-blog/anaconda-25-release-now-mkl-optimizations), which gives a much better performance.
+
+*Parthess* requires another code package written by us, temporarily named [*rxcclib*](https://github.com/ruixingw/rxcclib). It defines molecules, MM functions and methods for file parsing. You will need to install it manually.
+
+[*cclib*](https://cclib.github.io/) is not included in Anaconda, you will need to install it manually. Installation of cclib is very easy:
 
 ```pip install cclib```
 
+Although, only a small unit conversion utility is used in *cclib*. We plan to contribute some file parsing codes of *rxcclib* to *cclib* in the future.
 
 ## Prepare Input File
 PHF scheme will need a MM input file and the QM Hessian. 
 
 - QM Hessian is usually obtained by a frequency calculation. *Parthess* program accepts the Gaussian Formatted Checkpoint File (FCHK) as the QM Hessian input.
-- MM input file includes the equilibrium geometry (same with FCHK file), atom types, atomic charges, and MM functions. The MM input file follows Gaussian Format. An example of H_2O_2 is attached.
+- MM input file includes the equilibrium geometry (same with FCHK file), atom types, atomic charges, and MM functions. The MM input file follows Gaussian Format. The undetermined force constants are noted with "XXXXXX". An example for H<sub>2</sub>O<sub>2</sub> is attached.
+
 
 ```
 %mem=12gb         
@@ -57,6 +64,3 @@ VDW oh  1.7210  0.2104
 VDW ho  0.0000  0.0000
 
 ```
-
-
-
