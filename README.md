@@ -6,6 +6,16 @@
 *Parthess* is a program to determine force constants in Molecular Mechanics (MM) by *Partial Hessian Fitting (PHF)* scheme. The details of *PHF* scheme is published on XXX.
 
 
+## Quick Start
+1. Install [Anaconda(Python3 version)](https://www.continuum.io/downloads) 
+2. Install [cclib](https://cclib.github.io/). Just run ```pip install cclib```.
+3. Download [rxcclib](https://github.com/ruixingw/rxcclib).
+4. Setting up the $PYTHONPATH environment and put *rxcclib* in it.
+5. Download [Tsubasa](https://github.com/ruixingw/tsubasa).
+6. Prepare molecule geometry, and run *Tsubasa* program.
+7. From the output of *Tsubasa* program, run *Parthess*.
+
+
 ## HowTo
 
 This program is written in Python3 and used many third-party packages.
@@ -30,10 +40,13 @@ If you are not an experienced Python programmer, it is **strongly recommended** 
 Although, only a small unit conversion utility is used in *cclib*. We plan to contribute some file parsing codes of *rxcclib* to *cclib* in the future.
 
 ## Prepare Input File
-PHF scheme will need a MM input file and the QM Hessian. 
 
-- QM Hessian is usually obtained by a frequency calculation. *Parthess* program accepts the Gaussian Formatted Checkpoint File (FCHK) as the QM Hessian input.
-- MM input file includes the equilibrium geometry (same with FCHK file), atom types, atomic charges, and MM functions. The MM input file follows Gaussian Format. The undetermined force constants are noted with "XXXXXX". An example for H<sub>2</sub>O<sub>2</sub> is attached.
+It is recommended to generate all inputs file by [*Tsubasa* program](https://github.com/ruixingw/tsubasa).
+
+Parthess scheme needs an MM input file and the QM Hessian input file.
+
+- *Parthess* accepts the Gaussian Formatted Checkpoint File (FCHK) as the QM Hessian input. A frequency calculation can yield the Hessian.
+- The MM input file follows Gaussian Format, which includes the optimized geometry, atom types, atomic charges, and MM functions. The undetermined force constants are denoted by "XXXXXX". An example for H<sub>2</sub>O<sub>2</sub> is attached.
 
 
 ```
@@ -64,3 +77,6 @@ VDW oh  1.7210  0.2104
 VDW ho  0.0000  0.0000
 
 ```
+
+
+
