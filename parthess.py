@@ -106,7 +106,8 @@ for atom in mole:
 
 hesshead = mmcom.commandline + '\nhess\n\n' + str(
     qmfile.totalcharge) + ' ' + str(
-        qmfile.multiplicity) + '\n' + hessxyz + '\n' + mmcom.connectivity + '\n'
+        qmfile.
+        multiplicity) + '\n' + hessxyz + '\n' + mmcom.connectivity + '\n'
 hprimehead = mmcom.commandline + '\nhprime\n\n' + str(
     qmfile.totalcharge) + ' ' + str(
         qmfile.
@@ -311,8 +312,8 @@ def hprimetail():
             parm = str(improper.forceconst)
         tailstring += 'ImpTrs  ' + ' '.join([
             x.center(3, ' ') for x in improper.repr.split()
-        ]) + '  ' + parm + '  ' + '{:6.2f}'.format(improper.phase) + '  ' + str(
-            improper.npaths) + '\n'
+        ]) + '  ' + parm + '  ' + '{:6.2f}'.format(
+            improper.phase) + '  ' + str(improper.npaths) + '\n'
     for x in mmcom.additionfunc:
         tailstring += x.content
     tailstring += hprimevdwtail
