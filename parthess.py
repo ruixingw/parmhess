@@ -3,26 +3,51 @@ from __future__ import print_function
 import rxcclib.molecules as rxmol
 import rxcclib.chemfiles as rxfile
 import numpy as np
-import argparse, os, logging, itertools, copy
+import argparse
+import subprocess
+import logging
+import itertools
+import copy
+import os
+import shutil
 
 #  Parse input
 
+if os.path.lexists('hffiles'):
+    shutil.rmtree('hffiles')
+
+os.mkdir('hffiles')
+os.chdir('hffiles')
+# shutil.move('mv *hprime* hess* del.sh','tmpphffile')
+# else:
+#    os.remove('*hprime* hess* gau* Hess* del.sh\n')
+
 parser = argparse.ArgumentParser()
-parser.add_argument('mmfile', help="mmfile prepared by tsubasa.")
-parser.add_argument('qmfile', help="FCHK file from a frequency calculation.")
+parser.add_argument('inputinp',
+                    default='input.inp',
+                    help='input.inp prepared by tsubasa.')
+# parser.add_argument('mmfile', help="mmfile prepared by tsubasa.")
+# parser.add_argument('qmfile', help="FCHK file from a frequency calculation.")
 parser.add_argument(
     '--delete',
-    help="Delete all temp files. Default option will save files to ./phfdebug",
+    help="Delete all temp files. Default option will save files to ./hffiles",
     action='store_true')
 
 args = parser.parse_args()
-mmfile = args.mmfile
-originname = mmfile
-qmfile = args.qmfile
+inputinp = args.inputinp
+with open(os.path.join('..', inputinp), 'r') as f:
+    for line in f:
+        if line.find('mmfile') >= 0:
+            mmfile = line.split('=')[1].strip('\n')
+            mmfile = os.path.join('..', mmfile)
+        elif line.find('qmfchk') >= 0:
+            qmfile = line.split('=')[1].strip('\n')
+            qmfile = os.path.join('..', qmfile)
+originalname = os.path.basename(mmfile)
 delete = args.delete
 
 # Logging module setting. Print INFO on screen and DEBUG INFO in file======
-logging.basicConfig(filename=mmfile + '.phfout',
+logging.basicConfig(filename=originalname + '.phfout',
                     level=logging.DEBUG,
                     filemode='w')
 console = logging.StreamHandler()
@@ -37,13 +62,13 @@ print('\n\n            Partial Hessian Fitting for parameterization\n\n')
 logging.info("Provided mmfile input: " + mmfile + ' and qmfchk input: ' +
              qmfile)
 
-mmfile = mmfile[0:mmfile.find('.')]
-qmfile = qmfile[0:qmfile.find('.')]
+mmfile = os.path.splitext(mmfile)[0]
+qmfile = os.path.splitext(qmfile)[0]
 
 #  prepare del.sh, del old files, print title
 with open('del.sh', 'w') as f:
     f.write('rm -rf *hprime* hess* tmpphffile del.sh\n')
-os.system('chmod +x del.sh')
+subprocess.run('chmod +x del.sh', shell=True)
 
 #   Instantialize Molecule and file
 mole = rxmol.Molecule('mmcom')
@@ -106,8 +131,7 @@ for atom in mole:
 
 hesshead = mmcom.commandline + '\nhess\n\n' + str(
     qmfile.totalcharge) + ' ' + str(
-        qmfile.
-        multiplicity) + '\n' + hessxyz + '\n' + mmcom.connectivity + '\n'
+        qmfile.multiplicity) + '\n' + hessxyz + '\n' + mmcom.connectivity + '\n'
 hprimehead = mmcom.commandline + '\nhprime\n\n' + str(
     qmfile.totalcharge) + ' ' + str(
         qmfile.
@@ -185,7 +209,8 @@ for atom in mole:
     atom.vdwradius = vdwdict[atom.atomtype][0]
     atom.vdwwelldepth = vdwdict[atom.atomtype][1]
     hessvdwtail += 'VDW ' + atom.name + '  ' + atom.vdwradius + '  0.0000\n'
-    hprimevdwtail += 'VDW ' + atom.name + '  ' + atom.vdwradius + ' ' + atom.vdwwelldepth + '\n'
+    hprimevdwtail += 'VDW ' + atom.name + '  ' + \
+        atom.vdwradius + ' ' + atom.vdwwelldepth + '\n'
 
 # Match internal coordinate and mmfunction
 for dihd in mole.dihdlist.values():
@@ -312,8 +337,8 @@ def hprimetail():
             parm = str(improper.forceconst)
         tailstring += 'ImpTrs  ' + ' '.join([
             x.center(3, ' ') for x in improper.repr.split()
-        ]) + '  ' + parm + '  ' + '{:6.2f}'.format(
-            improper.phase) + '  ' + str(improper.npaths) + '\n'
+        ]) + '  ' + parm + '  ' + '{:6.2f}'.format(improper.phase) + '  ' + str(
+            improper.npaths) + '\n'
     for x in mmcom.additionfunc:
         tailstring += x.content
     tailstring += hprimevdwtail
@@ -373,7 +398,8 @@ for obj in unkparmL:
     if type(obj) == rxmol.dihdforceconst:
         a = obj.dihd[1].atomnum
         b = obj.dihd[4].atomnum
-        if a > b: a, b = b, a
+        if a > b:
+            a, b = b, a
         if str(a) + '-' + str(b) in links.keys():
             links[str(a) + '-' + str(b)].append(obj)
         else:
@@ -381,7 +407,8 @@ for obj in unkparmL:
     if type(obj) == rxmol.Angle:
         a = obj[1].atomnum
         b = obj[3].atomnum
-        if a > b: a, b = b, a
+        if a > b:
+            a, b = b, a
         if str(a) + '-' + str(b) in links.keys():
             links[str(a) + '-' + str(b)].append(obj)
         else:
@@ -389,7 +416,8 @@ for obj in unkparmL:
     if type(obj) == rxmol.Bond:
         a = obj[1].atomnum
         b = obj[2].atomnum
-        if a > b: a, b = b, a
+        if a > b:
+            a, b = b, a
         if str(a) + '-' + str(b) in links.keys():
             links[str(a) + '-' + str(b)].append(obj)
         else:
@@ -397,7 +425,8 @@ for obj in unkparmL:
     if type(obj) == rxmol.Improper:
         a = obj[1].atomnum
         b = obj[4].atomnum
-        if a > b: a, b = b, a
+        if a > b:
+            a, b = b, a
         if str(a) + '-' + str(b) in links.keys():
             links[str(a) + '-' + str(b)].append(obj)
         else:
@@ -587,18 +616,16 @@ for improper in mmcom.nozomuimproperfunc:
 for x in mmcom.additionfunc:
     tailstring += x.content
 for vdw in mmcom.nozomuvdw:
-    tailstring += 'VDW  ' + '  ' + vdw.atomtype + '  ' + vdw.radius + '  ' + vdw.welldepth + '\n'
+    tailstring += 'VDW  ' + '  ' + vdw.atomtype + \
+        '  ' + vdw.radius + '  ' + vdw.welldepth + '\n'
 tailstring += '\n\n'
 
 logging.info('\n\nresult:\n')
 logging.info(tailstring)
 
-with open('phf_result_' + originname, 'w') as f:
-    logging.info('Write result to file phf_result_' + originname)
+phfname = 'phf_result_' + originalname
+with open(phfname, 'w') as f:
+    logging.info('Write result to file phf_result_' + originalname)
     f.write(finalhead + tailstring)
 
-if not delete:
-    os.popen('mkdir tmpphffile')
-    os.popen('mv *hprime* hess* del.sh tmpphffile')
-else:
-    os.popen('rm -rf *hprime* hess* gau* Hess* del.sh\n')
+shutil.copy(phfname, os.path.join('..', phfname))
