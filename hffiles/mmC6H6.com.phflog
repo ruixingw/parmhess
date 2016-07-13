@@ -1,0 +1,21 @@
+INFO:root:Start Hessian Fitting for MM parameterization
+
+
+INFO:root:Release under GNU LGPL License
+INFO:root:If you use this program and/or the Hessian fitting method, cite DOI:XXX 
+
+
+INFO:root:Provided mmfile input: mmC6H6.com and qmfchk input: freqC6H6.fchk
+INFO:root:Read fchk:freqC6H6.fchk
+DEBUG:root:In freqC6H6.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In freqC6H6.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In freqC6H6.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In freqC6H6.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In freqC6H6.fchk.read(),  end read Cartesian Coordinates at line: Force Field                                I                0
+
+DEBUG:root:In freqC6H6.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
