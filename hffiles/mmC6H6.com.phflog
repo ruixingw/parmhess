@@ -19,3 +19,1003 @@ DEBUG:root:In freqC6H6.fchk.read(),  end read Cartesian Coordinates at line: For
 
 DEBUG:root:In freqC6H6.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
 
+INFO:root:  formchk -3 hess0.chk hess0.fchk
+INFO:root:Read fchk:hess0.fchk
+DEBUG:root:In hess0.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess0.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess0.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess0.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess0.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess0.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess0.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:56 left
+INFO:root:  formchk -3 hess1.chk hess1.fchk
+INFO:root:Read fchk:hess1.fchk
+DEBUG:root:In hess1.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess1.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess1.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess1.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess1.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess1.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess1.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:55 left
+INFO:root:  formchk -3 hess2.chk hess2.fchk
+INFO:root:Read fchk:hess2.fchk
+DEBUG:root:In hess2.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess2.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess2.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess2.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess2.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess2.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess2.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:54 left
+INFO:root:  formchk -3 hess3.chk hess3.fchk
+INFO:root:Read fchk:hess3.fchk
+DEBUG:root:In hess3.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess3.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess3.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess3.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess3.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess3.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess3.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:53 left
+INFO:root:  formchk -3 hess4.chk hess4.fchk
+INFO:root:Read fchk:hess4.fchk
+DEBUG:root:In hess4.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess4.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess4.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess4.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess4.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess4.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess4.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:52 left
+INFO:root:  formchk -3 hess5.chk hess5.fchk
+INFO:root:Read fchk:hess5.fchk
+DEBUG:root:In hess5.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess5.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess5.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess5.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess5.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess5.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess5.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:51 left
+INFO:root:  formchk -3 hess6.chk hess6.fchk
+INFO:root:Read fchk:hess6.fchk
+DEBUG:root:In hess6.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess6.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess6.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess6.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess6.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess6.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess6.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:50 left
+INFO:root:  formchk -3 hess7.chk hess7.fchk
+INFO:root:Read fchk:hess7.fchk
+DEBUG:root:In hess7.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess7.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess7.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess7.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess7.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess7.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess7.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:49 left
+INFO:root:  formchk -3 hess8.chk hess8.fchk
+INFO:root:Read fchk:hess8.fchk
+DEBUG:root:In hess8.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess8.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess8.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess8.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess8.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess8.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess8.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:48 left
+INFO:root:  formchk -3 hess9.chk hess9.fchk
+INFO:root:Read fchk:hess9.fchk
+DEBUG:root:In hess9.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess9.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess9.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess9.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess9.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess9.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess9.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:47 left
+INFO:root:  formchk -3 hess10.chk hess10.fchk
+INFO:root:Read fchk:hess10.fchk
+DEBUG:root:In hess10.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess10.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess10.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess10.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess10.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess10.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess10.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:46 left
+INFO:root:  formchk -3 hess11.chk hess11.fchk
+INFO:root:Read fchk:hess11.fchk
+DEBUG:root:In hess11.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess11.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess11.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess11.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess11.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess11.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess11.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:45 left
+INFO:root:  formchk -3 hess12.chk hess12.fchk
+INFO:root:Read fchk:hess12.fchk
+DEBUG:root:In hess12.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess12.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess12.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess12.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess12.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess12.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess12.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:44 left
+INFO:root:  formchk -3 hess13.chk hess13.fchk
+INFO:root:Read fchk:hess13.fchk
+DEBUG:root:In hess13.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess13.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess13.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess13.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess13.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess13.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess13.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:43 left
+INFO:root:  formchk -3 hess14.chk hess14.fchk
+INFO:root:Read fchk:hess14.fchk
+DEBUG:root:In hess14.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess14.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess14.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess14.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess14.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess14.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess14.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:42 left
+INFO:root:  formchk -3 hess15.chk hess15.fchk
+INFO:root:Read fchk:hess15.fchk
+DEBUG:root:In hess15.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess15.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess15.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess15.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess15.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess15.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess15.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:41 left
+INFO:root:  formchk -3 hess16.chk hess16.fchk
+INFO:root:Read fchk:hess16.fchk
+DEBUG:root:In hess16.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess16.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess16.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess16.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess16.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess16.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess16.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:40 left
+INFO:root:  formchk -3 hess17.chk hess17.fchk
+INFO:root:Read fchk:hess17.fchk
+DEBUG:root:In hess17.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess17.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess17.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess17.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess17.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess17.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess17.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:39 left
+INFO:root:  formchk -3 hess18.chk hess18.fchk
+INFO:root:Read fchk:hess18.fchk
+DEBUG:root:In hess18.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess18.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess18.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess18.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess18.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess18.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess18.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:38 left
+INFO:root:  formchk -3 hess19.chk hess19.fchk
+INFO:root:Read fchk:hess19.fchk
+DEBUG:root:In hess19.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess19.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess19.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess19.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess19.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess19.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess19.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:37 left
+INFO:root:  formchk -3 hess20.chk hess20.fchk
+INFO:root:Read fchk:hess20.fchk
+DEBUG:root:In hess20.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess20.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess20.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess20.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess20.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess20.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess20.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:36 left
+INFO:root:  formchk -3 hess21.chk hess21.fchk
+INFO:root:Read fchk:hess21.fchk
+DEBUG:root:In hess21.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess21.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess21.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess21.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess21.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess21.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess21.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:35 left
+INFO:root:  formchk -3 hess22.chk hess22.fchk
+INFO:root:Read fchk:hess22.fchk
+DEBUG:root:In hess22.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess22.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess22.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess22.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess22.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess22.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess22.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:34 left
+INFO:root:  formchk -3 hess23.chk hess23.fchk
+INFO:root:Read fchk:hess23.fchk
+DEBUG:root:In hess23.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess23.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess23.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess23.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess23.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess23.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess23.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:33 left
+INFO:root:  formchk -3 hess24.chk hess24.fchk
+INFO:root:Read fchk:hess24.fchk
+DEBUG:root:In hess24.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess24.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess24.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess24.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess24.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess24.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess24.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:32 left
+INFO:root:  formchk -3 hess25.chk hess25.fchk
+INFO:root:Read fchk:hess25.fchk
+DEBUG:root:In hess25.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess25.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess25.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess25.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess25.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess25.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess25.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:31 left
+INFO:root:  formchk -3 hess26.chk hess26.fchk
+INFO:root:Read fchk:hess26.fchk
+DEBUG:root:In hess26.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess26.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess26.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess26.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess26.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess26.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess26.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:30 left
+INFO:root:  formchk -3 hess27.chk hess27.fchk
+INFO:root:Read fchk:hess27.fchk
+DEBUG:root:In hess27.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess27.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess27.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess27.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess27.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess27.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess27.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:29 left
+INFO:root:  formchk -3 hess28.chk hess28.fchk
+INFO:root:Read fchk:hess28.fchk
+DEBUG:root:In hess28.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess28.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess28.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess28.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess28.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess28.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess28.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:28 left
+INFO:root:  formchk -3 hess29.chk hess29.fchk
+INFO:root:Read fchk:hess29.fchk
+DEBUG:root:In hess29.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess29.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess29.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess29.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess29.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess29.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess29.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:27 left
+INFO:root:  formchk -3 hess30.chk hess30.fchk
+INFO:root:Read fchk:hess30.fchk
+DEBUG:root:In hess30.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess30.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess30.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess30.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess30.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess30.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess30.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:26 left
+INFO:root:  formchk -3 hess31.chk hess31.fchk
+INFO:root:Read fchk:hess31.fchk
+DEBUG:root:In hess31.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess31.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess31.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess31.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess31.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess31.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess31.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:25 left
+INFO:root:  formchk -3 hess32.chk hess32.fchk
+INFO:root:Read fchk:hess32.fchk
+DEBUG:root:In hess32.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess32.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess32.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess32.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess32.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess32.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess32.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:24 left
+INFO:root:  formchk -3 hess33.chk hess33.fchk
+INFO:root:Read fchk:hess33.fchk
+DEBUG:root:In hess33.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess33.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess33.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess33.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess33.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess33.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess33.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:23 left
+INFO:root:  formchk -3 hess34.chk hess34.fchk
+INFO:root:Read fchk:hess34.fchk
+DEBUG:root:In hess34.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess34.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess34.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess34.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess34.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess34.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess34.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:22 left
+INFO:root:  formchk -3 hess35.chk hess35.fchk
+INFO:root:Read fchk:hess35.fchk
+DEBUG:root:In hess35.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess35.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess35.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess35.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess35.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess35.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess35.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:21 left
+INFO:root:  formchk -3 hess36.chk hess36.fchk
+INFO:root:Read fchk:hess36.fchk
+DEBUG:root:In hess36.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess36.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess36.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess36.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess36.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess36.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess36.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:20 left
+INFO:root:  formchk -3 hess37.chk hess37.fchk
+INFO:root:Read fchk:hess37.fchk
+DEBUG:root:In hess37.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess37.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess37.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess37.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess37.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess37.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess37.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:19 left
+INFO:root:  formchk -3 hess38.chk hess38.fchk
+INFO:root:Read fchk:hess38.fchk
+DEBUG:root:In hess38.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess38.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess38.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess38.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess38.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess38.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess38.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:18 left
+INFO:root:  formchk -3 hess39.chk hess39.fchk
+INFO:root:Read fchk:hess39.fchk
+DEBUG:root:In hess39.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess39.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess39.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess39.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess39.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess39.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess39.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:17 left
+INFO:root:  formchk -3 hess40.chk hess40.fchk
+INFO:root:Read fchk:hess40.fchk
+DEBUG:root:In hess40.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess40.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess40.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess40.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess40.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess40.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess40.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:16 left
+INFO:root:  formchk -3 hess41.chk hess41.fchk
+INFO:root:Read fchk:hess41.fchk
+DEBUG:root:In hess41.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess41.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess41.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess41.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess41.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess41.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess41.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:15 left
+INFO:root:  formchk -3 hess42.chk hess42.fchk
+INFO:root:Read fchk:hess42.fchk
+DEBUG:root:In hess42.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess42.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess42.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess42.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess42.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess42.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess42.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:14 left
+INFO:root:  formchk -3 hess43.chk hess43.fchk
+INFO:root:Read fchk:hess43.fchk
+DEBUG:root:In hess43.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess43.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess43.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess43.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess43.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess43.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess43.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:13 left
+INFO:root:  formchk -3 hess44.chk hess44.fchk
+INFO:root:Read fchk:hess44.fchk
+DEBUG:root:In hess44.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess44.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess44.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess44.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess44.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess44.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess44.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:12 left
+INFO:root:  formchk -3 hess45.chk hess45.fchk
+INFO:root:Read fchk:hess45.fchk
+DEBUG:root:In hess45.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess45.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess45.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess45.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess45.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess45.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess45.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:11 left
+INFO:root:  formchk -3 hess46.chk hess46.fchk
+INFO:root:Read fchk:hess46.fchk
+DEBUG:root:In hess46.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess46.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess46.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess46.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess46.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess46.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess46.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:10 left
+INFO:root:  formchk -3 hess47.chk hess47.fchk
+INFO:root:Read fchk:hess47.fchk
+DEBUG:root:In hess47.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess47.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess47.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess47.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess47.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess47.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess47.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:9 left
+INFO:root:  formchk -3 hess48.chk hess48.fchk
+INFO:root:Read fchk:hess48.fchk
+DEBUG:root:In hess48.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess48.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess48.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess48.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess48.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess48.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess48.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:8 left
+INFO:root:  formchk -3 hess49.chk hess49.fchk
+INFO:root:Read fchk:hess49.fchk
+DEBUG:root:In hess49.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess49.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess49.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess49.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess49.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess49.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess49.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:7 left
+INFO:root:  formchk -3 hess50.chk hess50.fchk
+INFO:root:Read fchk:hess50.fchk
+DEBUG:root:In hess50.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess50.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess50.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess50.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess50.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess50.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess50.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:6 left
+INFO:root:  formchk -3 hess51.chk hess51.fchk
+INFO:root:Read fchk:hess51.fchk
+DEBUG:root:In hess51.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess51.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess51.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess51.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess51.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess51.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess51.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:5 left
+INFO:root:  formchk -3 hess52.chk hess52.fchk
+INFO:root:Read fchk:hess52.fchk
+DEBUG:root:In hess52.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess52.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess52.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess52.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess52.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess52.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess52.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:4 left
+INFO:root:  formchk -3 hess53.chk hess53.fchk
+INFO:root:Read fchk:hess53.fchk
+DEBUG:root:In hess53.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In hess53.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In hess53.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In hess53.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In hess53.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In hess53.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In hess53.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:3 left
+INFO:root:  formchk -3 onefourhprime.chk onefourhprime.fchk
+INFO:root:Read fchk:onefourhprime.fchk
+DEBUG:root:In onefourhprime.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In onefourhprime.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In onefourhprime.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In onefourhprime.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In onefourhprime.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In onefourhprime.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In onefourhprime.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:  formchk -3 onetriucLhprime.chk onetriucLhprime.fchk
+INFO:root:Read fchk:onetriucLhprime.fchk
+DEBUG:root:In onetriucLhprime.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In onetriucLhprime.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In onetriucLhprime.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In onetriucLhprime.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In onetriucLhprime.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In onetriucLhprime.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In onetriucLhprime.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:  formchk -3 onetwoLhprime.chk onetwoLhprime.fchk
+INFO:root:Read fchk:onetwoLhprime.fchk
+DEBUG:root:In onetwoLhprime.fchk.read(), Read Charge at line: Charge                                     I                0
+
+DEBUG:root:In onetwoLhprime.fchk.read(), Read Multiplicity at line: Multiplicity                               I                1
+
+DEBUG:root:In onetwoLhprime.fchk.read(), Read Natoms at line: Atomic numbers                             I   N=          12
+
+DEBUG:root:In onetwoLhprime.fchk.read(),  end read atomlist at line: Nuclear charges                            R   N=          12
+
+DEBUG:root:In onetwoLhprime.fchk.read(),  end read Cartesian Coordinates at line: Number of symbols in /Mol/                 I                7
+
+DEBUG:root:In onetwoLhprime.fchk. read(), end read internal Hessian at line: Optimization MaxStp                        I                2
+
+DEBUG:root:In onetwoLhprime.fchk. read(), end read Hessian at line: Dipole Moment                              R   N=           3
+
+INFO:root:Start Summarizing
+INFO:root:
+
+result:
+
+INFO:root:AmbTrs   *   ca  ca  *    0  180  0   0    0.000 347.845  0.000  0.000   4.0
+HrmBnd1   ca  ca  ha   46.700  120.00000
+HrmBnd1   ca  ca  ca   91.704  120.00000
+HrmStr1   ca  ha   378.918  1.08728
+HrmStr1   ca  ca   377.250  1.39889
+Nonbon 3 1 0 0 0.0 0.0 0.5 0.0 0.0 -1.2
+VDW    ca  1.9080  0.0860
+VDW    ha  1.4590  0.0150
+
+
+
+INFO:root:Write result to filephf_result_mmC6H6.com
+INFO:root:Start Summarizing
+INFO:root:
+
+result:
+
+INFO:root:AmbTrs   *   ca  ca  *    0  180  0   0    0.000 397.176  0.000  0.000   4.0
+HrmBnd1   ca  ca  ha   40.563  120.00000
+HrmBnd1   ca  ca  ca   57.980  120.00000
+HrmStr1   ca  ha   399.608  1.08728
+HrmStr1   ca  ca   392.308  1.39889
+Nonbon 3 1 0 0 0.0 0.0 0.5 0.0 0.0 -1.2
+VDW    ca  1.9080  0.0860
+VDW    ha  1.4590  0.0150
+
+
+
+INFO:root:Write result to filefhf_result_mmC6H6.com
