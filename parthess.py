@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import print_function
-import rxcclib.molecules as rxmol
-import rxcclib.chemfiles as rxfile
-import numpy as np
 import argparse
 import subprocess
 import logging
@@ -11,6 +7,11 @@ import copy
 import os
 import shutil
 
+import numpy as np
+
+import rxcclib.molecules as rxmol
+import rxcclib.chemfiles as rxfile
+
 #  Parse input
 
 if os.path.lexists('hffiles'):
@@ -18,9 +19,6 @@ if os.path.lexists('hffiles'):
 
 os.mkdir('hffiles')
 os.chdir('hffiles')
-# shutil.move('mv *hprime* hess* del.sh','tmpphffile')
-# else:
-#    os.remove('*hprime* hess* gau* Hess* del.sh\n')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('inputinp',
@@ -300,51 +298,6 @@ def hesstail(obj, i=0):
     return tailstring
 
 
-# Hprime(known) Hessian Component Tail
-def hprimetail():
-    tailstring = ''
-    for dihd in mole.dihdlist.values():
-        parm = []
-        for item in dihd.forceconst:
-            if str(item) == 'XXXXXX':
-                parm.append('0.000')
-            else:
-                parm.append(item)
-        tailstring += 'AmbTrs  ' + ' '.join(
-            [x.center(3, ' ') for x in dihd.repr.split()]) + '  ' + ' '.join(
-                [str(x).center(3, ' ') for x in dihd.phase]) + '  ' + ' '.join(
-                    [str(x) for x in parm]) + '   ' + str(dihd.npaths) + '\n'
-    for angle in mole.anglelist.values():
-        if angle.forceconst == 'XXXXXX':
-            parm = '0.000'
-        else:
-            parm = str(angle.forceconst)
-        tailstring += 'HrmBnd1  ' + ' '.join([
-            x.center(3, ' ') for x in angle.repr.split()
-        ]) + '  ' + parm + '  ' + '{:>9.5f}'.format(angle.anglevalue) + '\n'
-    for bond in mole.bondlist.values():
-        if bond.forceconst == 'XXXXXX':
-            parm = '0.000'
-        else:
-            parm = str(bond.forceconst)
-        tailstring += 'HrmStr1  ' + ' '.join([
-            x.center(3, ' ') for x in bond.repr.split()
-        ]) + '  ' + parm + '  ' + '{:>7.5f}'.format(bond.length) + '\n'
-    for improper in mole.improperlist.values():
-        if improper.forceconst == 'XXXXXX':
-            parm = '0.000'
-        else:
-            parm = str(improper.forceconst)
-        tailstring += 'ImpTrs  ' + ' '.join([
-            x.center(3, ' ') for x in improper.repr.split()
-        ]) + '  ' + parm + '  ' + '{:6.2f}'.format(improper.phase) + '  ' + str(
-            improper.npaths) + '\n'
-    for x in mmcom.additionfunc:
-        tailstring += x.content
-    tailstring += hprimevdwtail
-    tailstring += '\n\n'
-    return tailstring
-
 # Prepare Unit Hessian File
 hess = []
 num = realnunk
@@ -439,7 +392,6 @@ onetriucL = {}
 onefourL = {}
 onetrifourL = {}
 for key, value in links.items():
-    mytype = None
     types = []
     for item in value:
         types.append(type(item))
@@ -462,31 +414,6 @@ for key, value in links.items():
 
 # Start parameterization.
 
-
-def calcgroup(adict, thishprime):
-    for key, value in adict.items():
-        leftL, rightL = [], []
-        a, b = [int(x) for x in key.split('-')]
-        hq = qmfile.fchk.find33Hessian(a, b)
-        hp = thishprime.fchk.find33Hessian(a, b)
-        hideal = hq - hp
-        hideal = [x for item in hideal for x in item]
-        hk = []
-        for item in value:
-            tmp = item.hessfile.fchk.find33Hessian(a, b)
-            hk.append([x for row in tmp for x in row])
-        for i in range(0, len(hideal)):
-            rightL.append(hideal[i])
-            line = []
-            for hks in hk:
-                line.append(hks[i])
-            leftL.append(line)
-        leftL = np.array(leftL)
-        rightL = np.array(rightL)
-        res = np.linalg.lstsq(leftL, rightL)[0]
-        for i, item in enumerate(value):
-            item.forceconst = res[i]
-
 # sequence: onefour-->onetrifour-->onetri(coupled)-->onetri(uncoupled)-->onetwo
 if len(onefourL) != 0:
     onefourhprime = hprimehead + hprimetail()
@@ -497,7 +424,7 @@ if len(onefourL) != 0:
     onefourhprime.com.isover()
     onefourhprime.runformchk()
     onefourhprime.fchk.read()
-    calcgroup(onefourL, onefourhprime)
+    calcgroup(onefourL, onefourhprime, qmfchk)
 if len(onetrifourL) != 0:
     onetrifourhprime = hprimehead + hprimetail()
     with open('onetrifourhprime.com', 'w') as f:
@@ -507,7 +434,7 @@ if len(onetrifourL) != 0:
     onetrifourhprime.com.isover()
     onetrifourhprime.runformchk()
     onetrifourhprime.fchk.read()
-    calcgroup(onetrifourL, onetrifourhprime)
+    calcgroup(onetrifourL, onetrifourhprime, qmfchk)
 
 if len(onetricL) != 0:
     onetrichprime = hprimehead + hprimetail()
@@ -518,7 +445,7 @@ if len(onetricL) != 0:
     onetrichprime.com.isover()
     onetrichprime.runformchk()
     onetrichprime.fchk.read()
-    calcgroup(onetricL, onetrichprime)
+    calcgroup(onetricL, onetrichprime, qmfchk)
 
 if len(onetriucL) != 0:
     onetriucLhprime = hprimehead + hprimetail()
@@ -529,7 +456,7 @@ if len(onetriucL) != 0:
     onetriucLhprime.com.isover()
     onetriucLhprime.runformchk()
     onetriucLhprime.fchk.read()
-    calcgroup(onetriucL, onetriucLhprime)
+    calcgroup(onetriucL, onetriucLhprime, qmfchk)
 
 if len(onetwoL) != 0:
     onetwoLhprime = hprimehead + hprimetail()
@@ -540,7 +467,7 @@ if len(onetwoL) != 0:
     onetwoLhprime.com.isover()
     onetwoLhprime.runformchk()
     onetwoLhprime.fchk.read()
-    calcgroup(onetwoL, onetwoLhprime)
+    calcgroup(onetwoL, onetwoLhprime, qmfchk)
 
 logging.info('Start Summarizing')
 for nozomufunc in nozomuL:
