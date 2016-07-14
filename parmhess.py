@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse
-import subprocess
 import logging
 import itertools
 import copy
@@ -15,6 +14,21 @@ import rxcclib.molecules as rxmol
 import rxcclib.chemfiles as rxfile
 
 
+class InternalCoordinates(object):
+    def __init__(self, fileobj, atoms):
+        self.file = fileobj
+        assert isinstance(atoms, list), 'give atoms as list'
+        self.atomset = atoms
+        if len(atoms) == 2:
+            self.type = 'stretching'
+        elif len(atoms) == 3:
+            self.type = 'bending'
+        elif len(atoms) == 4:
+            self.type = 'torsion'
+        else:
+            raise
+
+
 class DihdForceConst(object):
     def __init__(self, value, dihd):
         self.forceconst = value
@@ -27,6 +41,7 @@ class DihdForceConst(object):
 
     def __str__(self):
         return str(self.forceconst)
+
     __repr__ = __str__
 
 
@@ -383,8 +398,8 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
                     res = [float(str(x)) + oldx
                            for x, oldx in zip(item.forceconst, res)]
                     i += 1
-            for i, item in enumerate(func.forceconst):
-                item.forceconst = res[i]
+            for index, item in enumerate(func.forceconst):
+                item.forceconst = res[index] / i
             print(func.type, func.repr, func.forceconst)
 
     # Build tailstring
@@ -395,8 +410,7 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
             if str(item) == MMFunction.unknownsign:
                 parm.append('0.000')
                 logging.critical('Force constant is not'
-                                 ' determined for dihedral ' +
-                                 dihd.repr)
+                                 ' determined for dihedral ' + dihd.repr)
                 raise
             else:
                 parm.append(float(str(item)))
@@ -501,6 +515,7 @@ def main(args):
     shutil.copy(os.path.join('..', mmfile), '.')
     shutil.copy(os.path.join('..', qmfchk), '.')
 
+
     mmfile = os.path.splitext(mmfile)[0]
     qmfchk = os.path.splitext(qmfchk)[0]
 
@@ -515,6 +530,7 @@ def main(args):
     mole.readtypefromlist(mmcom.atomtypelist)
     mole.readconnectivity(mmcom.connectivity)
 
+    shutil.copy(os.path.join('..', qmfchk.logname), '.')
     #   Count unknown parameters
     nunk = 0
     unkL = []
@@ -689,7 +705,7 @@ def main(args):
                         except rxfile.rxFileError:
                             this.com.rung09()
                             this.com.isover()
-                    this.runformchk()
+                        this.runformchk()
                     this.fchk.read()
                     num -= 1
                     logging.info(str(num + 3) + ' left')
@@ -709,7 +725,7 @@ def main(args):
                     except:
                         this.com.rung09()
                         this.com.isover()
-                this.runformchk()
+                    this.runformchk()
                 num -= 1
                 this.fchk.read()
                 logging.info(str(num + 3) + ' left')
@@ -790,7 +806,7 @@ def main(args):
         if not nocalc:
             onefourhprime.com.rung09()
             onefourhprime.com.isover()
-        onefourhprime.runformchk()
+            onefourhprime.runformchk()
         onefourhprime.fchk.read()
         calcphfgroup(onefourL, onefourhprime, qmfchk)
     if onetrifourL:
@@ -801,7 +817,7 @@ def main(args):
         if not nocalc:
             onetrifourhprime.com.rung09()
             onetrifourhprime.com.isover()
-        onetrifourhprime.runformchk()
+            onetrifourhprime.runformchk()
         onetrifourhprime.fchk.read()
         calcphfgroup(onetrifourL, onetrifourhprime, qmfchk)
 
@@ -813,7 +829,7 @@ def main(args):
         if not nocalc:
             onetrichprime.com.rung09()
             onetrichprime.com.isover()
-        onetrichprime.runformchk()
+            onetrichprime.runformchk()
         onetrichprime.fchk.read()
         calcphfgroup(onetricL, onetrichprime, qmfchk)
 
@@ -825,7 +841,7 @@ def main(args):
         if not nocalc:
             onetriucLhprime.com.rung09()
             onetriucLhprime.com.isover()
-        onetriucLhprime.runformchk()
+            onetriucLhprime.runformchk()
         onetriucLhprime.fchk.read()
         calcphfgroup(onetriucL, onetriucLhprime, qmfchk)
 
@@ -837,7 +853,7 @@ def main(args):
         if not nocalc:
             onetwoLhprime.com.rung09()
             onetwoLhprime.com.isover()
-        onetwoLhprime.runformchk()
+            onetwoLhprime.runformchk()
         onetwoLhprime.fchk.read()
         calcphfgroup(onetwoL, onetwoLhprime, qmfchk)
 
@@ -867,11 +883,20 @@ def main(args):
     # Start of FHF
     leftL = []
     hideal = []
-    hprime = onefourhprime
-    # for i in range(0, len(qmfchk.fchk.hessian)):
-    #     leftL.append([])
-    #     for item in unkparmL:
-    #         leftL[-1].append(item.hessfile.fchk.hessian[i])
+    try:
+        hprime = onefourhprime
+    except UnboundLocalError:
+        try:
+            hprime = onetrifourhprime
+        except UnboundLocalError:
+            try:
+                hprime = onetrichprime
+            except UnboundLocalError:
+                try:
+                    hprime = onetriucLhprime
+                except UnboundLocalError:
+                    hprime = onetwoLhprime
+
     hideal = qmfchk.fchk.hessian - hprime.fchk.hessian
     for item in unkparmL:
         tmp = item.hessfile.fchk.hessian
@@ -887,6 +912,88 @@ def main(args):
         item.forceconst = results[i]
     summarize(unkL, itnlcordL, originalname, finalhead, 'fhf')
 
+    # End of FHF
+    # Clean up:
+
+    for item in itnlcordL:
+        if type(item) != rxmol.Dihd:
+            if item.known is False:
+                item.forceconst = MMFunction.unknownsign
+        else:
+            for parms in item.forceconst:
+                if parms.known is False:
+                    parms = MMFunction.unknownsign
+    for item in unkL:
+        if item.type != 'dihd':
+            if item.known is False:
+                item.forceconst = MMFunction.unknownsign
+        else:
+            for parms in item.forceconst:
+                if parms.known is False:
+                    parms.forceconst = MMFunction.unknownsign
+
+    def readintcoords(fileobj):
+        intcords = []
+        with open(fileobj.logname) as f:
+            for line in f:
+                if line.find('Initial Parameters') < 0:
+                    continue
+                break
+            [next(f) for x in range(0, 4)]
+            for line in f:
+                if line.find('---') >= 0:
+                    break
+                line = line.split()
+                line = line[2]
+                line = line[2:-1]
+                line = [int(x) for x in line.split(',')]
+                intcords.append(InternalCoordinates(fileobj,
+                                                    line))
+        return intcords
+    # Check internal coordinates order matching
+    qmfchk.itnl = readintcoords(qmfchk)
+    assert len(qmfchk.itnl) == len(itnlcordL)
+    for item in hess:
+        item.itnl = readintcoords(item)
+        assert len(item.itnl) == len(itnlcordL)
+        for index, this in enumerate(item.itnl):
+            assert this.atomset == qmfchk.itnl[index].atomset
+    hprime.itnl = readintcoords(hprime)
+    assert len(hprime.itnl) == len(itnlcordL)
+
+    for x, y in zip(hprime.itnl, qmfchk.itnl):
+        assert x.atomset == y.atomset
+
+    # Read internal Hessian
+    for i in range(1, len(qmfchk.itnl)+1):
+        qmfchk.itnl[i-1].value = qmfchk.fchk.findintHessianElement(i, i)
+        hprime.itnl[i-1].value = (hprime.fchk.
+                                         findintHessianElement(i, i))
+        for item in hess:
+            item.itnl[i-1].value = item.fchk.findintHessianElement(i, i)
+    # Build leftL in itnl order:
+
+    leftL = []
+    for item in unkparmL:
+        leftL.append([])
+        tmp = item.hessfile.itnl
+        leftL[-1].extend(x.value for x in tmp)
+
+    leftL = list(zip(*leftL))
+    # Build b  vector in itnl order:
+    rightL = []
+    for qm, hp in zip(qmfchk.itnl, hprime.itnl):
+        rightL.append(qm.value - hp.value)
+    rightL = np.array(rightL)
+
+    leftL = np.array(leftL)
+    rightL = np.array(rightL)
+    res = np.linalg.lstsq(leftL, rightL)[0]
+
+    for i, item in enumerate(unkparmL):
+        item.forceconst = res[i]
+    summarize(unkL, itnlcordL, originalname, finalhead, 'int')
+
 
 if __name__ == "__main__":
 
@@ -898,7 +1005,9 @@ if __name__ == "__main__":
                         '-q',
                         action='store_true',
                         help=('Do not show info on screen'))
-    parser.add_argument('--nocalc', '-nc', action='store_true',
+    parser.add_argument('--nocalc',
+                        '-nc',
+                        action='store_true',
                         help=('Use already calculated file.'))
 
     args = parser.parse_args()
