@@ -1,7 +1,0 @@
-Authors
--------
-
-* Ruixing WANG
-
-
-
