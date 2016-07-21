@@ -20,7 +20,7 @@ Acceptable arguments:
 
 ::
 
-  [rwang013@boonlay-h00 parmhess]$ parmhess.py -h
+  [ruixingw@NTU parmhess]$ parmhess.py -h
   usage: parmhess.py [-h] [--quiet] [--nocalc] inputinp
 
   positional arguments:
@@ -39,7 +39,67 @@ Acceptable arguments:
 3. :code:`-nc` :code:`--nocalc` If the program has successfully run once already and files in :code:`hffiles` folder exists, this argument just read these files and give the results quickly (normally for debug purpose).
 
 
-An example is as follow:
+An example is shown as follow:
 
 ::
 
+  [ruixingw@NTU test2]$ ls
+  freqbenzene.fchk  freqbenzene.log  input.inp  mmbenzene.com  tsubasa/
+  [ruixingw@NTU test2]$ parmhess.py input.inp
+  INFO     Start Hessian Fitting for MM parameterization
+
+  INFO     Release under GNU LGPL License
+  INFO     If you use this program and/or the Hessian fitting method, cite DOI:XXX
+
+  INFO     Provided mmfile input: mmbenzene.com and qmfchk input: freqbenzene.fchk
+  INFO     Read fchk:freqbenzene.fchk
+  INFO     Run g09 : g09 hess0.com
+  INFO     Checking g09 termination for hess0.com...
+  INFO         ..normal termination
+  INFO       formchk -3 hess0.chk hess0.fchk
+  INFO     Read fchk:hess0.fchk
+  INFO     56 left
+  ...............
+  ...............
+  INFO     Run g09 : g09 onetwoLhprime.com
+  INFO     Checking g09 termination for onetwoLhprime.com...
+  INFO         ..normal termination
+  INFO       formchk -3 onetwoLhprime.chk onetwoLhprime.fchk
+  INFO     Read fchk:onetwoLhprime.fchk
+
+  INFO     Start Summarizing
+  INFO     Write result to file phf_result_mmbenzene.com
+  INFO     AmbTrs   *   ca  ca  *    0  180  0   0    0.000 14.483  0.000  0.000   4.0
+  HrmBnd1   ca  ca  ha   46.686  120.00000
+  HrmBnd1   ca  ca  ca   91.819  120.00000
+  HrmStr1   ca  ha   378.325  1.08729
+  HrmStr1   ca  ca   377.096  1.39855
+  Nonbon 3 1 0 0 0.0 0.0 0.5 0.0 0.0 -1.2
+  VDW    ca  1.9080  0.0860
+  VDW    ha  1.4590  0.0150
+
+  INFO     Start Summarizing
+  INFO     Write result to file fhf_result_mmbenzene.com
+  INFO     AmbTrs   *   ca  ca  *    0  180  0   0    0.000 16.532  0.000  0.000   4.0
+  HrmBnd1   ca  ca  ha   40.543  120.00000
+  HrmBnd1   ca  ca  ca   58.058  120.00000
+  HrmStr1   ca  ha   399.011  1.08729
+  HrmStr1   ca  ca   392.178  1.39855
+  Nonbon 3 1 0 0 0.0 0.0 0.5 0.0 0.0 -1.2
+  VDW    ca  1.9080  0.0860
+  VDW    ha  1.4590  0.0150
+
+  INFO     Start Summarizing
+  INFO     Write result to file ihf_result_mmbenzene.com
+  INFO     AmbTrs   *   ca  ca  *    0  180  0   0    0.000 14.817  0.000  0.000   4.0
+  HrmBnd1   ca  ca  ha   38.276  120.00000
+  HrmBnd1   ca  ca  ca   66.642  120.00000
+  HrmStr1   ca  ha   401.858  1.08729
+  HrmStr1   ca  ca   477.899  1.39855
+  Nonbon 3 1 0 0 0.0 0.0 0.5 0.0 0.0 -1.2
+  VDW    ca  1.9080  0.0860
+  VDW    ha  1.4590  0.0150
+
+
+  [ruixingw@NTU test2]$ ls
+  fhf_result_mmbenzene.com  freqbenzene.fchk  freqbenzene.log  hffiles/  ihf_result_mmbenzene.com  input.inp  mmbenzene.com  phf_result_mmbenzene.com  test.out  tsubasa/
