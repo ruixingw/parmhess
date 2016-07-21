@@ -357,15 +357,15 @@ class GauCOM(object):
                 time.sleep(2)
                 if os.path.isfile(self._parent.logname):
                     logging.warning('Log file detected: ' +
-                                    self._parent.logname,
-                                    'waiting for termination..')
+                                    self._parent.logname +
+                                    ' waiting for termination..')
                 continue
 
             with open(self._parent.logname, 'r') as f:
                 for x in f.readlines()[:-10:-1]:
                     output += x
             if output.find('Normal termination') >= 0:
-                logging.debug('    ..normal termination')
+                logging.info('    ..normal termination')
                 return True
             if output.find('Error termination') >= 0:
                 logging.error('Error termination in ' +
