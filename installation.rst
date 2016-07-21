@@ -9,7 +9,7 @@ Prerequisites
 
 Parmhess is written in Python3_ and runs on Linux.
 
-The easiest way to setup Python3 is to install Anaconda_, "the leading open data science platform powered by Python." It is freely available at:
+The easiest way to setup Python3 is to install **Anaconda**, "the leading open data science platform powered by Python." It is freely available at:
 
     http://www.continuum.io/downloads
 
@@ -29,29 +29,26 @@ AmberTools is used to identify atom types and calculate RESP charge from Gaussia
 
 Download Parmhess
 -----------------
-Next, download **Parmhess** using any one of these commands:
+Next, download `the newest release of **Parmhess**`__.
 
-.. code-block:: bash
+.. __ : https://github.com/ruixingw/parmhess/releases
 
-    git clone https://github.com/ruixingw/parmhess  # Using git
-    svn co https://github.com/ruixingw/parmhess  # or using svn
-    wget https://github.com/ruixingw/parmhess/archive/master.zip -O parmhess.zip  # or download zip
+You will get:
 
-You will get three things:
+1. File "parmhess.py", "classdef.py". The **Parmhess** program.
+2. File "tsubasa.py", "config.yml", "vdw.dat". A copy of the **Tsubasa** program, which is used to prepare the input files.
+3. Folder "rxcclib".  A copy of the library code package **rxcclib**, the header file of **Tsubasa** and **Parmhess**.
 
-1. File  "parmhess.py". The main program.
-2. Folder "tsubasa". A copy of the Tsubasa_ program, which is used to prepare the input files.
-3. Folder "rxcclib".  A copy of the library code package rxcclib_, which is used by Tsubasa_ and Parmhess.
 
 Make it easier to use
 ---------------------
 
-You may wish to create soft-links for **parmhess.py** and **tsubasa/tsubasa.py** to your :code:`$PATH`. Suppose :code:`~/bin` is in your :code:`$PATH`, then:
+You may wish to create soft-links for **parmhess.py** and **tsubasa.py** to your :code:`$PATH`. Suppose :code:`~/bin` is in your :code:`$PATH`, then run:
 
 .. code-block:: bash
 
-    ln -s ~/bin /PathToParmhess/parmhess.py
-    ln -s ~/bin /PathToParmhess/tsubasa/tsubasa.py
+    ln -s /PathToParmhess/parmhess.py ~/bin
+    ln -s /PathToParmhess/tsubasa/tsubasa.py ~/bin
 
 which allows you to directly run :code:`parmhess.py input.inp` and :code:`tsubasa.py` at any directory.
 
