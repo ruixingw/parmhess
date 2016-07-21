@@ -19,9 +19,9 @@ If you are an experienced Python3 user and prefer to use your own Python build, 
 
 2. Gaussian 09 (G09)
 
-Gaussian 09 is used to perform QM and MM calculation and should be properly installed on your machine. Any revision of G09 should work, although, due to `a bug of Revision B.01`_ (search "Gaussian 09 fix" in this page), some attention should be paid to RESP charge calculation in **Tsubasa**. To use G09 B01, See *Job Control Arguments* :doc:`Tsubasa Manual<tsubasa>`.
+Gaussian 09 is used to perform QM and MM calculation and should be properly installed on your machine. Any revision of G09 should work, although, due to `a bug of Revision B.01`_ (search "Gaussian 09 fix" in this page), some attention is needed for RESP charge calculation in **Tsubasa**. To use G09 B01, See **Job Control Arguments** section in :doc:`Tsubasa Manual<tsubasa>`.
 
-For MM calculation (**Parmhess**), :code:`g09` is directly called as it is usually very fast. For QM calculation (**Tsubasa**), you could use your job submit command or script (see Tsubasa manual).
+For MM calculation (**Parmhess**), :code:`g09` is directly called as it is usually very fast. For QM calculation (**Tsubasa**), you could use your job submit command or script for PBS queue system etc (see **Config file** in :doc:`Tsubasa manual<tsubasa>`).
 
 3. AmberTools
 
@@ -29,9 +29,9 @@ AmberTools is used to identify atom types and calculate RESP charge from Gaussia
 
 Download Parmhess
 -----------------
-Download the `the newest release of **Parmhess**`__.
+You can download the the newest release of **Parmhess** here_.
 
-.. __ : https://github.com/ruixingw/parmhess/releases
+.. _here : https://github.com/ruixingw/parmhess/releases
 
 You will get:
 
@@ -48,7 +48,7 @@ You may wish to create soft-links for **parmhess.py** and **tsubasa.py** to your
 .. code-block:: bash
 
     ln -s /PathToParmhess/parmhess.py ~/bin
-    ln -s /PathToParmhess/tsubasa/tsubasa.py ~/bin
+    ln -s /PathToParmhess/tsubasa.py ~/bin
 
 which allows you to directly run :code:`parmhess.py` and :code:`tsubasa.py` at any directory.
 

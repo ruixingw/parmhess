@@ -120,9 +120,9 @@ An example of the whole process is:
 
 ::
 
-  [rwang013@boonlay-h00 test]$ ls
+  [ruixingw@NTU test]$ ls
   H2O2.gau  H2O2.yml
-  [rwang013@boonlay-h00 test]$ tsubasa.py
+  [ruixingw@NTU test]$ tsubasa.py
   INFO     Read config from H2O2.yml
   INFO     Runing optimization...                  # Start Optimization
   INFO     Run g09 : myg09boon optH2O2.com         # Submit optH2O2.com to PBS queue system
@@ -152,13 +152,42 @@ An example of the whole process is:
   INFO       formchk -3 freqH2O2.chk freqH2O2.fchk
   INFO     Read fchk:freqH2O2.fchk
 
-  [rwang013@boonlay-h00 test]$ ls  # inputs for Parmhess
+  [ruixingw@NTU test]$ ls  # inputs for Parmhess
   freqH2O2.fchk  freqH2O2.log  input.inp  mmH2O2.com  tsubasa/
-  [rwang013@boonlay-h00 test]$ cd tsubasa/
-  [rwang013@boonlay-h00 tsubasa]$ ls     # Temporary files of Tsubasa
+  [ruixingw@NTU test]$ cd tsubasa/
+  [ruixingw@NTU tsubasa]$ ls     # Temporary files of Tsubasa
   freqH2O2.chk  freqH2O2.fchk  H2O2.gau      H2O2.yml   mmH2O2.com   optH2O2.com  respH2O2.chk  respH2O2.log  freqH2O2.com  freqH2O2.log   H2O2.tsubasa  input.inp  optH2O2.chk  optH2O2.log  respH2O2.com  respH2O2.mol2
-  [rwang013@boonlay-h00 tsubasa]$
+  [ruixingw@NTU tsubasa]$ cd ..
+  [ruixingw@NTU tsubasa]$ cat mmH2O2.com
+  [rwang013@boonlay-h00 test]$ cat mmH2O2.com  # MM input file is ready
+  %mem=12gb
+  #p amber=softonly geom=connectivity nosymm
+  iop(4/33=3,7/33=1)
+  freq=intmodes
 
+  MM
+
+  0 1
+  O-oh--0.410452   -0.718633164030   -0.118472295063   -0.054617618503
+  H-ho-0.410452   -1.023538245240    0.665457463989    0.436707052760
+  O-oh--0.410452    0.718637032315    0.118468958072   -0.054573365001
+  H-ho-0.410452    1.023507272500   -0.665430766999    0.436820814218
+
+   1 2 1.0 3 1.0
+   2
+   3 4 1.0
+   4
+
+  AmbTrs ho oh oh ho 0 180 0 0 0.0 XXXXXX 0.0 0.0 1.0      # Dihedral is temporary assigned n=2 ,phase=1.0 and Npaths=1.0
+  HrmBnd1 ho oh oh XXXXXX 100.2486
+  HrmStr1 ho oh XXXXXX 0.97412
+  HrmStr1 oh oh XXXXXX 1.45667
+  Nonbon 3 1 0 0 0.0 0.0 0.5 0.0 0.0 -1.2
+  VDW ho  0.0000  0.0000
+  VDW oh  1.7210  0.2104
+
+  [rwang013@boonlay-h00 test]$
+  
 Config file
 ^^^^^^^^^^^
 
