@@ -8,7 +8,10 @@ import shutil
 import numpy as np
 import rxcclib.molecules as rxmol
 import rxcclib.chemfiles as rxfile
-from classdef import *
+from classdef import InternalCoordinates
+from classdef import DihdForceConst
+from classdef import MMFunction
+from classdef import GauAmberCOM
 
 
 def matchdihd(dihd, func):
@@ -310,7 +313,6 @@ def main(args):
 
     shutil.copy(os.path.join('..', mmfile), '.')
     shutil.copy(os.path.join('..', qmfchk), '.')
-
 
     mmfile = os.path.splitext(mmfile)[0]
     qmfchk = os.path.splitext(qmfchk)[0]
@@ -724,6 +726,7 @@ def main(args):
             for parms in item.forceconst:
                 if parms.known is False:
                     parms.forceconst = MMFunction.unknownsign
+    # Start of IHF
 
     def readintcoords(fileobj):
         intcords = []
@@ -760,8 +763,7 @@ def main(args):
     # Read internal Hessian
     for i in range(1, len(qmfchk.itnl)+1):
         qmfchk.itnl[i-1].value = qmfchk.fchk.findintHessianElement(i, i)
-        hprime.itnl[i-1].value = (hprime.fchk.
-                                         findintHessianElement(i, i))
+        hprime.itnl[i-1].value = (hprime.fchk.findintHessianElement(i, i))
         for item in hess:
             item.itnl[i-1].value = item.fchk.findintHessianElement(i, i)
     # Build leftL in itnl order:
@@ -785,7 +787,7 @@ def main(args):
 
     for i, item in enumerate(unkparmL):
         item.forceconst = res[i]
-    summarize(unkL, itnlcordL, originalname, finalhead, 'int')
+    summarize(unkL, itnlcordL, originalname, finalhead, 'ihf')
 
 
 if __name__ == "__main__":
