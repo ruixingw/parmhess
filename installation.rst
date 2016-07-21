@@ -19,7 +19,7 @@ If you are an experienced Python3 user and prefer to use your own Python build, 
 
 2. Gaussian 09 (G09)
 
-Gaussian 09 is used to perform QM and MM calculation and should be properly installed on your machine. Any revision of G09 should work, however, due to `a bug of Revision B.01`_ (search "Gaussian 09 fix" in this page), some attention should be paid to RESP charge calculation in **Tsubasa**. To use G09 B01, See :doc:`Tsubasa manual <tsubasa>`.
+Gaussian 09 is used to perform QM and MM calculation and should be properly installed on your machine. Any revision of G09 should work, although, due to `a bug of Revision B.01`_ (search "Gaussian 09 fix" in this page), some attention should be paid to RESP charge calculation in **Tsubasa**. To use G09 B01, See *Job Control Arguments* :doc:`Tsubasa Manual<tsubasa>`.
 
 For MM calculation (**Parmhess**), :code:`g09` is directly called as it is usually very fast. For QM calculation (**Tsubasa**), you could use your job submit command or script (see Tsubasa manual).
 
@@ -29,7 +29,7 @@ AmberTools is used to identify atom types and calculate RESP charge from Gaussia
 
 Download Parmhess
 -----------------
-Next, download `the newest release of **Parmhess**`__.
+Download the `the newest release of **Parmhess**`__.
 
 .. __ : https://github.com/ruixingw/parmhess/releases
 
@@ -50,7 +50,7 @@ You may wish to create soft-links for **parmhess.py** and **tsubasa.py** to your
     ln -s /PathToParmhess/parmhess.py ~/bin
     ln -s /PathToParmhess/tsubasa/tsubasa.py ~/bin
 
-which allows you to directly run :code:`parmhess.py input.inp` and :code:`tsubasa.py` at any directory.
+which allows you to directly run :code:`parmhess.py` and :code:`tsubasa.py` at any directory.
 
 
 .. _`Amber website` : http://ambermd.org/#AmberTools

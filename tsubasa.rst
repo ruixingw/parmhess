@@ -18,6 +18,12 @@ If you prefer to prepare these files by hand, please refer to :doc:`whatsgoingon
 Tsubasa Manual
 --------------
 
+Files of **Tsubasa**:
+
+1. :code:`tsubasa.py` the main progam.
+2. :code:`config.yml` the template config file
+3. :code:`vdw.dat` includes vdW parameters from GAFF
+
 Acceptable arguments:
 
 ::
@@ -44,7 +50,7 @@ Acceptable arguments:
 Input Arguments
 ^^^^^^^^^^^^^^^
 
-1. :code:`-i INPUTGEOM`: INPUTGEOM should be a file with :code:`.gau` extension. If not specified, program will search the current working directory(CWD) for a :code:`.gau` file , then use it if found, or exit if not.
+1. :code:`-i INPUTGEOM`: INPUTGEOM should be a file with :code:`.gau` extension. If not specified, program will search the current working directory(CWD) for a :code:`.gau` file , then use it if found, or exit if failed.
 
 The content of this file should include the geometry and connectivity in Gaussian format. An example is shown below:
 
@@ -61,12 +67,12 @@ The content of this file should include the geometry and connectivity in Gaussia
    2
    3 4 1.0
    4
-                                #(here is a blank line at last)
+                  #note here is a blank line at the end
   [ruixingw@NTU test~]$ ls
    H2O2.gau
   [ruixingw@NTU test~]$ tsubasa.py   # H2O2.gau will be read as INPUTGEOM
 
-2. :code:`-c CONFIGFILE`: CONFIGFILE should be a file with :code:`.yml` extension. If not specified, program will search the CWD for a :code:`.yml` file; if failed, a template :code:`.yml` file will be copied to CWD, named as same as :code:`.gau` file; if it is found, then check if the name of :code:`.yml` file and :code:`.gau` are the same and if they are not same, raise an error.
+2. :code:`-c CONFIGFILE`: CONFIGFILE should be a file with :code:`.yml` extension. If not specified, program will search the CWD for a :code:`.yml` file; if failed, a template :code:`.yml` file will be copied to CWD, named as same as :code:`.gau` file; if it is found, then check if the name of :code:`.yml` file and :code:`.gau` are the same. If they are not same, program will raise an error and exit.
 
 ::
 
@@ -74,10 +80,10 @@ The content of this file should include the geometry and connectivity in Gaussia
    WARNING:root:Config file is not found. A template is copied to current directory. Program will now quit.
   [ruixingw@NTU test~]$ ls
   H2O2.gau    H2O2.yml
-  [ruixingw@NTU test~]$ tsubasa.py # INPUTGEOM: H2O2.gau ; CONFIGFILE: H2O2.yml
+  [ruixingw@NTU test~]$ tsubasa.py   # INPUTGEOM: H2O2.gau ; CONFIGFILE: H2O2.yml
 
 
-3. :code:`--readvdw EXTERNALVDWFILE`: Tsubasa attached a :code:`vdw.dat` file including the vdW parameters in GAFF. If some certain vdW parameter is missing, you may provide a file to specify the vdW parameters. The format is same to :code:`vdw.dat`, which can be found in the source directory.
+3. :code:`--readvdw EXTERNALVDWFILE`: Tsubasa attached a :code:`vdw.dat` file which includes the vdW parameters used in GAFF. If some certain vdW parameter is missing, you may provide a file to specify the vdW parameters. The format is same to :code:`vdw.dat`, which can be found in the source directory.
 
 ::
 
@@ -89,7 +95,7 @@ The content of this file should include the geometry and connectivity in Gaussia
 Job Control Arguments
 ^^^^^^^^^^^^^^^^^^^^^
 
-**Tsubasa** have these steps:
+**Tsubasa** do these steps in sequence:
 
 - Optimization (opt)
 - Frequency calculation (freq)
@@ -98,15 +104,15 @@ Job Control Arguments
 - Read all outputs and generate the MM input file (readmol2).
 
 
-Normally, for small molecules, just running these steps in sequence should work. However, if the system is larger or complicated, these steps do not always succeed and may result in "Error termination". For such cases, you may check Gaussian options carefully and run them manually. After that, the success calculation can be provided to **Tsubasa** to do the following steps. **Note that the provided file must be named exactly same as the Tsubasa generated one.** Job flow can be controled by these arguments:
+Normally, just running these steps in sequence should work. However, if the system is larger or complicated, these steps do not always succeed and may result in "Error termination". For such cases, you may check Gaussian options and run calculation manually. The successful results can be provided to **Tsubasa** to do the following steps. **Note that the provided files must be named exactly same as those of Tsubasa generated.** Job flow can be controled by these arguments:
 
--  --startfrom {freq,resp,antechamber,readmol2}
+4. :code:`--startfrom {freq,resp,antechamber,readmol2}`  (choose one from the list)
 
-   Choose one from the list. If not specified, the program starts from (opt) as normal.
+   Read the existing files and restart from the specified step. If not specified, the program starts from the beginning (opt) as normal.
 
--   --stopafter {opt,freq,resp,antechamber}
+5. :code:`--stopafter {opt,freq,resp,antechamber}`  (choose one from the list)
 
-   Choose one from the list. If not specified, the program stops after (readmol2) as normal.
+   Stop after the specified step. If not specified, the program ends as normal.
 
 
 
@@ -149,7 +155,65 @@ An example of the whole process is:
   [rwang013@boonlay-h00 test]$ ls  # inputs for Parmhess
   freqH2O2.fchk  freqH2O2.log  input.inp  mmH2O2.com  tsubasa/
   [rwang013@boonlay-h00 test]$ cd tsubasa/
-  [rwang013@boonlay-h00 tsubasa]$ ls     # Temp files of Tsubasa
+  [rwang013@boonlay-h00 tsubasa]$ ls     # Temporary files of Tsubasa
   freqH2O2.chk  freqH2O2.fchk  H2O2.gau      H2O2.yml   mmH2O2.com   optH2O2.com  respH2O2.chk  respH2O2.log  freqH2O2.com  freqH2O2.log   H2O2.tsubasa  input.inp  optH2O2.chk  optH2O2.log  respH2O2.com  respH2O2.mol2
   [rwang013@boonlay-h00 tsubasa]$
+
+Config file
+^^^^^^^^^^^
+
+The config file includes the commands to run Gaussian and antechamber etc. The format is YAML_. An example is shown below.
+
+.. _YAML: http://yaml.org/
+
+
+::
+
+  g09rt: myg09boon           # command to run Gaussian 09 for (opt, freq). Here, running "myg09boon test.com" should yield "test.log" in the same folder.
+  g09a2rt: myg09a2boon       # command to run Gaussian 09 for resp (to avoid G09 B01 bug). Here, running "myg09boon test.com" should yield "test.log" in the same folder.
+
+  antechamber: antechamber -c resp   # command to run antechamber. Charge type may be modified. For large molecule(>100 atoms), "-pl 30" may be added. (please refer to antechamber manual)
+  clean: rm *gaussian*       # this command will be run at the end for clean purpose. (sometimes trash files are generated.)
+
+
+  opthead: |                 # this section specify the file head for Optimization.
+    %mem=16gb
+    %nproc=12
+    #p b3lyp/6-31+g* geom=connectivity
+    int=ultrafine symm=(loose,follow)
+    opt=(verytight,maxstep=7,notrust)
+
+    opt-title
+
+
+  opttail: |                 # this section specify the file tail of Optimization (Molecule coordinates and connectivities will be pasted between head and tail)
+
+
+  freqhead: |                # frequency calculation. Normally no changed is needed.
+    %mem=16gb
+    %nproc=12
+    #p b3lyp/chkbas int=ultrafine symm=loose geom=allcheck guess=tcheck freq=intmodes iop(7/33=1)
+
+
+  resphead: |                # MK charge calculation. If metal is encountered, for which Gaussian do not have the vdW radius, pop=(mk,readradii) can be used.
+    %mem=16gb
+    %nproc=12
+    #p b3lyp/chkbas
+    iop(6/33=2,6/42=17,6/41=10)
+    int=ultrafine symm=loose
+    pop=mk
+    geom=allcheck guess=tcheck
+
+
+  resptail: |                # If pop=(mk,readradii) is used, add the vdW radii here.
+
+
+  mmhead: |                  # Normally this part should not be changed.
+    %mem=12gb
+    #p amber=softonly geom=connectivity nosymm
+    iop(4/33=3,7/33=1)
+    freq=intmodes
+
+    MM
+
 
