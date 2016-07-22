@@ -10,27 +10,19 @@ Features
 - Fast, analytic method based on Hessian fitting
 - Yield good force constants for your specific molecule.
 
-Usage
-------------
-
-After preparing the input files by *tsubasa*, just run:
-
-    parmhess.py input.inp
-
-then the parameter files are yielded in the same folder.
-
 Contribute
 ----------
 
 - Issue Tracker: github.com/ruixingw/parmhess/issues
 - Source Code: github.com/ruixingw/parmhess
 
-
 Support
 -------
 
 If you are having issues or bug report, please let us know.
+
 Ruixing Wang: rwang013@e.ntu.edu.sg (preferred) or ruixingw@gmail.com
+
 Prof. Hajime Hirao: hirao@ntu.edu.sg
 
 License
@@ -39,3 +31,4 @@ License
 The project is licensed under the LGPL_.
 
 .. _LGPL: http://www.gnu.org/copyleft/lgpl.html
+
