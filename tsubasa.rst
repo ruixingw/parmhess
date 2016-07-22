@@ -77,7 +77,8 @@ The content of this file should include the geometry and connectivity in Gaussia
 ::
 
   [ruixingw@NTU test~]$ tsubasa.py   # H2O2.gau is readed as INPUTGEOM
-   WARNING:root:Config file is not found. A template is copied to current directory. Program will now quit.
+   WARNING:root:Config file is not found.
+   A template is copied to current directory. Program will now quit.
   [ruixingw@NTU test~]$ ls
   H2O2.gau    H2O2.yml
   [ruixingw@NTU test~]$ tsubasa.py   # INPUTGEOM: H2O2.gau ; CONFIGFILE: H2O2.yml
@@ -88,7 +89,7 @@ The content of this file should include the geometry and connectivity in Gaussia
 ::
 
   [ruixingw@NTU test~]$ cat externalvdw.dat
-   Zn          1.395   0.01491700         IOD Zn2+: Li,PF; Merz,Jr; JCTC2013 DOI:10.1021/ct400146w
+   Zn          1.395   0.01491700         JCTC2013 DOI:10.1021/ct400146w
   [ruixingw@NTU test~]$ tsubasa.py --readvdw externalvdw.dat # vdW for Zn is read
 
 
@@ -125,9 +126,9 @@ An example of the whole process is:
   [ruixingw@NTU test]$ tsubasa.py
   INFO     Read config from H2O2.yml
   INFO     Runing optimization...                  # Start Optimization
-  INFO     Run g09 : myg09boon optH2O2.com         # Submit optH2O2.com to PBS queue system
+  INFO     Run g09 : myg09boon optH2O2.com         # Submit optH2O2.com to PBS
   INFO     Checking g09 termination for optH2O2.com...
-  WARNING  No log file detected. Wait 2s..         # No log file detected due to the delay of queue system
+  WARNING  No log file detected. Wait 2s..         # (lag of queue system...)
   WARNING  Log file detected: optH2O2.log waiting for termination..
   INFO         ..normal termination
   INFO     Running frequency calculation...        # Start Frequency Calculation
@@ -156,7 +157,9 @@ An example of the whole process is:
   freqH2O2.fchk  freqH2O2.log  input.inp  mmH2O2.com  tsubasa/
   [ruixingw@NTU test]$ cd tsubasa/
   [ruixingw@NTU tsubasa]$ ls     # Temporary files of Tsubasa
-  freqH2O2.chk  freqH2O2.fchk  H2O2.gau      H2O2.yml   mmH2O2.com   optH2O2.com  respH2O2.chk  respH2O2.log  freqH2O2.com  freqH2O2.log   H2O2.tsubasa  input.inp  optH2O2.chk  optH2O2.log  respH2O2.com  respH2O2.mol2
+  freqH2O2.chk  freqH2O2.fchk  H2O2.gau      H2O2.yml   mmH2O2.com   optH2O2.com
+  respH2O2.chk  respH2O2.log  freqH2O2.com  freqH2O2.log   H2O2.tsubasa  input.inp
+  optH2O2.chk  optH2O2.log  respH2O2.com  respH2O2.mol2
   [ruixingw@NTU tsubasa]$ cd ..
   [ruixingw@NTU tsubasa]$ cat mmH2O2.com
   [rwang013@boonlay-h00 test]$ cat mmH2O2.com  # MM input file is ready
@@ -178,7 +181,7 @@ An example of the whole process is:
    3 4 1.0
    4
 
-  AmbTrs ho oh oh ho 0 180 0 0 0.0 XXXXXX 0.0 0.0 1.0      # Dihedral is temporary assigned n=2 ,phase=1.0 and Npaths=1.0
+  AmbTrs ho oh oh ho 0 180 0 0 0.0 XXXXXX 0.0 0.0 1.0
   HrmBnd1 ho oh oh XXXXXX 100.2486
   HrmStr1 ho oh XXXXXX 0.97412
   HrmStr1 oh oh XXXXXX 1.45667
@@ -198,14 +201,14 @@ The config file includes the commands to run Gaussian and antechamber etc. The f
 
 ::
 
-  g09rt: myg09boon           # command to run Gaussian 09 for (opt, freq). Here, running "myg09boon test.com" should yield "test.log" in the same folder.
-  g09a2rt: myg09a2boon       # command to run Gaussian 09 for resp (to avoid G09 B01 bug). Here, running "myg09boon test.com" should yield "test.log" in the same folder.
+  g09rt: myg09boon
+  g09a2rt: myg09a2boon
 
-  antechamber: antechamber -c resp   # command to run antechamber. Charge type may be modified. For large molecule(>100 atoms), "-pl 30" may be added. (please refer to antechamber manual)
-  clean: rm *gaussian*       # this command will be run at the end for clean purpose. (sometimes trash files are generated.)
+  antechamber: antechamber -c resp
+  clean: rm *gaussian*
 
 
-  opthead: |                 # this section specify the file head for Optimization.
+  opthead: |
     %mem=16gb
     %nproc=12
     #p b3lyp/6-31+g* geom=connectivity
@@ -215,16 +218,16 @@ The config file includes the commands to run Gaussian and antechamber etc. The f
     opt-title
 
 
-  opttail: |                 # this section specify the file tail of Optimization (Molecule coordinates and connectivities will be pasted between head and tail)
+  opttail: |
 
 
-  freqhead: |                # frequency calculation. Normally no changed is needed.
+  freqhead: |
     %mem=16gb
     %nproc=12
     #p b3lyp/chkbas int=ultrafine symm=loose geom=allcheck guess=tcheck freq=intmodes iop(7/33=1)
 
 
-  resphead: |                # MK charge calculation. If metal is encountered, for which Gaussian do not have the vdW radius, pop=(mk,readradii) can be used.
+  resphead: |
     %mem=16gb
     %nproc=12
     #p b3lyp/chkbas
@@ -234,10 +237,10 @@ The config file includes the commands to run Gaussian and antechamber etc. The f
     geom=allcheck guess=tcheck
 
 
-  resptail: |                # If pop=(mk,readradii) is used, add the vdW radii here.
+  resptail: |
 
 
-  mmhead: |                  # Normally this part should not be changed.
+  mmhead: |
     %mem=12gb
     #p amber=softonly geom=connectivity nosymm
     iop(4/33=3,7/33=1)
@@ -246,3 +249,16 @@ The config file includes the commands to run Gaussian and antechamber etc. The f
     MM
 
 
+Keywords:
+
+1. :code:`g09rt`:  command to run Gaussian 09 for (opt, freq). Here, running "myg09boon test.com" should yield "test.log" in the same folder.
+
+2. :code:`g09a2rt`:  command to run Gaussian 09 for resp (to avoid G09 B01 bug). Here, running "myg09a2boon test.com" should yield "test.log" in the same folder.
+
+3. :code:`antechamber`:  command to run antechamber. Charge type may be modified. For large molecule(>100 atoms), "-pl 30" may be added (see :code:`antechamber -h` for details).
+
+4. :code:`clean`: this command will be run at the end of all steps for clean purpose.
+
+5. :code:`opthead`, :code:`opttail`, :code:`freqhead`, :code:`resphead`, :code:`resptail`, :code:`mmhead`:
+
+Keywords to run Gaussian. The content of :code:`.gau` file will be pasted betwwen :code:`head` and :code:`tail` section and blank lines will be inserted between these sections to form a Gaussian Input file. You may change them in your own need. Normally, keywords in :code:`freqhead` and :code:`mmhead` should not be changed. 

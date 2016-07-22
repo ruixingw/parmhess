@@ -10,8 +10,8 @@ Once the inputs are prepared, simply run:
 
 Parmhess will read inputs and invoke **g09** command to do necessary MM calculations. These files will be generated:
 
-1. Folder **hffiles**, includes all temporary files. They are used to calculate lowercase :math:`h` (see the paper).
-2. Result MM input file including generated parameters. Named as PHF/FHF/IHF_result_mmXXX.com.
+1. Folder **hffiles**, including all temporary files. They are used to calculate lowercase **h** (see the paper).
+2. Result MM input file with determined parameters. Named as PHF/FHF/IHF_result_mmXXX.com.
 
 
 
@@ -36,7 +36,7 @@ Acceptable arguments:
 
 2. :code:`-q` :code:`--quiet` Normally, messages will be both printed on the screen and write in a :code:`.tsubasa` file. Specify this argument to remove the messages on the screen (can be used with :code:`&` to work at background).
 
-3. :code:`-nc` :code:`--nocalc` If the program has successfully run once already and files in :code:`hffiles` folder exists, this argument just read these files and give the results quickly (normally for debug purpose).
+3. :code:`-nc` :code:`--nocalc` (For debug purpose) If the program has successfully run once already and files in :code:`hffiles` folder exists, this argument just read these files and give the results quickly.
 
 
 An example is shown as follow:
