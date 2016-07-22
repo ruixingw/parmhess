@@ -3,7 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-.. include:: overview.rst
+
+.. include: overview.rst
+
 
 .. toctree::
    :maxdepth: 3
@@ -13,6 +15,3 @@
    installation
    tsubasa
    parmhess
-
-
-

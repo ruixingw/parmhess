@@ -260,3 +260,4 @@ Keywords:
 4. :code:`clean`: this command will be run at the end of all steps for clean purpose.
 
 5. :code:`opthead`, :code:`opttail`, :code:`freqhead`, :code:`resphead`, :code:`resptail`, :code:`mmhead`: Keywords that are used to run Gaussian. The content of :code:`.gau` file will be pasted betwwen *head* and *tail* section. Blank lines will be inserted between them to form a Gaussian Input file. You may change them in your own need. Normally, keywords in :code:`freqhead` and :code:`mmhead` should not be changed. 
+
