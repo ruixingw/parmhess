@@ -161,8 +161,7 @@ An example of the whole process is:
   respH2O2.chk  respH2O2.log  freqH2O2.com  freqH2O2.log   H2O2.tsubasa  input.inp
   optH2O2.chk  optH2O2.log  respH2O2.com  respH2O2.mol2
   [ruixingw@NTU tsubasa]$ cd ..
-  [ruixingw@NTU tsubasa]$ cat mmH2O2.com
-  [rwang013@boonlay-h00 test]$ cat mmH2O2.com  # MM input file is ready
+  [ruixingw@NTU test]$ cat mmH2O2.com       # MM input file is ready
   %mem=12gb
   #p amber=softonly geom=connectivity nosymm
   iop(4/33=3,7/33=1)
