@@ -105,7 +105,6 @@ class GauAmberCOM(rxfile.GauCOM):
         self.parent._com = self
 
     def read(self):
-        self.xyzfile = ''
         self.atomlist = [None]
         self.atomtypelist = [None]
         self.atomchargelist = [None]
@@ -130,67 +129,66 @@ class GauAmberCOM(rxfile.GauCOM):
             block = block.split('\n\n')
             block = [x + '\n' for x in block]
 
-            # route, title, molespecs, connectivity, mmfunctions
-            blockindex = [0, 1, 2, 3, 4]
-            if block[0].find('allcheck') >= 0:
-                blockindex[1] = -1
-                blockindex[2] = -1
-                blockindex[1:] = [x - 2 for x in blockindex[1:]]
-            if block[0].find('connectivity') < 0:
-                blockindex[3] = -1
-                blockindex[3:] = [x - 1 for x in blockindex[3:]]
+        # route, title, molespecs, connectivity, mmfunctions
+        blockindex = [0, 1, 2, 3, 4]
+        if block[0].find('allcheck') >= 0:
+            blockindex[1] = -1
+            blockindex[2] = -1
+            blockindex[1:] = [x - 2 for x in blockindex[1:]]
+        if block[0].find('connectivity') < 0:
+            blockindex[3] = -1
+            blockindex[3:] = [x - 1 for x in blockindex[3:]]
 
-            def molespecs(line):
-                self.xyzfile += line
-                tmp = line.split()[0]
-                if tmp.find('-') >= 0:
-                    self.atomlist.append(tmp.split('-')[0])
-                    if tmp.count('-') == 2:
-                        tmp = tmp.split('-')
-                        self.atomtypelist.append(tmp[1])
-                        self.atomchargelist.append(tmp[2])
-                    elif tmp.count('-') == 3:
-                        tmp = tmp.split('-')
-                        self.atomtypelist.append(tmp[1])
-                        self.atomchargelist.append(-float(tmp[3]))
-                else:
-                    self.atomlist.append(tmp)
-                self.coordslist.extend(line.split()[1:4])
+        def molespecs(line):
+            tmp = line.split()[0]
+            if tmp.find('-') >= 0:
+                self.atomlist.append(tmp.split('-')[0])
+                if tmp.count('-') == 2:
+                    tmp = tmp.split('-')
+                    self.atomtypelist.append(tmp[1])
+                    self.atomchargelist.append(tmp[2])
+                elif tmp.count('-') == 3:
+                    tmp = tmp.split('-')
+                    self.atomtypelist.append(tmp[1])
+                    self.atomchargelist.append(-float(tmp[3]))
+            else:
+                self.atomlist.append(tmp)
+            self.coordslist.extend(line.split()[1:4])
 
-            for index, item in enumerate(block):
-                if index == blockindex[0]:
-                    self.route = item
-                if index == blockindex[1]:
-                    self.title = item
-                if index == blockindex[2]:
-                    f = StringIO(item)
-                    line = next(f)
-                    self.totalcharge = line.split()[0]
-                    self.multiplicity = line.split()[1]
-                    for line in f:
-                        molespecs(line)
-                if index == blockindex[3]:
-                    f = StringIO(item)
-                    for line in f:
-                        self.connectivity += line
-                if index == blockindex[4]:
-                    f = StringIO(item)
-                    for line in f:
-                        thisline = MMFunction(line)
-                        if thisline.type == 'dihd':
-                            self.dihdfunc.append(thisline)
-                        elif thisline.type == 'angle':
-                            self.anglefunc.append(thisline)
-                        elif thisline.type == 'bond':
-                            self.bondfunc.append(thisline)
-                        elif thisline.type == 'else':
-                            self.additionfunc.append(thisline)
-                        elif thisline.type == 'vdw':
-                            self.vdw.append(thisline)
-                            self.vdwdict.update({thisline.atomtype: (
-                                thisline.radius, thisline.welldepth)})
-                        elif thisline.type == 'improper':
-                            self.improperfunc.append(thisline)
+        for index, item in enumerate(block):
+            if index == blockindex[0]:
+                self.route = item
+            if index == blockindex[1]:
+                self.title = item
+            if index == blockindex[2]:
+                f = StringIO(item)
+                line = next(f)
+                self.totalcharge = line.split()[0]
+                self.multiplicity = line.split()[1]
+                for line in f:
+                    molespecs(line)
+            if index == blockindex[3]:
+                f = StringIO(item)
+                for line in f:
+                    self.connectivity += line
+            if index == blockindex[4]:
+                f = StringIO(item)
+                for line in f:
+                    thisline = MMFunction(line)
+                    if thisline.type == 'dihd':
+                        self.dihdfunc.append(thisline)
+                    elif thisline.type == 'angle':
+                        self.anglefunc.append(thisline)
+                    elif thisline.type == 'bond':
+                        self.bondfunc.append(thisline)
+                    elif thisline.type == 'else':
+                        self.additionfunc.append(thisline)
+                    elif thisline.type == 'vdw':
+                        self.vdw.append(thisline)
+                        self.vdwdict.update({thisline.atomtype: (
+                            thisline.radius, thisline.welldepth)})
+                    elif thisline.type == 'improper':
+                        self.improperfunc.append(thisline)
 
         self.coordslist = np.array(self.coordslist)
         for i in range(0, len(self.atomlist) - 1):
