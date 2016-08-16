@@ -251,18 +251,23 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
             for index, item in enumerate(func.forceconst):
                 item.forceconst = res[index] / i
 
+
     # Build tailstring
     tailstring = ''
     for dihd in mmcom.dihdfunc:
         parm = []
-        for item in dihd.forceconst:
+        for i, item in enumerate(dihd.forceconst):
             if str(item) == MMFunction.unknownsign:
                 parm.append('0.000')
                 logging.critical('Force constant is not'
                                  ' determined for dihedral ' + dihd.repr)
                 raise
             else:
-                parm.append(float(str(item)))
+                tmp = float(str(item))
+                if tmp < 0:
+                    dihd.phase[i] = 180
+                parm.append(abs(tmp))
+
         tailstring += 'AmbTrs  ' + ' '.join(
             [x.center(3, ' ') for x in dihd.repr.split()]) + '  ' + ' '.join(
                 [str(x).center(3, ' ') for x in dihd.phase]) + '  ' + ' '.join(
@@ -297,6 +302,9 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
             raise
         else:
             parm = improper.forceconst
+            if parm < 0:
+                improper.phase = 180
+                parm = -parm
         tailstring += 'ImpTrs  ' + ' '.join([
             x.center(3, ' ') for x in improper.repr.split()
         ]) + '  ' + '{:>.10f}'.format(parm) + '  ' + '{:6.2f}'.format(
@@ -969,11 +977,8 @@ def main(args):
         print(item.repr, res[i])
     summarize(unkL, itnlcordL, originalname, finalhead, 'ihf')
 
-    exactihf = exactsum(mole, itnlcordL, originalname, hprimehead)
+    exactsum(mole, itnlcordL, originalname, hprimehead)
 
-    exactihf.com.read()
-    exactihf.com.rung09()
-    exactihf.com.isover()
 
 if __name__ == "__main__":
 
