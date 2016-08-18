@@ -181,6 +181,7 @@ def calcphfgroup(adict, thishprime, qmfchk):
         for i, item in enumerate(value):
             item.forceconst = res[i]
             print(item.forceconst)
+            print(item.repr)
 
 
 def exactsum(geom, itnlcordL, originalname, hprimehead):
