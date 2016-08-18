@@ -848,7 +848,6 @@ def main(args):
             for parms in item.forceconst:
                 if parms.known is False:
                     parms.forceconst = MMFunction.unknownsign
-    sys.exit()
     # Start of IHF
 
     def readintcoords(fileobj):
@@ -975,7 +974,7 @@ def main(args):
     leftL = np.array(leftL)
     rightL = np.array(rightL)
 #    print(leftL[index])
-    res = np.linalg.solve(leftL, rightL)
+    res = np.linalg.lstsq(leftL, rightL)[0]
 
     for i, item in enumerate(unkparmL):
         item.forceconst = res[i]
