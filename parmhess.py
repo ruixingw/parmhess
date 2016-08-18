@@ -4,6 +4,7 @@ import logging
 import itertools
 import copy
 import os
+import sys
 import shutil
 import numpy as np
 from io import StringIO
@@ -176,8 +177,10 @@ def calcphfgroup(adict, thishprime, qmfchk):
         leftL = np.array(leftL)
         rightL = np.array(rightL)
         res = np.linalg.lstsq(leftL, rightL)[0]
+        print(leftL, rightL)
         for i, item in enumerate(value):
             item.forceconst = res[i]
+            print(item.forceconst)
 
 
 def exactsum(geom, itnlcordL, originalname, hprimehead):
@@ -758,6 +761,7 @@ def main(args):
         onetriuchprime.fchk.read()
         calcphfgroup(onetriucL, onetriuchprime, qmfchk)
 
+
     if onetwoL:
         onetwohprime = rxfile.File('onetwohprime')
         tmp = ('%chk=' + onetwohprime.chkname + '\n' +
@@ -844,6 +848,7 @@ def main(args):
             for parms in item.forceconst:
                 if parms.known is False:
                     parms.forceconst = MMFunction.unknownsign
+    sys.exit()
     # Start of IHF
 
     def readintcoords(fileobj):
