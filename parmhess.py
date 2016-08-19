@@ -4,16 +4,15 @@ import logging
 import itertools
 import copy
 import os
-import sys
 import shutil
 import numpy as np
 from io import StringIO
 import rxcclib.molecules as rxmol
 import rxcclib.chemfiles as rxfile
-from classdef import InternalCoordinates
-from classdef import DihdForceConst
-from classdef import MMFunction
-from classdef import GauAmberCOM
+from rxcclib.parmhesshead.InternalCoordinates import InternalCoordinates
+from rxcclib.parmhesshead.GauAmberCOM import DihdForceConst
+from rxcclib.parmhesshead.GauAmberCOM import MMFunction
+from rxcclib.parmhesshead.GauAmberCOM import GauAmberCOM
 
 
 def matchdihd(dihd, func):
@@ -43,6 +42,7 @@ def matchbond(bond, func):
     if forward or backward:
         return True
     else:
+
         return False
 
 
@@ -260,6 +260,7 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
     tailstring = ''
     for dihd in mmcom.dihdfunc:
         parm = []
+
         for i, item in enumerate(dihd.forceconst):
             if str(item) == MMFunction.unknownsign:
                 parm.append('0.000')
@@ -270,6 +271,8 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
                 tmp = float(str(item))
                 if tmp < 0:
                     dihd.phase[i] = 180
+                else:
+                    dihd.phase[i] = 0
                 parm.append(abs(tmp))
 
         tailstring += 'AmbTrs  ' + ' '.join(
@@ -327,9 +330,11 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
 
         f.write(finalhead + tailstring)
     shutil.copy(finalname, os.path.join('..', finalname))
+    return finalname
 
 
 def addlink1(mmfile, itnlcordL):
+#    return ''
     fakecontent = '--link1--\n'
     fakecontent += ('%chk=' + mmfile.chkname + '\n')
     fakecontent += ('#p geom=allcheck ')
@@ -762,7 +767,6 @@ def main(args):
         onetriuchprime.fchk.read()
         calcphfgroup(onetriucL, onetriuchprime, qmfchk)
 
-
     if onetwoL:
         onetwohprime = rxfile.File('onetwohprime')
         tmp = ('%chk=' + onetwohprime.chkname + '\n' +
@@ -876,7 +880,7 @@ def main(args):
         return intcords
     # Check internal coordinates order matching
     qmfchk.itnl = readintcoords(qmfchk)
-    assert len(qmfchk.itnl) == len(itnlcordL)
+    assert len(qmfchk.itnl) == len(itnlcordL), 'itnl not equal'
     for item in hess:
         item.itnl = readintcoords(item)
         assert len(item.itnl) == len(itnlcordL), item.comname
@@ -942,9 +946,7 @@ def main(args):
         for item in hess:
             if type(item.orig) != DihdForceConst:
                 tmp.append(0.0)
-                print('out:', item.orig.repr)
                 continue
-            print('in:', item.orig.repr)
             value = (item.fchk.intforces[index])
             tmp.append(value)
         leftL.append(tmp)
@@ -980,9 +982,28 @@ def main(args):
     for i, item in enumerate(unkparmL):
         item.forceconst = res[i]
         print(item.repr, res[i])
-    summarize(unkL, itnlcordL, originalname, finalhead, 'ihf')
+    ihfname = summarize(unkL, itnlcordL, originalname, finalhead, 'ihf')
+    # ihfname = os.path.splitext(ihfname)[0]
+    # ihfname = rxfile.File(ihfname)
+    # ihfname.com.rung09()
+    # ihfname.com.read()
+    # ihfname.com.isover()
+    # ihfname.runformchk()
+    # ihfname.fchk.read()
+    # remforces = ihfname.fchk.intforces
+    # hprimeforces = hprime.fchk.intforces
+    # refforces = [x-y for x,y in zip(remforces, hprimeforces)]
 
-    exactsum(mole, itnlcordL, originalname, hprimehead)
+    # leftL = []
+    # for item in unkparmL:
+    #     leftL.append([])
+    #     tmp = item.hessfile.itnl
+    #     leftL[-1].extend(x.force for x in tmp)
+
+    # leftL = list(zip(*leftL))
+    # leftL = np.array(leftL)
+    # refforces = np.array(refforces)
+    # res = np.linalg.solve(leftL, refforces)
 
 
 if __name__ == "__main__":
