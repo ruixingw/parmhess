@@ -268,7 +268,22 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
     shutil.copy(finalname, os.path.join('..', finalname))
 
 
-def main(args):
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('inputinp',
+                        default='input.inp',
+                        help='input.inp prepared by tsubasa.')
+    parser.add_argument('--quiet',
+                        '-q',
+                        action='store_true',
+                        help=('Do not show info on screen'))
+    parser.add_argument('--nocalc',
+                        '-nc',
+                        action='store_true',
+                        help=('Use already calculated file.'))
+
+    args = parser.parse_args()
     global mmcom
     inputinp = args.inputinp
     quiet = args.quiet
@@ -790,20 +805,3 @@ def main(args):
     summarize(unkL, itnlcordL, originalname, finalhead, 'ihf')
 
 
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('inputinp',
-                        default='input.inp',
-                        help='input.inp prepared by tsubasa.')
-    parser.add_argument('--quiet',
-                        '-q',
-                        action='store_true',
-                        help=('Do not show info on screen'))
-    parser.add_argument('--nocalc',
-                        '-nc',
-                        action='store_true',
-                        help=('Use already calculated file.'))
-
-    args = parser.parse_args()
-    main(args)

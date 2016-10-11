@@ -59,6 +59,10 @@
   na          1.8240  0.1700             OPLS
   nb          1.8240  0.1700             OPLS
   nc          1.8240  0.1700             OPLS
+  nc1          1.8240  0.1700             OPLS
+  nc2          1.8240  0.1700             OPLS
+  nc3          1.8240  0.1700             OPLS
+  nc4          1.8240  0.1700             OPLS
   nd          1.8240  0.1700             OPLS
   ne          1.8240  0.1700             OPLS
   nf          1.8240  0.1700             OPLS
@@ -139,3 +143,4 @@
   Al2          1.297   0.00471279         Al3+ For TIP3P/IOD: Li,PF; Merz,Jr; JPCB DOI:10.1021/jp505875v Table3
   Al3          1.297   0.00471279         Al3+ For TIP3P/IOD: Li,PF; Merz,Jr; JPCB DOI:10.1021/jp505875v Table3
   Al4          1.297   0.00471279         Al3+ For TIP3P/IOD: Li,PF; Merz,Jr; JPCB DOI:10.1021/jp505875v Table3
+  Fe           1.386   0.01357097         Fe3+ For TIP3P/IOD: Li,PF; Merz,Jr; JPCB DOI:10.1021/jp505875v Table3
