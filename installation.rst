@@ -9,11 +9,11 @@ Prerequisites
 
 Parmhess is written in Python3_ and runs on Linux.
 
-The easiest way to setup Python3 is to install **Anaconda**, "the leading open data science platform powered by Python." It is freely available at:
+The easiest way to setup Python3 is to install **Anaconda**. It is freely available at:
 
     http://www.continuum.io/downloads
 
-Be sure to install Anaconda for Linux (Python3.5), but not Python2.7 nor for other operating system.
+Be sure to install Anaconda for Linux (Python3.5), not Python2.7 nor for other operating system.
 
 If you are an experienced Python3 user and prefer to use your own Python build, make sure that **numpy** and **pyyaml** be installed properly.
 
@@ -21,11 +21,11 @@ If you are an experienced Python3 user and prefer to use your own Python build, 
 
 Gaussian 09 is used to perform QM and MM calculation and should be properly installed on your machine. Any revision of G09 should work, although, due to `a bug of Revision B.01`_ (search "Gaussian 09 fix" in this page), some attention is needed for RESP charge calculation in **Tsubasa**. To use G09 B01, See **Job Control Arguments** section in :doc:`Tsubasa Manual<tsubasa>`.
 
-For MM calculation (**Parmhess**), :code:`g09` is directly called as it is usually very fast. For QM calculation (**Tsubasa**), you could use your job submit command or script for PBS queue system etc (see **Config file** in :doc:`Tsubasa manual<tsubasa>`).
+For MM calculation (**Parmhess**), :code:`g09` is directly called as it is usually very fast. For QM calculation (**Tsubasa**), you could use your job submitting command or script for PBS queue system etc (see **Config file** in :doc:`Tsubasa manual<tsubasa>`).
 
 3. AmberTools
 
-AmberTools is used to identify atom types and calculate RESP charge from Gaussian output. It is freely available at `Amber website`_ and the installation guide is in `Amber Manual`_. Make sure it is installed properly as **Tsubasa** will call :code:`antechamber` directly from :code:`$PATH`.
+AmberTools is used to identify atom types and calculate RESP charge from Gaussian output. It is freely available at `Amber website`_ and the installation guide is in `Amber Manual`_. Make sure it is installed properly as **Tsubasa** will directly call :code:`antechamber` defined in :code:`$PATH`.
 
 Download Parmhess
 -----------------
@@ -50,7 +50,13 @@ You may wish to create soft-links for **parmhess.py** and **tsubasa.py** to your
     ln -s /PathToParmhess/parmhess.py ~/bin
     ln -s /PathToParmhess/tsubasa.py ~/bin
 
-which allows you to directly run :code:`parmhess.py` and :code:`tsubasa.py` at any directory.
+or you may add Parmhess folder to your :code:`$PATH` by:
+
+.. code-block:: bash
+   # this is ~/.bashrc file
+   export PATH = "PathToParmhess":$PATH
+
+Either setting enables you to directly run :code:`parmhess.py` and :code:`tsubasa.py` at any directory.
 
 
 .. _`Amber website` : http://ambermd.org/#AmberTools

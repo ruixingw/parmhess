@@ -4,15 +4,15 @@ Welcome to Parmhess documentation
 Parmhess is a program to generate force-field constants for MM simulation, based on Hessian Fitting methods.
 
 
-Features
-^^^^^^^^
+*Features*
+
 
 - Fast, analytic method based on Hessian fitting
 - Yield good force constants for your specific molecule.
 
 
-Support
-^^^^^^^
+*Support*
+
 
 If you are having issues or bug report, please let us know by sending us an email.
 
@@ -26,8 +26,8 @@ Or, open an issue in the github page:
 - Issue Tracker: https://github.com/ruixingw/parmhess/issues
 
 
-License
-^^^^^^^
+*License*
+
 
 The program of Parmhess is licensed under LGPL_, and this documentation is licensed under `Creative-Commons "by-nc" 4.0`__.
 
