@@ -1,6 +1,6 @@
-=========
-Structure
-=========
+================
+How's it working
+================
 
 Prepare Input file
 ------------------
@@ -18,11 +18,11 @@ A program **Tsubasa** is made to automated these processes. **Tsubasa** accepts 
 
 Suppose we start from a "H2O2.gau" and "H2O2.cfg", **Tsubasa** will produce several things:
 
-1. mmH2O2.com     : MM input file. Includes the following information: geometry, atom type, charge, types of bonded terms
-2. freqH2O2.fchk  :Frequency FCHK file. Hessian is read from this file.
-3. freqH2O2.log   : Frequency log file   
-4. input.inp      : All-in-one input file.
-5. Tsubasa        : Folder in which stores the intermediate files.
+1. :code:`mmH2O2.com`     : MM input file. Includes the following information: geometry, atom type, charge, types of bonded terms
+2. :code:`freqH2O2.fchk`  :Frequency FCHK file. Hessian is read from this file.
+3. :code:`freqH2O2.log`   : Frequency log file   
+4. :code:`input.inp`      : All-in-one input file.
+5. :code:`Tsubasa`        : Folder in which stores the intermediate files.
 
 We are now ready for parameterization by Parmhess.
 
@@ -33,9 +33,9 @@ It is very common that several bonds/angles/dihedrals/impropers have the same ty
 
 This section will explain how is the program working.
 
-For convinience, in the following text, term "internal coordinates" refers to all bonds/angles/dihedrals/impropers in the system. 
+For convinience, in the following text, term *internal coordinates* refers to all bonds/angles/dihedrals/impropers in the system. 
 
-1. Create and switch to "hffiles" folder as the working space and then copy all input files here.
+1. Create and switch to :code:`hffiles` folder as the working space and then copy all input files here.
 
 
 2. From the Input files (mmH2O2.com/freqH2O2.fchk in the previous example), read geometry, atom types, charges , Hessian, and internal coordinate types.
@@ -44,8 +44,7 @@ For convinience, in the following text, term "internal coordinates" refers to al
    The following internal coordinates are identified: h1-o1; o1-o2; o2-h2; h1-o1-o2; o1-o2-h2; h1-o1-o2-h2.
 
 
-3. Identify and count unknown coordinate types. If a "improper" type exists, the corresponding improper coordinate will be identified, too.
-
+3. Identify and count unknown coordinate types. If a *improper* type exists, the corresponding improper coordinate will be identified, too.
    In this example, all types are unknown and the number of unknowns is 4.
 
 
@@ -57,7 +56,7 @@ For convinience, in the following text, term "internal coordinates" refers to al
    Here, all internal coordinates are unknown and the number of unknowns is 6.
 
 
-6. Prepare and run Gaussian jobs named as "hessXX.com". Each job corresponds to a internal coordinate. They are used to calculate the "lowercase h".
+6. Prepare and run Gaussian jobs named as :code:`hessXX.com`. Each job corresponds to a internal coordinate. They are used to calculate the *lowercase h*.
 
 
 7. 1-4 pair of dihedrals and impropers, 1-3 pair of angles, 1-2 pair of bonds are created and stored. These pairs are corresponding to 3x3 partial Hessians.
@@ -84,10 +83,10 @@ For convinience, in the following text, term "internal coordinates" refers to al
    This group contains all "pure" bonds. After subtracting contribution from former groups, the 3x3 partial Hessian is purly from a single bond.
 
 
-10. Prepare the initial Hprime file, which yield the Hessian produced by known terms and nonbonded terms. These contribution will then be subtracted in group a) process.
+10. Prepare the initial :code:`hprime` file, which yield the Hessian contributed by *known terms* and nonbonded terms. Their contribution will then be subtracted in group a) process.
 
 
-11. Construct and solve equation systems for each group in sequence. After the end of each group, force constants of that group are solved. These solved parameters are then treated as "known terms" in the new Hprime file. Hence, the contribution of former groups will be excluded in the following processes.
+11. Construct and solve equation systems for each group in sequence. After the end of each group, force constants of that group are solved. These solved parameters are then treated as *known terms* and form a new :code:`hprime` file. Hence, the contribution of former groups will be excluded in the following processes.
 
 
 12. Now, all force constants for each internal coordinate are solved. These results will then be averaged based on MM functions.
