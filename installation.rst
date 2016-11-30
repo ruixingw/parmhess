@@ -54,6 +54,7 @@ You may wish to create soft-links for **parmhess.py** and **tsubasa.py** to your
 or you may add Parmhess folder to your :code:`$PATH` by adding the following line to your :code:`~/.bashrc`:
 
 .. code-block:: bash
+
    export PATH = "PathToParmhess":$PATH
 
 
