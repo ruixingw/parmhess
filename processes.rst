@@ -68,21 +68,26 @@ For convinience, in the following text, term "internal coordinates" refers to al
 
 9. All pairs are classified into 5 groups based on the coupling situation:
 
-   a. one-four group: This group contains all 1-4 pairs that are not coupled with 1-3 pairs. This means, the contribution to the 3x3 partial-Hessian is only from dehedral terms and nonbonded terms. Please note if an 1-4 pair couples with a 1-2 pair, it will be a 4-member ring case, which is not supported by PHF.
+   a. one-four group:
+   This group contains all 1-4 pairs that are not coupled with 1-3 pairs. This means, the contribution to the 3x3 partial-Hessian is only from dehedral terms and nonbonded terms. Please note if an 1-4 pair couples with a 1-2 pair, it will be a 4-member ring case, which is not supported by PHF.
 
-   b. one-tri-four group: This group contains 1-4 pairs that are coupled with 1-3 pairs. This is the 5-member ring case, in which the 1-4 pair of a dihedral is also the 1-3 pair of an angle. Hence, the 3x3 partial Hessian is contributed both from a dihedral and an angle. Since other dihedrals may also have contribution to this partial Hessian, this group is placed after group a) to subtract the contribution from group a).
+   b. one-tri-four group:
+   This group contains 1-4 pairs that are coupled with 1-3 pairs. This is the 5-member ring case, in which the 1-4 pair of a dihedral is also the 1-3 pair of an angle. Hence, the 3x3 partial Hessian is contributed both from a dihedral and an angle. Since other dihedrals may also have contribution to this partial Hessian, this group is placed after group a) to subtract the contribution from group a).
 
-   c. one-tri-coupled group: This group contains angles that are coupled with impropers. The 1-4 atom pair of an improper is always also the 1-3 atom pair of an angle. Obviously, contributions from former groups are to be subtracted.
+   c. one-tri-coupled group:
+   This group contains angles that are coupled with impropers. The 1-4 atom pair of an improper is always also the 1-3 atom pair of an angle. Obviously, contributions from former groups are to be subtracted.
 
-   d. one-tri-uncoupled group: This group contains all "pure" 1-3 pairs that are not coupld with others. After subtracting the former groups' contribution, the 3x3 partial Hessian is only contributed by a single angle. Please note if an 1-3 pair couples with a 1-3 or 1-2 pair, it will be a 4- or 3-member ring case, which is not supported by PHF. 
+   d. one-tri-uncoupled group:
+   This group contains all "pure" 1-3 pairs that are not coupld with others. After subtracting the former groups' contribution, the 3x3 partial Hessian is only contributed by a single angle. Please note if an 1-3 pair couples with a 1-3 or 1-2 pair, it will be a 4- or 3-member ring case, which is not supported by PHF.
 
-   e. one-two group: This group contains all "pure" bonds. After subtracting contribution from former groups, the 3x3 partial Hessian is purly from a single bond.
+   e. one-two group:
+   This group contains all "pure" bonds. After subtracting contribution from former groups, the 3x3 partial Hessian is purly from a single bond.
 
 
 10. Prepare the initial Hprime file, which yield the Hessian produced by known terms and nonbonded terms. These contribution will then be subtracted in group a) process.
 
 
-11. Start solving equation systems for each group in sequence. After the end of each group, force constants of that group are solved. These solved parameters are then treated as "known terms" in the new Hprime file. Hence, the contribution of former groups will be excluded in the following processes.
+11. Construct and solve equation systems for each group in sequence. After the end of each group, force constants of that group are solved. These solved parameters are then treated as "known terms" in the new Hprime file. Hence, the contribution of former groups will be excluded in the following processes.
 
 
 12. Now, all force constants for each internal coordinate are solved. These results will then be averaged based on MM functions.
