@@ -467,6 +467,8 @@ if __name__ == "__main__":
             if matchimproper(improper, improperfunc):
                 improper.func = improperfunc
                 improper.forceconst = improperfunc.forceconst
+                improper.phase = improperfunc.phase
+                improper.npaths = improperfunc.npaths
                 if improper.forceconst == MMFunction.unknownsign:
                     improper.known = False
                 else:
@@ -692,7 +694,6 @@ if __name__ == "__main__":
             for parms in item.forceconst:
                 if parms.known is False:
                     parms.forceconst = MMFunction.unknownsign
-
     # Start of FHF
     leftL = []
     hideal = []
@@ -722,6 +723,7 @@ if __name__ == "__main__":
         item.forceconst = results[i]
     summarize(unkL, itnlcordL, originalname, finalhead, 'fhf')
 
+    quit()
     # End of FHF
     # Clean up:
 
