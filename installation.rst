@@ -50,11 +50,12 @@ You may wish to create soft-links for **parmhess.py** and **tsubasa.py** to your
     ln -s /PathToParmhess/parmhess.py ~/bin
     ln -s /PathToParmhess/tsubasa.py ~/bin
 
-or you may add Parmhess folder to your :code:`$PATH` by:
+
+or you may add Parmhess folder to your :code:`$PATH` by adding the following line to your :code:`~/.bashrc`:
 
 .. code-block:: bash
-   # this is ~/.bashrc file
    export PATH = "PathToParmhess":$PATH
+
 
 Either setting enables you to directly run :code:`parmhess.py` and :code:`tsubasa.py` at any directory.
 
