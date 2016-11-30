@@ -10,7 +10,7 @@ Prepare inputs by Tsubasa
 
 All these files can be prepared by **Tsubasa** program automatically.
 
-If you prefer to prepare these files by hand, please refer to :doc:`whatsgoingon`.
+If you prefer to prepare these files by hand, please refer to :doc:`processes`.
 
 .. _`Tsubasa` : http://github.com/ruixingw/tsubasa/
 
