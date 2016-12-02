@@ -38,27 +38,23 @@ For convinience, in the following text, term **internal coordinates** refers to 
 
 \2. From the Input files (:code:`mmH2O2.com`/:code:`freqH2O2.fchk` in the previous example), read geometry, atom types, charges , Hessian, and internal coordinate types.
 
-   From these informations, internal coordinates are identified.
-   In this example, the following coordinate types are readed: ho-oh, oh-oh, ho-oh-oh, ho-oh-oh-ho.
-   The following internal coordinates are identified: h1-o1; o1-o2; o2-h2; h1-o1-o2; o1-o2-h2; h1-o1-o2-h2.
+From these informations, internal coordinates are identified.
+In this example, the following coordinate types are readed: ho-oh, oh-oh, ho-oh-oh, ho-oh-oh-ho.
+The following internal coordinates are identified: h1-o1; o1-o2; o2-h2; h1-o1-o2; o1-o2-h2; h1-o1-o2-h2.
 
 \3. Identify and count unknown coordinate types. If a **improper** type exists, the corresponding improper coordinate will be identified, too.
-
-   In H2O2, all types are unknown and the number of unknowns is 4.
+In H2O2, all types are unknown and the number of unknowns is 4.
 
 \4. Identify and match the type of internal coordinates.
-
-   Here, The relation between o1-o2 and oh-oh type will be identified. 
+Here, The relation between o1-o2 and oh-oh type will be identified. 
 
 \5. Identify and Count all internal coordinates whose force constant is unknown.
-
-   Here, all internal coordinates are unknown and the number of unknowns is 6.
+Here, all internal coordinates are unknown and the number of unknowns is 6.
 
 \6. Prepare and run Gaussian jobs named as :code:`hessXX.com`. Each job corresponds to a internal coordinate. They are used to calculate the **lowercase h**.
 
 \7. 1-4 pair of dihedrals and impropers, 1-3 pair of angles, 1-2 pair of bonds are identified and stored.
-
-   These pairs are corresponding to 3x3 partial Hessians.
+These pairs are corresponding to 3x3 partial Hessians.
 
 \8. Identify cross-coupled pairs that are involved in 6- and 5-member rings.
 

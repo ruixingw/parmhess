@@ -15,13 +15,13 @@ If you prefer to prepare these files by hand, please refer to :doc:`processes`.
 .. _`Tsubasa` : http://github.com/ruixingw/tsubasa/
 
 
-Tsubasa Manual
+Tsubasa Usage
 --------------
 
 Files of **Tsubasa**:
 
 1. :code:`tsubasa.py` the main progam.
-2. :code:`config.yml` the template config file
+2. :code:`config.yml` the template config file.
 3. :code:`vdw.dat` includes vdW parameters from GAFF
 
 Acceptable arguments:
@@ -105,15 +105,17 @@ Job Control Arguments
 - Read all outputs and generate the MM input file (readmol2).
 
 
-Normally, just running these steps in sequence should work. However, if the system is larger or complicated, these steps do not always succeed and may result in "Error termination". For such cases, you may check Gaussian options and run calculation manually. The successful results can be provided to **Tsubasa** to do the following steps. **Note that the provided files must be named exactly same as those of Tsubasa generated.** Job flow can be controled by these arguments:
+Normally, just running these steps in sequence should work. However, if the system is large or complicated, it is recommended to do QM optimization by hand. The QM results can be provided to **Tsubasa** to do the following steps. If provided :code:`XXX.gau`, these QM files should be named as :code:`optXXX.ext`, :code:`freqXXX.ext`, :code:`respXXX.ext`, where the extension :code:`ext` are :code:`.com, .log, .chk, .fchk` for Gaussian input, output, checkpoint file and formatted checkpoint file, respectively. **Note that the provided files must be named exactly same as those of Tsubasa generated files.**
+
+The provided files can be used by the following arguments:
 
 4. :code:`--startfrom {freq,resp,antechamber,readmol2}`  (choose one from the list)
 
-   Read the existing files and restart from the specified step. If not specified, the program starts from the beginning (opt) as normal.
+   Read the existing files and start from the specified step. If not specified, the program starts from the beginning (opt).
 
 5. :code:`--stopafter {opt,freq,resp,antechamber}`  (choose one from the list)
 
-   Stop after the specified step. If not specified, the program ends as normal.
+   Stop after the specified step. If not specified, the program ends as normal. 
 
 
 
@@ -250,13 +252,15 @@ The config file includes the commands to run Gaussian and antechamber etc. The f
 
 Keywords:
 
-1. :code:`g09rt`:  command to run Gaussian 09 for (opt, freq). Here, running "myg09boon test.com" should yield "test.log" in the same folder.
+1. :code:`g09rt`:  The command to run Gaussian 09 for (opt, freq). Here, running "myg09boon test.com" should yield "test.log" in the same folder.
 
-2. :code:`g09a2rt`:  command to run Gaussian 09 for resp (to avoid G09 B01 bug). Here, running "myg09a2boon test.com" should yield "test.log" in the same folder.
+2. :code:`g09a2rt`:  The command to run Gaussian 09 for resp (to avoid G09 B01 bug). Here, running "myg09a2boon test.com" should yield "test.log" in the same folder. If you only have Gaussian 09 Rev.B01, please use :code:`--stopafter resp`, and then check `a bug of Revision B.01`_ (search "Gaussian 09 fix" in this page) to apply a fixing script to the Gaussian output. After fixing the output, it can be provided to **Tsubasa** by :code:`--startfrom antechamber`.
 
 3. :code:`antechamber`:  command to run antechamber. Charge type may be modified. For large molecule(>100 atoms), "-pl 30" may be added (see :code:`antechamber -h` for details).
 
-4. :code:`clean`: this command will be run at the end of all steps for clean purpose.
+4. :code:`clean`: this command will be run at the end of all steps for clean purpose (delete redundant files).
 
-5. :code:`opthead`, :code:`opttail`, :code:`freqhead`, :code:`resphead`, :code:`resptail`, :code:`mmhead`: Keywords that are used to run Gaussian. The content of :code:`.gau` file will be pasted betwwen *head* and *tail* section. Blank lines will be inserted between them to form a Gaussian Input file. You may change them in your own need. Normally, keywords in :code:`freqhead` and :code:`mmhead` should not be changed. 
+5. :code:`opthead`, :code:`opttail`, :code:`freqhead`, :code:`resphead`, :code:`resptail`, :code:`mmhead`: Keywords that are used to run Gaussian. The content of :code:`.gau` file will be pasted between :code:`head` and :code:`tail` section. You may change them in your own need. Normally, keywords in :code:`freqhead` and :code:`mmhead` should not be changed. 
 
+
+.. _`a bug of Revision B.01` : http://ambermd.org/bugfixesat.html
