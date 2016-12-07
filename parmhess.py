@@ -699,16 +699,16 @@ if __name__ == "__main__":
     hideal = []
     try:
         hprime = onefourhprime
-    except UnboundLocalError:
+    except:
         try:
             hprime = onetrifourhprime
-        except UnboundLocalError:
+        except:
             try:
                 hprime = onetrichprime
-            except UnboundLocalError:
+            except:
                 try:
                     hprime = onetriucLhprime
-                except UnboundLocalError:
+                except:
                     hprime = onetwoLhprime
 
     hideal = qmfchk.fchk.hessian - hprime.fchk.hessian
@@ -723,7 +723,7 @@ if __name__ == "__main__":
         item.forceconst = results[i]
     summarize(unkL, itnlcordL, originalname, finalhead, 'fhf')
 
-    quit()
+   # quit()
     # End of FHF
     # Clean up:
 
