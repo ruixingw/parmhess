@@ -1,16 +1,15 @@
-================
 How's it working
 ================
 
 Prepare Input file
 ------------------
 
-Simply starting from a model, following further processes must be done.
+The following processes must be done before parameterization.
 
 1. Geometry Optimization by Gaussian
 2. Frequency Calculation by Gaussian to obtain Hessian 
 3. MK Charge Calculation by Gaussian to obtain potential fitting data 
-4. RESP Charge Calculation by AmberTools to obtain atom charge
+4. RESP Charge Calculation by AmberTools to obtain atomic charge
 5. Identify atom types by AmberTools
 
 
@@ -28,30 +27,30 @@ Now it is ready for parameterization by Parmhess.
 
 Parameterization
 ----------------
+For convinience, in the following text, the term **internal coordinates** refers to all bonds/angles/dihedrals/impropers in the molecule.
 
-It is very common that several bonds/angles/dihedrals/impropers have the same type. For example, two H-O bonds in H2O2 have the same bond type "ho-oh". Parmhess will solve force constant for each of them separately, and then average force constants of both to yield the force constant for "ho-oh" type.
+It is very common that several internal coordinates have the same type. For example, two H-O bonds in H2O2 have the same bond type "ho-oh". Parmhess solves force constant for every internal coordinate separately, and the average value of the force constant over all equivalent internal coordinates in the molecule was provided as the final result.
 
-For convinience, in the following text, term **internal coordinates** refers to all bonds/angles/dihedrals/impropers in the system. 
 
 \1. Create and switch to :code:`hffiles` folder as the working space and then copy all input files here.
 
 
-\2. From the Input files (:code:`mmH2O2.com`/:code:`freqH2O2.fchk` in the previous example), read geometry, atom types, charges , Hessian, and internal coordinate types.
+\2. From the Input files (:code:`mmH2O2.com`/:code:`freqH2O2.fchk` in the previous example), read geometry, atom types, charges, connectivity, Hessian, and all internal coordinate types (eg: "ho-oh").
 
 From these informations, internal coordinates are identified.
 In this example, the following coordinate types are readed: ho-oh, oh-oh, ho-oh-oh, ho-oh-oh-ho.
-The following internal coordinates are identified: h1-o1; o1-o2; o2-h2; h1-o1-o2; o1-o2-h2; h1-o1-o2-h2.
+Based on the connectivity, following internal coordinates are identified: h1-o1; o1-o2; o2-h2; h1-o1-o2; o1-o2-h2; h1-o1-o2-h2.
 
 \3. Identify and count unknown coordinate types. If a **improper** type exists, the corresponding improper coordinate will be identified, too.
 In H2O2, all types are unknown and the number of unknowns is 4.
 
 \4. Identify and match the type of internal coordinates.
-Here, The relation between o1-o2 and oh-oh type will be identified. 
+FOr example, o1-o2 will be matched with "oh-oh" type.
 
 \5. Identify and Count all internal coordinates whose force constant is unknown.
 Here, all internal coordinates are unknown and the number of unknowns is 6.
 
-\6. Prepare and run Gaussian jobs named as :code:`hessXX.com`. Each job corresponds to a internal coordinate. They are used to calculate the **lowercase h**.
+\6. Prepare and run Gaussian jobs named as :code:`hessXX.com`. Each job corresponds to a internal coordinate. They are used to calculate the lowercase **h**.
 
 \7. 1-4 pair of dihedrals and impropers, 1-3 pair of angles, 1-2 pair of bonds are identified and stored.
 These pairs are corresponding to 3x3 partial Hessians.
@@ -77,7 +76,7 @@ These pairs are corresponding to 3x3 partial Hessians.
 
    \d. one-tri-uncoupled group:
 
-      This group contains all "pure" 1-3 pairs that are not coupld with others. After subtracting the former groups' contribution, the 3x3 partial Hessian is only contributed by a single angle.
+      This group contains all "pure" 1-3 pairs that are not coupld with others. After subtracting former groups' contribution, a 3x3 sub-matrix is only contributed by a single angle.
 
       Please note if an 1-3 pair couples with a 1-3 or 1-2 pair, it will be a 4- or 3-member ring case, which is not supported by PHF.
 
@@ -85,11 +84,11 @@ These pairs are corresponding to 3x3 partial Hessians.
 
       This group contains all "pure" bonds. After subtracting contribution from former groups, the 3x3 partial Hessian is purly contributed by a single bond.
 
-\10. Prepare the initial *hprime* file to calculate **H'**, which is the Hessian contributed by *known terms* and nonbonded terms. Their contribution will then be subtracted in group a) process.
+\10. Prepare the initial :code:`hprime` file to calculate **H'**, which is the Hessian contributed by *known terms* and nonbonded terms. Their contribution will then be subtracted in group a) process.
 
 \11. Construct and solve equation systems for each group in sequence. After solving  force constants for each group, these solved parameters will then be treated as *known terms* and form a new :code:`hprime` file. Hence, the contribution of former groups will be excluded in the following processes.
 
-\12. Now, all force constants for each internal coordinate are solved. These results will then be averaged based on coordinate types.
+\12. Now, all force constants for each internal coordinate are solved. These results will then be averaged over equivalent internal coordinates.
 
-
+\13. Summarize the results and write to output file.
 

@@ -1,35 +1,38 @@
-Welcome to Parmhess documentation
-=================================
+Overview
+========
+**Parmhess** is a program to determine force field constants for AMBER force field, written in Python_, based on Hessian Fitting methods. It can:
 
-Parmhess is a program to generate force-field constants for MM simulation, based on Hessian Fitting methods.
+.. _Python: http://www.python.org
 
-
-*Features*
-
-
-- Fast, analytic method based on Hessian fitting
-- Yield good force constants for your specific molecule.
+- Use *Cartesian* Hessian matrices to determine force constants.
+- Derive force constants for quadratic terms: bond-stretching and angle-bending.
+- Derive force constants for one-Fourier-term dihedal-torsion and AMBER-type improper-torsion.
 
 
-*Support*
+*Contact*
 
+- Ruixing Wang: rwang013[%]e.ntu.edu.sg
 
-If you are having issues or bug report, please let us know by sending us an email.
+- Dr.Hajime Hirao: hirao[%]ntu.edu.sg
 
-- Ruixing Wang: rwang013@e.ntu.edu.sg
-
-- Prof. Hajime Hirao: hirao@ntu.edu.sg
 
 Or, open an issue in the github page:
 
-- Source Code: https://github.com/ruixingw/parmhess
 - Issue Tracker: https://github.com/ruixingw/parmhess/issues
+- Source Code: https://github.com/ruixingw/parmhess
 
 
-*License*
+About Parmhess
+==============
 
+The code behind was developed in Dr.Hirao's group and is licensed under the LGPL_. The method, tests, and benchmarks are published on:
 
-The program of Parmhess is licensed under LGPL_, and this documentation is licensed under `Creative-Commons "by-nc" 4.0`__.
+|    Wang, R., Ozhgibesov, M. and Hirao, H., Partial hessian fitting for determining force constant parameters in molecular mechanics. *J. Comput. Chem.*, 37(26), pp.2349-2359, **2016** (DOI: `10.1002/jcc.24457`_)  (Featured as Insider Cover, DOI: `10.1002/jcc.24485`_)
+|
 
 .. _LGPL: http://www.gnu.org/copyleft/lgpl.html
-.. __: https://creativecommons.org/licenses/by-nc/4.0/
+.. _`10.1002/jcc.24457`: http://dx.doi.org/10.1002/jcc.24457
+.. _`10.1002/jcc.24485`: http://dx.doi.org/10.1002/jcc.24485
+
+If you use Parmhess in your scientific work, please support our work by citing this article.
+

@@ -5,12 +5,12 @@ Prepare inputs by Tsubasa
 **Parmhess** needs the following inputs.
 
 1. Gaussian Formatted Checkpoint file (FCHK) and Gaussian Output (LOG) as QM input, which should be created from a QM frequency calculation. Hessian, forces, and internal coordinates are read from here.
-2. An MM input file in Gaussian format. Coordinates, charges, atom types, and MM functions are read from here. Force constants waiting to be determined should be written as :code:`XXXXXX`.
+2. An MM input file in Gaussian format. Coordinates, charges, atom types, and internal coordinate types are read from here. Unknown force constants waiting to be determined should be written as :code:`XXXXXX`.
 3. An :code:`input.inp` file that includes the name of the aforementioned two files.
 
 All these files can be prepared by **Tsubasa** program automatically.
 
-If you prefer to prepare these files by hand, please refer to :doc:`processes`.
+If you prefer to prepare these files by hand, please refer to :doc:`files`.
 
 .. _`Tsubasa` : http://github.com/ruixingw/tsubasa/
 
@@ -50,7 +50,7 @@ Acceptable arguments:
 Input Arguments
 ^^^^^^^^^^^^^^^
 
-1. :code:`-i INPUTGEOM`: INPUTGEOM should be a file with :code:`.gau` extension. If not specified, program will search the current working directory(CWD) for a :code:`.gau` file , then use it if found, or exit if failed.
+1. :code:`-i INPUTGEOM`: INPUTGEOM should be a file with :code:`.gau` extension. If not specified, program will search the current working directory(CWD) for a :code:`.gau` file. If found, it will be read; if not, program will raise an error and then quit.
 
 The content of this file should include the geometry and connectivity in Gaussian format. An example is shown below:
 
@@ -72,7 +72,7 @@ The content of this file should include the geometry and connectivity in Gaussia
    H2O2.gau
   [ruixingw@NTU test~]$ tsubasa.py   # H2O2.gau will be read as INPUTGEOM
 
-2. :code:`-c CONFIGFILE`: CONFIGFILE should be a file with :code:`.yml` extension. If not specified, program will search the CWD for a :code:`.yml` file; if failed, a template :code:`.yml` file will be copied to CWD, named as same as :code:`.gau` file; if it is found, then check if the name of :code:`.yml` file and :code:`.gau` are the same. If they are not same, program will raise an error and exit.
+2. :code:`-c CONFIGFILE`: CONFIGFILE should be a file with :code:`.yml` extension. If not specified, program will search the CWD for a :code:`.yml` file; if failed, a template :code:`.yml` file will be copied to CWD, named as same as :code:`.gau` file; if it is found, program will check if the name of :code:`.yml` file is consistent with :code:`.gau` file. If they are not same, program will raise an error and then quit.
 
 ::
 
@@ -84,7 +84,7 @@ The content of this file should include the geometry and connectivity in Gaussia
   [ruixingw@NTU test~]$ tsubasa.py   # INPUTGEOM: H2O2.gau ; CONFIGFILE: H2O2.yml
 
 
-3. :code:`--readvdw EXTERNALVDWFILE`: Tsubasa attached a :code:`vdw.dat` file which includes the vdW parameters used in GAFF. If some certain vdW parameter is missing, you may provide a file to specify the vdW parameters. The format is same to :code:`vdw.dat`, which can be found in the source directory.
+3. :code:`--readvdw EXTERNALVDWFILE`: Tsubasa attached a :code:`vdw.dat` file which includes the vdW parameters used in GAFF. If some certain vdW parameter is missing, you may add them in :code:`vdw.dat`, or provide an external file by this argument. The format is same to :code:`vdw.dat`, which can be found in the source directory.
 
 ::
 
@@ -105,17 +105,19 @@ Job Control Arguments
 - Read all outputs and generate the MM input file (readmol2).
 
 
-Normally, just running these steps in sequence should work. However, if the system is large or complicated, it is recommended to do QM optimization by hand. The QM results can be provided to **Tsubasa** to do the following steps. If provided :code:`XXX.gau`, these QM files should be named as :code:`optXXX.ext`, :code:`freqXXX.ext`, :code:`respXXX.ext`, where the extension :code:`ext` are :code:`.com, .log, .chk, .fchk` for Gaussian input, output, checkpoint file and formatted checkpoint file, respectively. **Note that the provided files must be named exactly same as those of Tsubasa generated files.**
+Normally, just running these steps in sequence should work. However, if the system is large or complicated, it is recommended to do QM calculations by hand, and the output can be provided to **Tsubasa** to do the following steps.
+
+If provided :code:`XXX.gau` as INPUTGEOM, the files for these QM calculations will be named as :code:`optXXX`, :code:`freqXXX`, :code:`respXXX`, and the extensions are :code:`.com, .log, .chk, .fchk` for Gaussian input, output, checkpoint file and formatted checkpoint file, respectively. **Note if you provide QM files by hand, the provided files must be named exactly following this rule.**
 
 The provided files can be used by the following arguments:
 
 4. :code:`--startfrom {freq,resp,antechamber,readmol2}`  (choose one from the list)
 
-   Read the existing files and start from the specified step. If not specified, the program starts from the beginning (opt).
+   Read the existing files and start from the requested step. If not specified, the program starts from the beginning (opt).
 
 5. :code:`--stopafter {opt,freq,resp,antechamber}`  (choose one from the list)
 
-   Stop after the specified step. If not specified, the program ends as normal. 
+   Stop after the requested step. If not specified, the program ends as normal. 
 
 
 
@@ -195,7 +197,7 @@ An example of the whole process is:
 Config file
 ^^^^^^^^^^^
 
-The config file includes the commands to run Gaussian and antechamber etc. The format is YAML_. An example is shown below.
+The config file includes the commands to run Gaussian and antechamber etc. The format follows YAML_. An example is shown below.
 
 .. _YAML: http://yaml.org/
 
@@ -252,15 +254,14 @@ The config file includes the commands to run Gaussian and antechamber etc. The f
 
 Keywords:
 
-1. :code:`g09rt`:  The command to run Gaussian 09 for (opt, freq). Here, running "myg09boon test.com" should yield "test.log" in the same folder.
+1. :code:`g09rt`:  The command to run Gaussian 09 for (opt, freq). You may use script to submit the job, but to ensure running "myg09boon test.com" should yield "test.log" in the same folder.
 
-2. :code:`g09a2rt`:  The command to run Gaussian 09 for resp (to avoid G09 B01 bug). Here, running "myg09a2boon test.com" should yield "test.log" in the same folder. If you only have Gaussian 09 Rev.B01, please use :code:`--stopafter resp`, and then check `a bug of Revision B.01`_ (search "Gaussian 09 fix" in this page) to apply a fixing script to the Gaussian output. After fixing the output, it can be provided to **Tsubasa** by :code:`--startfrom antechamber`.
+2. :code:`g09a2rt`:  The command to run Gaussian 09 for resp (to avoid G09 B01 bug). Here, running "myg09a2boon test.com" should yield "test.log" in the same folder. If you only have Gaussian 09 Rev.B01, please use :code:`--stopafter resp`, and then check :doc:`Gaussian 09 Bug<installation>` to apply a fixing script. After fixing the output, it can be provided to **Tsubasa** by :code:`--startfrom antechamber` (File name should be same). 
 
-3. :code:`antechamber`:  command to run antechamber. Charge type may be modified. For large molecule(>100 atoms), "-pl 30" may be added (see :code:`antechamber -h` for details).
+3. :code:`antechamber`:  The command to run antechamber. Charge type may be modified. For large molecule(>100 atoms), "-pl 30" may be added (see :code:`antechamber -h` for details).
 
 4. :code:`clean`: this command will be run at the end of all steps for clean purpose (delete redundant files).
 
-5. :code:`opthead`, :code:`opttail`, :code:`freqhead`, :code:`resphead`, :code:`resptail`, :code:`mmhead`: Keywords that are used to run Gaussian. The content of :code:`.gau` file will be pasted between :code:`head` and :code:`tail` section. You may change them in your own need. Normally, keywords in :code:`freqhead` and :code:`mmhead` should not be changed. 
+5. :code:`opthead`, :code:`opttail`, :code:`freqhead`, :code:`resphead`, :code:`resptail`, :code:`mmhead`: Keywords that are used to run Gaussian. The content of :code:`.gau` file will be inserted between :code:`head` and :code:`tail` section. You may change them in your own need. Normally, keywords in :code:`mmhead` should not be changed. 
 
 
-.. _`a bug of Revision B.01` : http://ambermd.org/bugfixesat.html

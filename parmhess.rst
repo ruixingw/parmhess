@@ -14,9 +14,7 @@ Parmhess will read inputs and invoke **g09** command to do necessary MM calculat
 2. Result MM input file with determined parameters. Named as PHF/FHF/IHF_result_mmXXX.com.
 
 
-
 Acceptable arguments:
-
 
 ::
 
