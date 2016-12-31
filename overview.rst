@@ -1,6 +1,6 @@
 Overview
 ========
-**Parmhess** is a program to determine force field constants for AMBER force field, written in Python_, based on Hessian Fitting methods. It can:
+**Parmhess** is a program to determine force constants for AMBER force field, written in Python_, based on Hessian Fitting methods. It can:
 
 .. _Python: http://www.python.org
 
