@@ -5,7 +5,6 @@ import itertools
 import copy
 import os
 import shutil
-import pdb
 from multiprocessing import Pool
 from io import StringIO
 import numpy as np
@@ -944,7 +943,7 @@ def unavgsummarize(finalfuncL, itnlcordL, originalname, hprimehead, hprimetail,
     for item in itnlcordL:
         if type(item) is rxmol.Dihd:
             phase = [x.phase for x in item.dihdfunctions]
-            parm = [x.forceconst for x in item.dihdfunctions]
+            parm = [item.npaths * x.forceconst for x in item.dihdfunctions]
             tailstring += 'AmbTrs  ' + ' '.join(
                 [x.center(3, ' ')
                  for x in item.repr.split()]) + '  ' + ' '.join(
