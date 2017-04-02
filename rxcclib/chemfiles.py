@@ -331,7 +331,7 @@ class GauCOM(object):
             f.write(content)
         logging.info('Run g09 : ' + GauCOM.g09rt + ' ' +
                      self._parent.comname)
-        self.running = subprocess.Popen([GauCOM.g09rt, self._parent.comname])
+        self.running = subprocess.Popen([GauCOM.g09rt, self._parent.comname],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
 
     def rung09a2(self):
         bak = GauCOM.g09rt

@@ -13,7 +13,6 @@ from classdef import DihdForceConst
 from classdef import MMFunction
 from classdef import GauAmberCOM
 
-
 def matchdihd(dihd, func):
     a = (dihd[1].atomtype == func.a or func.a == '*')
     b = (dihd[2].atomtype == func.b or func.b == '*')
@@ -80,11 +79,13 @@ def hesstail(obj, itnlcordL, hessvdwtail, i=0):
             parm = ['0.000', '0.000', '0.000', '0.000']
             if obj is item:
                 parm[i] = '1.000'
-            tailstring += 'AmbTrs  ' + ' '.join([
-                x.center(3, ' ') for x in item.repr.split()
-            ]) + '  ' + ' '.join(
-                [str(x).center(3, ' ') for x in item.phase]) + '  ' + ' '.join(
-                    [str(x) for x in parm]) + '   ' + str(item.npaths) + '\n'
+            tailstring += 'AmbTrs  ' + ' '.join(
+                [x.center(3, ' ')
+                 for x in item.repr.split()]) + '  ' + ' '.join(
+                     [str(x).center(3, ' ')
+                      for x in item.phase]) + '  ' + ' '.join(
+                          [str(x)
+                           for x in parm]) + '   ' + str(item.npaths) + '\n'
         else:
             parm = '0.000'
             if obj is item:
@@ -123,12 +124,13 @@ def hprimetail(itnlcordL, hprimevdwtail):
                     parm.append('0.000')
                 else:
                     parm.append(item)
-            tailstring += (
-                'AmbTrs  ' + ' '.join(
-                    [x.center(3, ' ') for x in dihd.repr.split()]) + '  ' +
-                ' '.join([str(x).center(3, ' ') for x in dihd.phase]) + '  ' +
-                ' '.join([str(x) for x in parm]) + '   ' + str(dihd.npaths) +
-                '\n')
+            tailstring += ('AmbTrs  ' + ' '.join(
+                [x.center(3, ' ')
+                 for x in dihd.repr.split()]) + '  ' + ' '.join(
+                     [str(x).center(3, ' ')
+                      for x in dihd.phase]) + '  ' + ' '.join(
+                          [str(x)
+                           for x in parm]) + '   ' + str(dihd.npaths) + '\n')
         else:
             if item.forceconst == MMFunction.unknownsign:
                 parm = '0.000'
@@ -137,20 +139,20 @@ def hprimetail(itnlcordL, hprimevdwtail):
 
             if type(item) == rxmol.Angle:
 
-                tailstring += ('HrmBnd1  ' + ' '.join([
-                    x.center(3, ' ') for x in item.repr.split()
-                ]) + '  ' + parm + '  ' + '{:>9.5f}'.format(item.anglevalue) +
-                               '\n')
+                tailstring += ('HrmBnd1  ' + ' '.join(
+                    [x.center(3, ' ')
+                     for x in item.repr.split()]) + '  ' + parm + '  ' +
+                               '{:>9.5f}'.format(item.anglevalue) + '\n')
             if type(item) == rxmol.Bond:
-                tailstring += ('HrmStr1  ' + ' '.join([
-                    x.center(3, ' ') for x in item.repr.split()
-                ]) + '  ' + parm + '  ' + '{:>7.5f}'.format(item.length) + '\n'
-                               )
+                tailstring += ('HrmStr1  ' + ' '.join(
+                    [x.center(3, ' ')
+                     for x in item.repr.split()]) + '  ' + parm + '  ' +
+                               '{:>7.5f}'.format(item.length) + '\n')
             if type(item) == rxmol.Improper:
-                tailstring += ('ImpTrs  ' + ' '.join(
-                    [x.center(3, ' ') for x in item.repr.split()]) + '  ' +
-                               parm + '  ' + '{:6.2f}'.format(item.phase) +
-                               '  ' + str(item.npaths) + '\n')
+                tailstring += ('ImpTrs  ' + ' '.join([
+                    x.center(3, ' ') for x in item.repr.split()
+                ]) + '  ' + parm + '  ' + '{:6.2f}'.format(item.phase) + '  ' +
+                               str(item.npaths) + '\n')
     for x in mmcom.additionfunc:
         tailstring += x.content
     tailstring += hprimevdwtail
@@ -196,8 +198,10 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
             i = 0
             for item in itnlcordL:
                 if item.func == func:
-                    res = [float(str(x)) + oldx
-                           for x, oldx in zip(item.forceconst, res)]
+                    res = [
+                        float(str(x)) + oldx
+                        for x, oldx in zip(item.forceconst, res)
+                    ]
                     i += 1
             for index, item in enumerate(func.forceconst):
                 item.forceconst = res[index] / i
@@ -227,9 +231,10 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
             raise
         else:
             parm = angle.forceconst
-        tailstring += 'HrmBnd1  ' + ' '.join([x.center(
-            3, ' ') for x in angle.repr.split()]) + '  ' + '{:>7.3f}'.format(
-                parm) + '  ' + '{:>9.5f}'.format(angle.eqvalue) + '\n'
+        tailstring += 'HrmBnd1  ' + ' '.join(
+            [x.center(3, ' ')
+             for x in angle.repr.split()]) + '  ' + '{:>7.3f}'.format(
+                 parm) + '  ' + '{:>9.5f}'.format(angle.eqvalue) + '\n'
     for bond in mmcom.bondfunc:
         if bond.forceconst == MMFunction.unknownsign:
             parm = '0.000'
@@ -238,9 +243,10 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
             raise
         else:
             parm = bond.forceconst
-        tailstring += 'HrmStr1  ' + ' '.join([x.center(
-            3, ' ') for x in bond.repr.split()]) + '  ' + '{:>8.3f}'.format(
-                parm) + '  ' + '{:>7.5f}'.format(bond.eqvalue) + '\n'
+        tailstring += 'HrmStr1  ' + ' '.join(
+            [x.center(3, ' ')
+             for x in bond.repr.split()]) + '  ' + '{:>8.3f}'.format(
+                 parm) + '  ' + '{:>7.5f}'.format(bond.eqvalue) + '\n'
     for improper in mmcom.improperfunc:
         if improper.forceconst == MMFunction.unknownsign:
             logging.critical('Force constant is not determined for improper ' +
@@ -268,20 +274,47 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
     shutil.copy(finalname, os.path.join('..', finalname))
 
 
+def addlink1(mmfile, itnlcordL):
+    #    return ''
+    content = '\n--link1--\n'
+    content += ('%chk=' + mmfile.chkname + '\n')
+    content += ('#p geom=allcheck ')
+    content += ('freq=(readfc,modredundant,intmodes) '
+                'iop(4/33=3,7/33=1,99/5=5)\n\n')
+    content += ('* * K\n* * * K\n* * * * K\n')
+    for item in itnlcordL:
+        if type(item) == rxmol.Bond:
+            content += (
+                str(item[1].atomnum) + ' ' + str(item[2].atomnum) + ' A\n')
+        if type(item) == rxmol.Angle:
+            content += (str(item[1].atomnum) + ' ' + str(item[2].atomnum) + ' '
+                        + str(item[3].atomnum) + ' A\n')
+        if type(item) == rxmol.Dihd:
+            content += (
+                str(item[1].atomnum) + ' ' + str(item[2].atomnum) + ' ' +
+                str(item[3].atomnum) + ' ' + str(item[4].atomnum) + ' A\n')
+        if type(item) == rxmol.Improper:
+            content += (
+                str(item[1].atomnum) + ' ' + str(item[2].atomnum) + ' ' +
+                str(item[3].atomnum) + ' ' + str(item[4].atomnum) + ' A\n')
+    content += '\n'
+    return content
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('inputinp',
-                        default='input.inp',
-                        help='input.inp prepared by tsubasa.')
-    parser.add_argument('--quiet',
-                        '-q',
-                        action='store_true',
-                        help=('Do not show info on screen'))
-    parser.add_argument('--nocalc',
-                        '-nc',
-                        action='store_true',
-                        help=('Use already calculated file.'))
+    parser.add_argument(
+        'inputinp', default='input.inp', help='input.inp prepared by tsubasa.')
+    parser.add_argument(
+        '--quiet',
+        '-q',
+        action='store_true',
+        help=('Do not show info on screen'))
+    parser.add_argument(
+        '--nocalc',
+        '-nc',
+        action='store_true',
+        help=('Use already calculated file.'))
 
     args = parser.parse_args()
     global mmcom
@@ -307,9 +340,8 @@ if __name__ == "__main__":
     originalname = os.path.basename(mmfile)
 
     # Logging module setting. Print INFO on screen and DEBUG INFO in file======
-    logging.basicConfig(filename=originalname + '.phflog',
-                        level=logging.DEBUG,
-                        filemode='w')
+    logging.basicConfig(
+        filename=originalname + '.phflog', level=logging.DEBUG, filemode='w')
     console = logging.StreamHandler()
     console.setLevel(logging.INFO)
     formatter = logging.Formatter('%(levelname)-8s %(message)s')
@@ -342,6 +374,7 @@ if __name__ == "__main__":
     mole.readchargefromlist(mmcom.atomchargelist)
     mole.readtypefromlist(mmcom.atomtypelist)
     mole.readconnectivity(mmcom.connectivity)
+    mmcom.route = '%mem=1gb\n#p opt=(nomicro,redundant,modredundant,maxcyc=1)\namber=softonly geom=connectivity nosymm\niop(4/33=3)\n'
 
     shutil.copy(os.path.join('..', qmfchk.logname), '.')
     #   Count unknown parameters
@@ -394,17 +427,17 @@ if __name__ == "__main__":
     hprimexyz = ''
     finalxyz = ''
     for atom in mole:
-        hprimexyz += (
-            atom.elementsym + '-' + atom.name + '-' +
-            '{:8.6f}'.format(float(atom.atomcharge)) + '   ' + '   '.join(
-                ["{: .12f}".format(x) for x in atom.coords]) + '\n')
-        hessxyz += (
-            atom.elementsym + '-' + atom.name + '-0.000000' + '   ' +
-            '    '.join(["{: .12f}".format(x) for x in atom.coords]) + '\n')
-        finalxyz += (
-            atom.elementsym + '-' + atom.atomtype + '-' +
-            '{:8.6f}'.format(float(atom.atomcharge)) + '   ' + '    '.join(
-                ["{: .12f}".format(x) for x in atom.coords]) + '\n')
+        hprimexyz += (atom.elementsym + '-' + atom.name + '-' +
+                      '{:8.6f}'.format(float(atom.atomcharge)) + '   ' +
+                      '   '.join(["{: .12f}".format(x)
+                                  for x in atom.coords]) + '\n')
+        hessxyz += (atom.elementsym + '-' + atom.name + '-0.000000' + '   ' +
+                    '    '.join(["{: .12f}".format(x)
+                                 for x in atom.coords]) + '\n')
+        finalxyz += (atom.elementsym + '-' + atom.atomtype + '-' +
+                     '{:8.6f}'.format(float(atom.atomcharge)) + '   ' +
+                     '    '.join(["{: .12f}".format(x)
+                                  for x in atom.coords]) + '\n')
 
     hesshead = (mmcom.route + '\nhess\n\n' + str(qmfchk.totalcharge) + ' ' +
                 str(qmfchk.multiplicity) + '\n' + hessxyz + '\n' +
@@ -434,8 +467,9 @@ if __name__ == "__main__":
         for dihdfunc in mmcom.dihdfunc:
             if matchdihd(dihd, dihdfunc):
                 dihd.func = dihdfunc
-                dihd.forceconst = [DihdForceConst(x, dihd)
-                                   for x in dihdfunc.forceconst]
+                dihd.forceconst = [
+                    DihdForceConst(x, dihd) for x in dihdfunc.forceconst
+                ]
                 dihd.phase = copy.copy(dihdfunc.phase)
                 dihd.npaths = dihdfunc.npaths
                 for dihdfc in dihd.forceconst:
@@ -497,6 +531,49 @@ if __name__ == "__main__":
             if item.forceconst == MMFunction.unknownsign:
                 realnunk += 1
 
+    # MM freq file
+    
+    content = ('* * K\n* * * K\n* * * * K\n')
+    for item in itnlcordL:
+        if type(item) == rxmol.Bond:
+            content += (
+                str(item[1].atomnum) + ' ' + str(item[2].atomnum) + ' A\n')
+        if type(item) == rxmol.Angle:
+            content += (str(item[1].atomnum) + ' ' + str(item[2].atomnum) + ' '
+                        + str(item[3].atomnum) + ' A\n')
+        if type(item) == rxmol.Dihd:
+            content += (
+                str(item[1].atomnum) + ' ' + str(item[2].atomnum) + ' ' +
+                str(item[3].atomnum) + ' ' + str(item[4].atomnum) + ' A\n')
+        if type(item) == rxmol.Improper:
+            content += (
+                str(item[1].atomnum) + ' ' + str(item[2].atomnum) + ' ' +
+                str(item[3].atomnum) + ' ' + str(item[4].atomnum) + ' A\n')
+    content += '\n'
+    modred = content
+    content = ('#p geom=allcheck nosymm ')
+    content += ('amber=softonly freq=intmodes iop(4/33=3,7/33=1,99/5=5)\n\n')
+    mmfreqhead = content
+
+    def newrun(this,tail):
+        this.com.rung09()
+        try:
+            this.com.isover()
+        except rxfile.rxFileError:
+            pass
+        with open("freq_"+this.comname,'w') as f:
+            f.write("%chk=" + this.chkname+'\n' + mmfreqhead + '\n' + tail)
+        logging.info('  ..freq')
+        os.system('g09 freq_'+this.comname)
+        logging.info('  ..ok')
+        this.runformchk()
+        pass
+
+    def newhesstail(*args):
+        return modred + hesstail(*args)
+
+    def newhprimetail(*args):
+        return modred + hprimetail(*args)
     # Prepare Unit Hessian File
     hess = []
     num = realnunk
@@ -506,7 +583,7 @@ if __name__ == "__main__":
             for i, parms in enumerate(obj.forceconst):
                 if str(parms) == MMFunction.unknownsign:
                     with open('hess' + str(len(hess)) + '.com', 'w') as f:
-                        f.write(hesshead + hesstail(obj, itnlcordL,
+                        f.write(hesshead + newhesstail(obj, itnlcordL,
                                                     hessvdwtail, i))
                     this = rxfile.File('hess' + str(len(hess)))
                     obj.forceconst[i].hessfile = this
@@ -514,33 +591,22 @@ if __name__ == "__main__":
                     unkparmL.append(this.orig)
                     hess.append(this)
                     if not nocalc:
-                        this.com.rung09()
-                        try:
-                            this.com.isover()
-                        except rxfile.rxFileError:
-                            this.com.rung09()
-                            this.com.isover()
-                        this.runformchk()
+                        newrun(this, hesstail(obj, itnlcordL,
+                                              hessvdwtail, i))
                     this.fchk.read()
                     num -= 1
                     logging.info(str(num + 3) + ' left')
         else:
             if obj.forceconst == MMFunction.unknownsign:
                 with open('hess' + str(len(hess)) + '.com', 'w') as f:
-                    f.write(hesshead + hesstail(obj, itnlcordL, hessvdwtail))
+                    f.write(hesshead + newhesstail(obj, itnlcordL, hessvdwtail))
                 this = rxfile.File('hess' + str(len(hess)))
                 obj.hessfile = this
                 this.orig = obj
                 unkparmL.append(this.orig)
                 hess.append(this)
                 if not nocalc:
-                    this.com.rung09()
-                    try:
-                        this.com.isover()
-                    except:
-                        this.com.rung09()
-                        this.com.isover()
-                    this.runformchk()
+                    newrun(this, hesstail(obj, itnlcordL, hessvdwtail))
                 num -= 1
                 this.fchk.read()
                 logging.info(str(num + 3) + ' left')
@@ -614,61 +680,68 @@ if __name__ == "__main__":
     # sequence: onefour-->onetrifour-->onetri(coupled)
     # -->onetri(uncoupled)-->onetwo
     if onefourL:
-        onefourhprime = hprimehead + hprimetail(itnlcordL, hprimevdwtail)
+        onefourhprime = hprimehead + newhprimetail(itnlcordL, hprimevdwtail)
         with open('onefourhprime.com', 'w') as f:
             f.write(onefourhprime)
         onefourhprime = rxfile.File('onefourhprime')
         if not nocalc:
-            onefourhprime.com.rung09()
-            onefourhprime.com.isover()
-            onefourhprime.runformchk()
+            newrun(onefourhprime,hprimetail(itnlcordL, hprimevdwtail))
+            ##############################
+            # onefourhprime.com.rung09() #
+            # onefourhprime.com.isover() #
+            # onefourhprime.runformchk() #
+            ##############################
         onefourhprime.fchk.read()
         calcphfgroup(onefourL, onefourhprime, qmfchk)
     if onetrifourL:
-        onetrifourhprime = hprimehead + hprimetail(itnlcordL, hprimevdwtail)
+        onetrifourhprime = hprimehead + newhprimetail(itnlcordL, hprimevdwtail)
         with open('onetrifourhprime.com', 'w') as f:
             f.write(onetrifourhprime)
         onetrifourhprime = rxfile.File('onetrifourhprime')
         if not nocalc:
-            onetrifourhprime.com.rung09()
-            onetrifourhprime.com.isover()
-            onetrifourhprime.runformchk()
+            newrun(onetrifourhprime,hprimetail(itnlcordL, hprimevdwtail))
+            #onetrifourhprime.com.rung09()
+            #onetrifourhprime.com.isover()
+            #onetrifourhprime.runformchk()
         onetrifourhprime.fchk.read()
         calcphfgroup(onetrifourL, onetrifourhprime, qmfchk)
 
     if onetricL:
-        onetrichprime = hprimehead + hprimetail(itnlcordL, hprimevdwtail)
+        onetrichprime = hprimehead + newhprimetail(itnlcordL, hprimevdwtail)
         with open('onetrichprime.com', 'w') as f:
             f.write(onetrichprime)
         onetrichprime = rxfile.File('onetrichprime')
         if not nocalc:
-            onetrichprime.com.rung09()
-            onetrichprime.com.isover()
-            onetrichprime.runformchk()
+            newrun(onetrichprime,hprimetail(itnlcordL, hprimevdwtail))
+            #onetrichprime.com.rung09()
+            #onetrichprime.com.isover()
+            #onetrichprime.runformchk()
         onetrichprime.fchk.read()
         calcphfgroup(onetricL, onetrichprime, qmfchk)
 
     if onetriucL:
-        onetriucLhprime = hprimehead + hprimetail(itnlcordL, hprimevdwtail)
+        onetriucLhprime = hprimehead + newhprimetail(itnlcordL, hprimevdwtail)
         with open('onetriucLhprime.com', 'w') as f:
             f.write(onetriucLhprime)
         onetriucLhprime = rxfile.File('onetriucLhprime')
         if not nocalc:
-            onetriucLhprime.com.rung09()
-            onetriucLhprime.com.isover()
-            onetriucLhprime.runformchk()
+            newrun(onetriucLhprime,hprimetail(itnlcordL, hprimevdwtail))
+            #onetriucLhprime.com.rung09()
+            #onetriucLhprime.com.isover()
+            #onetriucLhprime.runformchk()
         onetriucLhprime.fchk.read()
         calcphfgroup(onetriucL, onetriucLhprime, qmfchk)
 
     if onetwoL:
-        onetwoLhprime = hprimehead + hprimetail(itnlcordL, hprimevdwtail)
+        onetwoLhprime = hprimehead + newhprimetail(itnlcordL, hprimevdwtail)
         with open('onetwoLhprime.com', 'w') as f:
             f.write(onetwoLhprime)
         onetwoLhprime = rxfile.File('onetwoLhprime')
         if not nocalc:
-            onetwoLhprime.com.rung09()
-            onetwoLhprime.com.isover()
-            onetwoLhprime.runformchk()
+            newrun(onetwoLhprime,hprimetail(itnlcordL, hprimevdwtail))
+            #onetwoLhprime.com.rung09()
+            #onetwoLhprime.com.isover()
+            #onetwoLhprime.runformchk()
         onetwoLhprime.fchk.read()
         calcphfgroup(onetwoL, onetwoLhprime, qmfchk)
 
@@ -723,7 +796,7 @@ if __name__ == "__main__":
         item.forceconst = results[i]
     summarize(unkL, itnlcordL, originalname, finalhead, 'fhf')
 
-   # quit()
+    # quit()
     # End of FHF
     # Clean up:
 
@@ -760,9 +833,9 @@ if __name__ == "__main__":
                 line = line[2]
                 line = line[2:-1]
                 line = [int(x) for x in line.split(',')]
-                intcords.append(InternalCoordinates(fileobj,
-                                                    line))
+                intcords.append(InternalCoordinates(fileobj, line))
         return intcords
+
     # Check internal coordinates order matching
     qmfchk.itnl = readintcoords(qmfchk)
     assert len(qmfchk.itnl) == len(itnlcordL)
@@ -778,11 +851,11 @@ if __name__ == "__main__":
         assert x.atomset == y.atomset
 
     # Read internal Hessian
-    for i in range(1, len(qmfchk.itnl)+1):
-        qmfchk.itnl[i-1].value = qmfchk.fchk.findintHessianElement(i, i)
-        hprime.itnl[i-1].value = (hprime.fchk.findintHessianElement(i, i))
+    for i in range(1, len(qmfchk.itnl) + 1):
+        qmfchk.itnl[i - 1].value = qmfchk.fchk.findintHessianElement(i, i)
+        hprime.itnl[i - 1].value = (hprime.fchk.findintHessianElement(i, i))
         for item in hess:
-            item.itnl[i-1].value = item.fchk.findintHessianElement(i, i)
+            item.itnl[i - 1].value = item.fchk.findintHessianElement(i, i)
     # Build leftL in itnl order:
 
     leftL = []
@@ -805,5 +878,3 @@ if __name__ == "__main__":
     for i, item in enumerate(unkparmL):
         item.forceconst = res[i]
     summarize(unkL, itnlcordL, originalname, finalhead, 'ihf')
-
-
