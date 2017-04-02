@@ -405,9 +405,13 @@ if __name__ == "__main__":
                         b = tu[1].atomtype == item.b or item.b == '*'
                         c = tu[2].atomtype == item.d or item.d == '*'
                         if a and b and c:
-                            mole.addimproper(tu[0].atomnum, tu[1].atomnum,
-                                             atom3.atomnum, tu[2].atomnum)
-                            break
+                            res.append([
+                                tu[0].atomnum, tu[1].atomnum, atom3.atomnum,
+                                tu[2].atomnum
+                            ])
+                    res = sorted(res, key=lambda x: (str(x[1]) + str(x[3])))
+                    res = res[0]
+                    mole.addimproper(*res)
             # */
 
             if item.forceconst == MMFunction.unknownsign:
