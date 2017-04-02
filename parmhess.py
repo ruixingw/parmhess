@@ -374,6 +374,7 @@ if __name__ == "__main__":
     mole.readchargefromlist(mmcom.atomchargelist)
     mole.readtypefromlist(mmcom.atomtypelist)
     mole.readconnectivity(mmcom.connectivity)
+    bakroute = mmcom.route
     mmcom.route = '%mem=1gb\n#p opt=(nomicro,redundant,modredundant,maxcyc=1)\namber=softonly geom=connectivity nosymm\niop(4/33=3)\n'
 
     shutil.copy(os.path.join('..', qmfchk.logname), '.')
@@ -400,6 +401,7 @@ if __name__ == "__main__":
             for atom3 in mole:
                 if atom3.atomtype == item.c:
                     permu = list(itertools.permutations(atom3.neighbor, 3))
+                    res = []
                     for tu in permu:
                         a = tu[0].atomtype == item.a or item.a == '*'
                         b = tu[1].atomtype == item.b or item.b == '*'
@@ -449,7 +451,7 @@ if __name__ == "__main__":
     hprimehead = (mmcom.route + '\nhprime\n\n' + str(qmfchk.totalcharge) + ' '
                   + str(qmfchk.multiplicity) + '\n' + hprimexyz + '\n' +
                   mmcom.connectivity + '\n')
-    finalhead = (mmcom.route + '\nfinal\n\n' + str(qmfchk.totalcharge) + ' ' +
+    finalhead = (bakroute + '\nfinal\n\n' + str(qmfchk.totalcharge) + ' ' +
                  str(qmfchk.multiplicity) + '\n' + finalxyz + '\n' +
                  mmcom.connectivity + '\n')
 
