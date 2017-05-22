@@ -72,6 +72,7 @@ def matchimproper(improper, func):
 
 # Unit Hessian Component Tail
 def hesstail(obj, itnlcordL, hessvdwtail, i=0):
+
     global mmcom
     tailstring = ''
     for item in itnlcordL:
@@ -272,6 +273,7 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
 
         f.write(finalhead + tailstring)
     shutil.copy(finalname, os.path.join('..', finalname))
+    return finalname
 
 
 def addlink1(mmfile, itnlcordL):
@@ -800,12 +802,10 @@ if __name__ == "__main__":
     results = np.linalg.lstsq(leftL, hideal)[0]
     for i, item in enumerate(unkparmL):
         item.forceconst = results[i]
-    summarize(unkL, itnlcordL, originalname, finalhead, 'fhf')
+    fhffilename = summarize(unkL, itnlcordL, originalname, finalhead, 'fhf')
 
-    # quit()
-    # End of FHF
+
     # Clean up:
-
     for item in itnlcordL:
         if type(item) != rxmol.Dihd:
             if item.known is False:
@@ -822,6 +822,170 @@ if __name__ == "__main__":
             for parms in item.forceconst:
                 if parms.known is False:
                     parms.forceconst = MMFunction.unknownsign
+
+# BHF:
+    pairs = []
+    pairs.extend(onetwoL.keys())
+    pairs.extend(onetricL.keys())
+    pairs.extend(onetriucL.keys())
+    pairs.extend(onefourL.keys())
+    pairs.extend(onetrifourL.keys())
+    #for i in range(1,mole.natoms+1):
+     #   pairs.append(str(i)+'-'+str(i))
+
+    def getBHessian(fileobj):
+        #return fileobj.fchk.hessian
+        hessian = []
+        for item in pairs:
+            a,b = item.split('-')
+            a = int(a)
+            b = int(b)
+            h = fileobj.fchk.find33Hessian(a,b)
+            if a!=b:
+            #if True:
+                for item in h.tolist():
+                    for i in item:
+                        hessian.append(i)
+            else:
+                 pass
+                 hessian.append(h[0][0])
+                 hessian.append(h[1][0])
+                 hessian.append(h[1][1])
+                 hessian.append(h[2][0])
+                 hessian.append(h[2][1])
+                 hessian.append(h[2][2])
+        return hessian
+
+    def wfhf(fhffile,deltafunc,omegafunc,name):
+
+        with open(fhffile,'r') as f:
+            content = f.read()
+        with open(fhffile,'w') as f:
+            chkname = os.path.splitext(fhffile)[0]+'.chk\n'
+            f.write(chkname+content)
+        fhffile = rxfile.File(os.path.splitext(fhffile)[0])
+        fhffile.com.rung09()
+        fhffile.com.isover()
+        fhffile.runformchk()
+        fhffile.fchk.read()
+        fhfhessian = np.array(getBHessian(fhffile))
+
+        leftL = []
+        hideal = []
+        try:
+            hprime = onefourhprime
+        except:
+            try:
+                hprime = onetrifourhprime
+            except:
+                try:
+                    hprime = onetrichprime
+                except:
+                    try:
+                        hprime = onetriucLhprime
+                    except:
+                        hprime = onetwoLhprime
+        qmhess = np.array(getBHessian(qmfchk))
+        hprimehess = np.array(getBHessian(hprime))
+
+        hideal = qmhess - hprimehess
+        deltaij = deltafunc(fhfhessian,qmhess)
+        omegaij = omegafunc(deltaij)
+
+        for item in unkparmL:
+            tmp = np.array(getBHessian(item.hessfile))
+            leftL.append([x for x in tmp])
+
+        leftL = np.array(list(zip(*leftL)))
+        hideal = np.array([x*y for x,y in zip(hideal, omegaij)])
+        leftL = np.array([x*y for x,y in zip(omegaij, leftL)])
+
+        results = np.linalg.lstsq(leftL, hideal)[0]
+
+        for i, item in enumerate(unkparmL):
+            item.forceconst = results[i]
+        summarize(unkL, itnlcordL, originalname, finalhead, name)
+        # End 
+        # Clean up:
+        for item in itnlcordL:
+            if type(item) != rxmol.Dihd:
+                if item.known is False:
+                    item.forceconst = MMFunction.unknownsign
+            else:
+                for parms in item.forceconst:
+                    if parms.known is False:
+                        parms = MMFunction.unknownsign
+        for item in unkL:
+            if item.type != 'dihd':
+                if item.known is False:
+                    item.forceconst = MMFunction.unknownsign
+            else:
+                for parms in item.forceconst:
+                    if parms.known is False:
+                        parms.forceconst = MMFunction.unknownsign
+
+        return results
+
+
+    # abs diff
+    def delta456(mmhess,qmhess):
+        return np.array([abs(x-y) for x,y in zip(mmhess,qmhess)])
+    # squared diff
+    def delta7(mmhess,qmhess):
+        return np.array([(x-y)**2 for x,y in zip(mmhess,qmhess)])
+    # 1 - x/max
+    def omega1(deltaij):
+        ma = max(deltaij)
+        return np.array([1-x/ma for x in deltaij])
+    # 1- x/summ
+    def omega47(deltaij):
+        summ = sum(deltaij)
+        return np.array([(1-x/summ) for x in deltaij])
+    # 1- (x/summ)^2
+    def omega5(deltaij):
+        summ = sum(deltaij)
+        return np.array([(1-(x/summ)**2) for x in deltaij])
+    # (1-x/summ)^2
+    def omega6(deltaij):
+        summ = sum(deltaij)
+        return np.array([(1-x/summ)**2 for x in deltaij])
+    # exp(-lambda*delta_ij/Delta_av)
+    def omega8(deltaij):
+        av = sum(deltaij)/len(deltaij)
+        return np.array([np.exp(-x/av) for x in deltaij])
+    def omega0(deltaij):
+        return np.array([1 for x in deltaij])
+
+
+    # method 4:
+    #wfhf(fhffilename,delta456,omega0,'bhf')
+    #wfhf(fhffilename,delta456,omega1,'wbhf1')
+    #wfhf(fhffilename,delta456,omega47,'wfhf4')
+    #wfhf(fhffilename,delta456,omega5,'wfhf5')
+    #wfhf(fhffilename,delta456,omega6,'wfhf6')
+    #wfhf(fhffilename,delta7,omega47,'wfhf7')
+    #wfhf(fhffilename,delta7,omega8,'wbhf8')
+    wfhf(fhffilename,delta7,omega0,'chf')
+
+    # # do iter of wFHF
+    # i = 0
+    # while True:
+    #     i+=1
+    #     print(i)
+    #     results = np.array(wfhfiter(fhffilename))
+    #     if i==1 :
+    #         oldresults = results
+    #         continue
+    #     else:
+    #         diff = oldresults - results
+    #     oldresults = results
+    #     length = np.linalg.norm(diff)
+    #     print(length)
+    #     if length == 0.000:
+    #         print(results)
+    #         break
+
+
     # Start of IHF
 
     def readintcoords(fileobj):
