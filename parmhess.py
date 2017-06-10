@@ -830,8 +830,8 @@ if __name__ == "__main__":
     pairs.extend(onetriucL.keys())
     pairs.extend(onefourL.keys())
     pairs.extend(onetrifourL.keys())
-    #for i in range(1,mole.natoms+1):
-     #   pairs.append(str(i)+'-'+str(i))
+    for i in range(1,mole.natoms+1):
+        pairs.append(str(i)+'-'+str(i))
 
     def getBHessian(fileobj):
         #return fileobj.fchk.hessian
@@ -965,7 +965,7 @@ if __name__ == "__main__":
     #wfhf(fhffilename,delta456,omega6,'wfhf6')
     #wfhf(fhffilename,delta7,omega47,'wfhf7')
     #wfhf(fhffilename,delta7,omega8,'wbhf8')
-    wfhf(fhffilename,delta7,omega0,'chf')
+    wfhf(fhffilename,delta7,omega8,'wbhf8')
 
     # # do iter of wFHF
     # i = 0
