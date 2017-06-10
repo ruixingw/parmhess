@@ -848,12 +848,12 @@ if __name__ == "__main__":
                         hessian.append(i)
             else:
                  pass
-                 hessian.append(h[0][0])
+                 hessian.append(0.5*h[0][0])
                  hessian.append(h[1][0])
-                 hessian.append(h[1][1])
+                 hessian.append(0.5*h[1][1])
                  hessian.append(h[2][0])
                  hessian.append(h[2][1])
-                 hessian.append(h[2][2])
+                 hessian.append(0.5*h[2][2])
         return hessian
 
     def wfhf(fhffile,deltafunc,omegafunc,name):
@@ -965,7 +965,7 @@ if __name__ == "__main__":
     #wfhf(fhffilename,delta456,omega6,'wfhf6')
     #wfhf(fhffilename,delta7,omega47,'wfhf7')
     #wfhf(fhffilename,delta7,omega8,'wbhf8')
-    wfhf(fhffilename,delta7,omega8,'wbhf8')
+    wfhf(fhffilename,delta456,omega0,'rfhf')
 
     # # do iter of wFHF
     # i = 0
