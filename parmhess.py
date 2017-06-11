@@ -211,14 +211,19 @@ def summarize(unkL, itnlcordL, originalname, finalhead, method):
     tailstring = ''
     for dihd in mmcom.dihdfunc:
         parm = []
-        for item in dihd.forceconst:
+        for i,item in enumerate(dihd.forceconst):
             if str(item) == MMFunction.unknownsign:
                 parm.append('0.000')
                 logging.critical('Force constant is not'
                                  ' determined for dihedral ' + dihd.repr)
                 raise
             else:
-                parm.append(float(str(item)))
+                value = float(str(item))
+                if value < 0:
+                    dihd.phase[i] = 180
+                    parm.append(abs(value))
+                else:
+                    parm.append(value)
         tailstring += 'AmbTrs  ' + ' '.join(
             [x.center(3, ' ') for x in dihd.repr.split()]) + '  ' + ' '.join(
                 [str(x).center(3, ' ') for x in dihd.phase]) + '  ' + ' '.join(
@@ -858,17 +863,17 @@ if __name__ == "__main__":
 
     def wfhf(fhffile,deltafunc,omegafunc,name):
 
-        with open(fhffile,'r') as f:
-            content = f.read()
-        with open(fhffile,'w') as f:
-            chkname = os.path.splitext(fhffile)[0]+'.chk\n'
-            f.write(chkname+content)
-        fhffile = rxfile.File(os.path.splitext(fhffile)[0])
-        fhffile.com.rung09()
-        fhffile.com.isover()
-        fhffile.runformchk()
-        fhffile.fchk.read()
-        fhfhessian = np.array(getBHessian(fhffile))
+        # with open(fhffile,'r') as f:
+        #     content = f.read()
+        # with open(fhffile,'w') as f:
+        #     chkname = os.path.splitext(fhffile)[0]+'.chk\n'
+        #     f.write(chkname+content)
+        # fhffile = rxfile.File(os.path.splitext(fhffile)[0])
+        # fhffile.com.rung09()
+        # fhffile.com.isover()
+        # fhffile.runformchk()
+        # fhffile.fchk.read()
+        # fhfhessian = np.array(getBHessian(fhffile))
 
         leftL = []
         hideal = []
@@ -889,16 +894,16 @@ if __name__ == "__main__":
         hprimehess = np.array(getBHessian(hprime))
 
         hideal = qmhess - hprimehess
-        deltaij = deltafunc(fhfhessian,qmhess)
-        omegaij = omegafunc(deltaij)
+#       deltaij = deltafunc(fhfhessian,qmhess)
+#        omegaij = omegafunc(deltaij)
 
         for item in unkparmL:
             tmp = np.array(getBHessian(item.hessfile))
             leftL.append([x for x in tmp])
 
         leftL = np.array(list(zip(*leftL)))
-        hideal = np.array([x*y for x,y in zip(hideal, omegaij)])
-        leftL = np.array([x*y for x,y in zip(omegaij, leftL)])
+#        hideal = np.array([x*y for x,y in zip(hideal, omegaij)])
+#       leftL = np.array([x*y for x,y in zip(omegaij, leftL)])
 
         results = np.linalg.lstsq(leftL, hideal)[0]
 
