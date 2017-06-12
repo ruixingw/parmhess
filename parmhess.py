@@ -357,10 +357,9 @@ if __name__ == "__main__":
         logging.getLogger('').addHandler(console)
     #  ==================================================================
 
-    logging.info('Start Hessian Fitting for MM parameterization\n\n')
-    logging.info('Release under GNU LGPL License')
-    logging.info('If you use this program and/or the Hessian fitting method' +
-                 ', cite DOI:XXX \n\n')
+    logging.info('Start Hessian Fitting for MM parameterization\n')
+    logging.info('This program is released under BSD 3-Clause License')
+    logging.info('See details at https://github.com/ruixingw/parmhess\n\n')
 
     logging.info("Provided mmfile input: " + mmfile + ' and qmfchk input: ' +
                  qmfchk)
