@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Installation &#8212; Parmhess v1.0 20171117 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'v1.0 20171117',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Format of Inputs" href="inputformat.html" />
+    <link rel="prev" title="Overview" href="overview.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="inputformat.html" title="Format of Inputs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Parmhess v1.0 20171117 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p><strong>Python3 (Anaconda)</strong></p>
+<p><strong>Parmhess</strong> is written in Python3 and runs on Linux.</p>
+<p>The easiest way to setup Python3 is to install <strong>Anaconda</strong>. It is freely available at <a class="reference external" href="https://www.anaconda.com/download/">https://www.anaconda.com/download/</a>.</p>
+<p>You should choose Anaconda for Linux (Python3.X), not Python2.7 nor for other operating system. Simply run <code class="code docutils literal"><span class="pre">bash</span> <span class="pre">Anaconda3-x.x.x-Linux-x86_64.sh</span></code> to start the installation and follow the instruction. Root access is not necessary.</p>
+<p>If you are an experienced Python3 user and prefer to use your own Python build, make sure that <strong>numpy</strong> and <strong>pyyaml</strong> be installed properly.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Gaussian 09 (G09)</strong></p>
+<p>QM and MM calculation is performed by Gaussian 09.</p>
+<p>Any revision of G09 should work. However, there is a bug in G09 Rev. B.01 and thus special attention is needed in MK charge calculation. If you only have G09 B01, read the workaround in: <a class="reference external" href="http://ambermd.org/bugfixesat.html">http://ambermd.org/bugfixesat.html</a></p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>AmberTools</strong></p>
+<p>AmberTools is used to identify the atom types and calculate RESP charges. After you have Anaconda installed, a simple command could be used to install a light version of AmberTools:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>conda install ambertools -y -c http://ambermd.org/downloads/ambertools/conda/
+</pre></div>
+</div>
+<p>Then, run antechamber and you should see the help of usage.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Parmhess</strong></p>
+<p>Download <strong>Parmhess</strong> from <a class="reference external" href="https://github.com/ruixingw/parmhess/releases">https://github.com/ruixingw/parmhess/releases</a></p>
+<p>Extract the files to any folder. Create a soft-link to your $PATH. For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>ln -s /PathToParmhess/parmhess.py ~/bin
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Katachi</strong></p>
+<p>Download <strong>Katachi</strong> from <a class="reference external" href="https://github.com/ruixingw/katachi/releases">https://github.com/ruixingw/katachi/releases</a>.</p>
+<p>Extract the files to any folder. Create a soft-link to your $PATH. For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>ln -s /PathToKatachi/gokatachi.py ~/bin
+ln -s /PathToKatachi/katachi.py ~/bin
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Tsubasa</strong></p>
+<p>Download Tsubasa from <a class="reference external" href="https://github.com/ruixingw/tsubasa/releases">https://github.com/ruixingw/tsubasa/releases</a>
+Extract the files to any folder. Create a soft-link to your $PATH. For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>ln -s /PathToTsubasa/tsubasa.py ~/bin
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="overview.html"
+                        title="previous chapter">Overview</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="inputformat.html"
+                        title="next chapter">Format of Inputs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/installation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="inputformat.html" title="Format of Inputs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="Overview"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Parmhess v1.0 20171117 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Ruixing WANG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Automated Preparation of Input Files &#8212; Parmhess v1.0 20171117 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'v1.0 20171117',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Run Parameterization" href="parmhess.html" />
+    <link rel="prev" title="Format of Inputs" href="inputformat.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="parmhess.html" title="Run Parameterization"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="inputformat.html" title="Format of Inputs"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Parmhess v1.0 20171117 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="automated-preparation-of-input-files">
+<h1>Automated Preparation of Input Files<a class="headerlink" href="#automated-preparation-of-input-files" title="Permalink to this headline">¶</a></h1>
+<p><strong>Tsubasa</strong> is designed to automatically prepare the input files for <strong>Parmhess</strong>. It could automatically do optimization (opt), MK charge calculation (resp), RESP charge calculation (antechamber), frequency calculation (freq) and preparation of MM input file.</p>
+<p>The input for Tsubasa program is just coordinates and connectivity. An example is:</p>
+<p>H2O2.gau</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="mi">0</span> <span class="mi">1</span>
+<span class="n">O</span>     <span class="o">-</span><span class="mf">0.718633164030</span>    <span class="o">-</span><span class="mf">0.118472295063</span>    <span class="o">-</span><span class="mf">0.054617618503</span>
+<span class="n">H</span>     <span class="o">-</span><span class="mf">1.023538245240</span>     <span class="mf">0.665457463989</span>     <span class="mf">0.436707052760</span>
+<span class="n">O</span>      <span class="mf">0.718637032315</span>     <span class="mf">0.118468958072</span>    <span class="o">-</span><span class="mf">0.054573365001</span>
+<span class="n">H</span>      <span class="mf">1.023507272500</span>    <span class="o">-</span><span class="mf">0.665430766999</span>     <span class="mf">0.436820814218</span>
+
+ <span class="mi">1</span> <span class="mi">2</span> <span class="mf">1.0</span> <span class="mi">3</span> <span class="mf">1.0</span>
+ <span class="mi">2</span>
+ <span class="mi">3</span> <span class="mi">4</span> <span class="mf">1.0</span>
+ <span class="mi">4</span>
+</pre></div>
+</div>
+<p>Save it to a file named <em>H2O2.gau</em>. Then run the following command within the same folder
+.. code-block:: bash</p>
+<blockquote>
+<div>tsubasa.py</div></blockquote>
+<p>A template config file will be copied to the same folder and named <em>H2O2.yml</em>. The format is YAML but is easy to understand. Below we attach the content of this file and make comments after a number sign (#).</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>g09rt: myg09boon     # myg09boon is the command to run Gaussian 09; change it to your job submit
+                     script. For example, running “myg09boon foo.com” should produce
+                     foo.log in the same folder. If you do not use job management system,
+                   it should just be “g09”.
+g09a2rt: myg09a2boon         # Command to run Gaussian 09 for MK charge calculation
+                               If you mainly use G09B01, which is problematic for MK charge calculation,
+                               you can use another version for MK charge calculation.
+
+antechamber: antechamber -c resp      # Commands to run antechamber. The charge type can be changed
+                                        # For metal system, “-j 5” may be added
+clean: rm *gaussian*                  # will run at the last to clean the directory.
+
+opthead: |                            # A block starts with a vertical bar (|)
+  %mem=16gb                           # the content in the block is indented by 2 spaces.
+  %nproc=12                           # This block defines the command used for optimization
+  #p b3lyp/6-31+g* geom=connectivity
+  int=ultrafine symm=(loose,follow)
+  opt=(verytight,maxstep=7,notrust)
+
+  opt-title
+
+opttail: |                            # The coordinates and connectivity will be inserted
+                                      # between the content of opthead and opttail
+freqhead: |                           # This block defines the command used for frequency calculation
+  %mem=16gb                           # coordinates will be read from CHK files.
+  %nproc=12
+  #p b3lyp/chkbas int=ultrafine symm=loose geom=allcheck guess=tcheck freq=intmodes iop(7/33=1)
+
+
+resphead: |                           # This block defines the command used for MK charge calculation
+  %mem=16gb
+  %nproc=12
+  #p b3lyp/chkbas
+  iop(6/33=2,6/42=17,6/41=10)
+  int=ultrafine symm=loose
+  pop=mk                               # If any VDW radius is missing, use pop=(mk,readradii) …
+  geom=allcheck guess=tcheck
+
+
+resptail: |                            # … and add the VDW radius here
+
+
+mmhead: |                              # this block should not be changed.
+  %mem=12gb
+  #p amber=softonly geom=connectivity nosymm
+  iop(4/33=3,7/33=1)
+  freq=intmodes
+
+  MM
+</pre></div>
+</div>
+<p>You should check the content of config file before going to the next step. After that, run the command again:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>tsubasa.py
+</pre></div>
+</div>
+<p>The program will start the process and finally produce all necessary files for Parmhess if all the calculations succeed. The intermediate files will be named as: optH2O2.com/log/chk, freqH2O2.com/log/chk/fchk and respH2O2.com/log/chk/mol2.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>The detailed usage is as follows.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">tsubasa</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+<span class="n">usage</span><span class="p">:</span> <span class="n">tsubasa</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="n">GAUFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="n">YMLFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">readvdw</span> <span class="n">EXTERNALVDWFILE</span><span class="p">]</span>
+                  <span class="p">[</span><span class="o">--</span><span class="n">startfrom</span> <span class="p">{</span><span class="n">resp</span><span class="p">,</span><span class="n">antechamber</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">buildMMfile</span><span class="p">}]</span>
+                  <span class="p">[</span><span class="o">--</span><span class="n">stopafter</span> <span class="p">{</span><span class="n">opt</span><span class="p">,</span><span class="n">resp</span><span class="p">,</span><span class="n">antechamber</span><span class="p">,</span><span class="n">freq</span><span class="p">}]</span>
+                  <span class="p">[</span><span class="o">--</span><span class="n">improper</span> <span class="n">IMPROPERLIST</span><span class="p">]</span>
+
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">-</span><span class="n">i</span> <span class="n">GAUFILE</span>            <span class="n">Inputfile</span> <span class="n">including</span> <span class="n">molecular</span> <span class="n">specs</span> <span class="ow">and</span>
+                              <span class="n">connectivity</span>
+  <span class="o">-</span><span class="n">c</span> <span class="n">YMLFILE</span>            <span class="n">Tsubasa</span> <span class="n">config</span> <span class="n">file</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">readvdw</span> <span class="n">EXTERNALVDWFILE</span>
+                        <span class="n">If</span> <span class="n">provided</span><span class="p">,</span> <span class="n">read</span> <span class="n">external</span> <span class="n">vdW</span> <span class="n">parameters</span> <span class="kn">from</span>
+                              <span class="nn">EXTERNALVDWFILE</span>
+  <span class="o">--</span><span class="n">startfrom</span> <span class="p">{</span><span class="n">resp</span><span class="p">,</span><span class="n">antechamber</span><span class="p">,</span><span class="n">freq</span><span class="p">,</span><span class="n">buildMMfile</span><span class="p">}</span>
+                        <span class="n">Start</span> <span class="kn">from</span> <span class="nn">a</span> <span class="n">certain</span> <span class="n">step</span><span class="o">.</span>
+                    <span class="n">Choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;resp&#39;</span><span class="p">,</span><span class="s1">&#39;antechamber&#39;</span><span class="p">,</span><span class="s1">&#39;freq&#39;</span><span class="p">,</span><span class="s1">&#39;buildMMfile&#39;</span><span class="p">]</span>
+  <span class="o">--</span><span class="n">stopafter</span> <span class="p">{</span><span class="n">opt</span><span class="p">,</span><span class="n">resp</span><span class="p">,</span><span class="n">antechamber</span><span class="p">,</span><span class="n">freq</span><span class="p">}</span>
+                        <span class="n">Stop</span> <span class="n">after</span> <span class="n">a</span> <span class="n">certain</span> <span class="n">step</span><span class="o">.</span>
+                        <span class="n">Choices</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;opt&#39;</span><span class="p">,</span><span class="s1">&#39;resp&#39;</span><span class="p">,</span><span class="s1">&#39;antechamber&#39;</span><span class="p">,</span><span class="s1">&#39;freq&#39;</span><span class="p">]</span>
+  <span class="o">--</span><span class="n">improper</span> <span class="n">IMPROPERLIST</span>
+                        <span class="n">Add</span> <span class="n">improper</span> <span class="n">functions</span><span class="p">,</span> <span class="n">IMPROPERLIST</span> <span class="n">should</span> <span class="n">be</span>
+<span class="n">a</span> <span class="nb">list</span> <span class="n">like</span> <span class="s2">&quot;h5 * c2 *,c3 * o *&quot;</span>
+</pre></div>
+</div>
+<p><em>GAUFILE</em> and <em>YMLFILE</em> is the .gau and .yml file aforementioned. If they are not specified, the program will search for a .gau file and a .yml file in the current folder. If a .gau file is found but not a .yml file, a template config file will be copied to the current folder. If both are found, the program will start to prepare the inputs.</p>
+<p>The program included the vdW parameters in GAFF (gaff.dat) as a database. However, if any vdW parameter is missing, it can be provided by <em>&#8211;readvdw EXTERNALVDWFILE</em>. The format of this file should be same to the vdW parameters in AMBER(for example, gaff.dat). If the missing vdW parameters are not provided, the placeholder RADII and WELLDEPTH will be written into the generated MM input file.</p>
+<p><em>startfrom</em> and <em>stopafter</em>: control the steps. For large systems, it is better to do QM calculations manually and then provide the results to tsubasa. The name of provided files should be same to those tsubasa generated. For example, if a FOO.gau is provided as input, the files should be optFOO.com/log/chk, freqFOO.com/log/chk/fchk, respFOO.com/log/chk/mol2. Mol2 file can be modified to change atom types, which are usually not satisfactorily determined. After modifying the Mol2 files, <em>&#8211;startfrom buildMMfile</em> can be used.</p>
+<p>If improper terms are defined, they can be provided by <em>&#8211;improper IMPROPERLIST</em>, so that the internal coordinates for improper torsions could be included to perform IHF.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="inputformat.html"
+                        title="previous chapter">Format of Inputs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parmhess.html"
+                        title="next chapter">Run Parameterization</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tsubasa.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="parmhess.html" title="Run Parameterization"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="inputformat.html" title="Format of Inputs"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Parmhess v1.0 20171117 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Ruixing WANG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

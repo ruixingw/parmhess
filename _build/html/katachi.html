@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Run Katachi Amendment &#8212; Parmhess v1.0 20171117 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'v1.0 20171117',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Run Parameterization" href="parmhess.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="parmhess.html" title="Run Parameterization"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Parmhess v1.0 20171117 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="run-katachi-amendment">
+<h1>Run Katachi Amendment<a class="headerlink" href="#run-katachi-amendment" title="Permalink to this headline">¶</a></h1>
+<p>After parameterization, run:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>katachi.py ihf_result_mmH2O2.com <span class="m">0</span> calcall <span class="m">100</span>
+</pre></div>
+</div>
+<p>The result will be named katachi_ihf_result_mmH2O2.com.</p>
+<p>Here are the last lines of the example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">AmbTrs</span>   <span class="n">ho</span>  <span class="n">oh</span>  <span class="n">oh</span>  <span class="n">ho</span>   <span class="mi">0</span>   <span class="mi">0</span>   <span class="mi">0</span>   <span class="mi">0</span>    <span class="mf">0.000</span>  <span class="mf">1.552</span>  <span class="mf">0.000</span>  <span class="mf">0.000</span>   <span class="mf">1.0</span>
+<span class="n">HrmBnd1</span> <span class="n">ho</span> <span class="n">oh</span> <span class="n">oh</span>   <span class="mf">68.779</span>  <span class="mf">98.2714</span>
+<span class="n">HrmStr1</span> <span class="n">ho</span> <span class="n">oh</span>   <span class="mf">550.931</span>  <span class="mf">0.96915</span>
+<span class="n">HrmStr1</span> <span class="n">oh</span> <span class="n">oh</span>   <span class="mf">346.974</span>  <span class="mf">1.44835</span>
+<span class="n">Nonbon</span> <span class="mi">3</span> <span class="mi">1</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">0.5</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="o">-</span><span class="mf">1.2</span>
+<span class="n">VDW</span>    <span class="n">ho</span>  <span class="mf">0.0000</span>  <span class="mf">0.0000</span>
+<span class="n">VDW</span>    <span class="n">oh</span>  <span class="mf">1.7210</span>  <span class="mf">0.210</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>The detailed usage is as follows.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">katachi</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+<span class="n">usage</span><span class="p">:</span> <span class="n">katachi</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="n">mmresult</span> <span class="n">loopid</span> <span class="n">opt</span> <span class="n">convthreshold</span>
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="n">mmresult</span>       <span class="n">parameterized</span> <span class="n">result</span> <span class="n">MM</span> <span class="n">file</span><span class="o">.</span>
+  <span class="n">loopid</span>         <span class="n">loopid</span>
+  <span class="n">opt</span>            <span class="n">opt</span> <span class="ow">or</span> <span class="n">calcall</span>
+  <span class="n">convthreshold</span>  <span class="n">convergence</span> <span class="n">threshold</span>
+</pre></div>
+</div>
+<p><em>loopid</em> is the number of starting cycle. It should be 0 if it is a fresh run. If Katachi was interrupted in the middle, this number can be set to that of the latest cycle to restore the process.</p>
+<p><em>opt</em> or <em>calcall</em> controls the commands used for MM optimization. If <em>opt</em> is specified, <em>opt=(nomicro,cartesian)</em> will be used for MM optimization, and after the convergence, <em>opt=(nomicro,cartesian,tight,calcall)</em> will then be used and start again from the previous result. If calcall is specified, all steps will use the latter keywords. In practice, we found that using calcall is usually better.</p>
+<p><em>convthreshold</em> is the cycle number threshold. If the result does not improve any more in the given cycles, the program will stop. In our tests, we used 100 for this threshold; that means, if the result does not improve in 100 cycles, the program will stop and use the best result before.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parmhess.html"
+                        title="previous chapter">Run Parameterization</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/katachi.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="parmhess.html" title="Run Parameterization"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Parmhess v1.0 20171117 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Ruixing WANG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

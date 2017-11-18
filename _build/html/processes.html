@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How’s it working &#8212; Parmhess v0.1-alpha-1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     'v0.1-alpha-1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Parameterization using Parmhess" href="parmhess.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="parmhess.html" title="Parameterization using Parmhess"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Parmhess v0.1-alpha-1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-s-it-working">
+<h1>How&#8217;s it working<a class="headerlink" href="#how-s-it-working" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="prepare-input-file">
+<h2>Prepare Input file<a class="headerlink" href="#prepare-input-file" title="Permalink to this headline">¶</a></h2>
+<p>The following processes must be done before parameterization.</p>
+<ol class="arabic simple">
+<li>Geometry Optimization by Gaussian</li>
+<li>Frequency Calculation by Gaussian to obtain Hessian</li>
+<li>MK Charge Calculation by Gaussian to obtain potential fitting data</li>
+<li>RESP Charge Calculation by AmberTools to obtain atomic charge</li>
+<li>Identify atom types by AmberTools</li>
+</ol>
+<p>A program <strong>Tsubasa</strong> is made to automated these processes. <strong>Tsubasa</strong> accepts a geometry input and a config file, then do these  steps in sequence. Although, for large or complex system, it is recommended that you should do optimization and frequency calculation manually (also charge calculation if necessary). These outputs can be provided for the following steps.</p>
+<p>Suppose we start from a &#8220;H2O2.gau&#8221; and &#8220;H2O2.cfg&#8221;, <strong>Tsubasa</strong> will produce these files:</p>
+<ul class="simple">
+<li><code class="code docutils literal"><span class="pre">mmH2O2.com</span></code>     : MM input file. Includes the following information: geometry, atom type, charge, types of bonded terms</li>
+<li><code class="code docutils literal"><span class="pre">freqH2O2.fchk</span></code>  :Frequency FCHK file. Hessian is read from this file.</li>
+<li><code class="code docutils literal"><span class="pre">freqH2O2.log</span></code>   : Frequency log file</li>
+<li><code class="code docutils literal"><span class="pre">input.inp</span></code>      : All-in-one input file.</li>
+<li><code class="code docutils literal"><span class="pre">Tsubasa</span></code>        : Folder that stores intermediate files.</li>
+</ul>
+<p>Now it is ready for parameterization by Parmhess.</p>
+</div>
+<div class="section" id="parameterization">
+<h2>Parameterization<a class="headerlink" href="#parameterization" title="Permalink to this headline">¶</a></h2>
+<p>For convinience, in the following text, the term <strong>internal coordinates</strong> refers to all bonds/angles/dihedrals/impropers in the molecule.</p>
+<p>It is very common that several internal coordinates have the same type. For example, two H-O bonds in H2O2 have the same bond type &#8220;ho-oh&#8221;. Parmhess solves force constant for every internal coordinate separately, and the average value of the force constant over all equivalent internal coordinates in the molecule was provided as the final result.</p>
+<p>1. Create and switch to <code class="code docutils literal"><span class="pre">hffiles</span></code> folder as the working space and then copy all input files here.</p>
+<p>2. From the Input files (<code class="code docutils literal"><span class="pre">mmH2O2.com</span></code>/<code class="code docutils literal"><span class="pre">freqH2O2.fchk</span></code> in the previous example), read geometry, atom types, charges, connectivity, Hessian, and all internal coordinate types (eg: &#8220;ho-oh&#8221;).</p>
+<p>From these informations, internal coordinates are identified.
+In this example, the following coordinate types are readed: ho-oh, oh-oh, ho-oh-oh, ho-oh-oh-ho.
+Based on the connectivity, following internal coordinates are identified: h1-o1; o1-o2; o2-h2; h1-o1-o2; o1-o2-h2; h1-o1-o2-h2.</p>
+<p>3. Identify and count unknown coordinate types. If a <strong>improper</strong> type exists, the corresponding improper coordinate will be identified, too.
+In H2O2, all types are unknown and the number of unknowns is 4.</p>
+<p>4. Identify and match the type of internal coordinates.
+FOr example, o1-o2 will be matched with &#8220;oh-oh&#8221; type.</p>
+<p>5. Identify and Count all internal coordinates whose force constant is unknown.
+Here, all internal coordinates are unknown and the number of unknowns is 6.</p>
+<p>6. Prepare and run Gaussian jobs named as <code class="code docutils literal"><span class="pre">hessXX.com</span></code>. Each job corresponds to a internal coordinate. They are used to calculate the lowercase <strong>h</strong>.</p>
+<p>7. 1-4 pair of dihedrals and impropers, 1-3 pair of angles, 1-2 pair of bonds are identified and stored.
+These pairs are corresponding to 3x3 partial Hessians.</p>
+<p>8. Identify cross-coupled pairs that are involved in 6- and 5-member rings.</p>
+<p>9. All pairs are classified into 5 groups based on the coupling situation:</p>
+<blockquote>
+<div><p>a. one-four group:</p>
+<blockquote>
+<div>This group contains all 1-4 pairs that are not coupled with 1-3 pairs. This means, the contribution to the 3x3 partial-Hessian is only from dehedral terms and nonbonded terms.
+Please note if an 1-4 pair couples with a 1-2 pair, it will be a 4-member ring case, which is not supported by PHF.</div></blockquote>
+<p>b. one-tri-four group:</p>
+<blockquote>
+<div><p>This group contains 1-4 pairs that are coupled with 1-3 pairs. This is the 5-member ring case, in which the 1-4 pair of a dihedral is also the 1-3 pair of an angle. Hence, the 3x3 partial Hessian is contributed both from a dihedral and an angle.</p>
+<p>Since other dihedrals may also have contribution to this partial Hessian, this group is placed after group a) to subtract the contribution from group a).</p>
+</div></blockquote>
+<p>c. one-tri-coupled group:</p>
+<blockquote>
+<div>This group contains angles that are coupled with impropers. The 1-4 atom pair of an improper is always also the 1-3 atom pair of an angle. Also, contributions from former groups should be subtracted.</div></blockquote>
+<p>d. one-tri-uncoupled group:</p>
+<blockquote>
+<div><p>This group contains all &#8220;pure&#8221; 1-3 pairs that are not coupld with others. After subtracting former groups&#8217; contribution, a 3x3 sub-matrix is only contributed by a single angle.</p>
+<p>Please note if an 1-3 pair couples with a 1-3 or 1-2 pair, it will be a 4- or 3-member ring case, which is not supported by PHF.</p>
+</div></blockquote>
+<p>e. one-two group:</p>
+<blockquote>
+<div>This group contains all &#8220;pure&#8221; bonds. After subtracting contribution from former groups, the 3x3 partial Hessian is purly contributed by a single bond.</div></blockquote>
+</div></blockquote>
+<p>10. Prepare the initial <code class="code docutils literal"><span class="pre">hprime</span></code> file to calculate <strong>H&#8217;</strong>, which is the Hessian contributed by <em>known terms</em> and nonbonded terms. Their contribution will then be subtracted in group a) process.</p>
+<p>11. Construct and solve equation systems for each group in sequence. After solving  force constants for each group, these solved parameters will then be treated as <em>known terms</em> and form a new <code class="code docutils literal"><span class="pre">hprime</span></code> file. Hence, the contribution of former groups will be excluded in the following processes.</p>
+<p>12. Now, all force constants for each internal coordinate are solved. These results will then be averaged over equivalent internal coordinates.</p>
+<p>13. Summarize the results and write to output file.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How&#8217;s it working</a><ul>
+<li><a class="reference internal" href="#prepare-input-file">Prepare Input file</a></li>
+<li><a class="reference internal" href="#parameterization">Parameterization</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parmhess.html"
+                        title="previous chapter">Parameterization using Parmhess</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/processes.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="parmhess.html" title="Parameterization using Parmhess"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Parmhess v0.1-alpha-1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Ruixing WANG.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>
