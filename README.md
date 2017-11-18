@@ -1,1 +1,1 @@
-Documentation is hosted at parmhess.readthedocs.io. 
+Documentation is hosted at http://parmhess.readthedocs.io. 
