@@ -14,7 +14,8 @@ Overview
 If you found them useful in your research, please support our work by citing these papers.
 
 
-**Contact**
+Contact
+-------
 
 - Ruixing Wang: ruixingw[%]outlook.com
 
@@ -27,7 +28,8 @@ Or, open an issue in the github page:
 - Source Code: https://github.com/ruixingw/parmhess
 
 
-**License**
+License
+-------
 
 The programs are released under the `BSD-3 license`_.
 
