@@ -1,5 +1,8 @@
 Overview
 ========
+Manual for **Parmhess** v1.0, 20171117.
+
+|
 
 **Parmhess** implements Full, Partial, and Internal Hessian Fitting schemes for force-field parameterization, which are described in the following papers. Please refer to these papers for detailed theories.
 
