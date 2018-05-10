@@ -20,7 +20,7 @@ If you found them useful in your research, please support our work by citing the
 Contact
 -------
 
-- Ruixing Wang: ruixingw[%]outlook.com
+- Ruixing Wang: ruixingw[%]terpmail.umd.edu
 
 - Dr.Hajime Hirao: hhirao[%]cityu.edu.hk
 
